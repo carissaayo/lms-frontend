@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,13 +12,16 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { toast } from "sonner";
+import { toast, Toaster } from "sonner";
+import api from "@/lib/axios";
 
 export const Route = createFileRoute("/auth/login")({
   component: RouteComponent,
 });
 
 function RouteComponent() {
+  const navigate = useNavigate();
+
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
@@ -30,57 +33,69 @@ function RouteComponent() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // const handleSubmit = async (e: React.FormEvent) => {
-  //   e.preventDefault();
-  //   setIsLoading(true);
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
 
-  //   try {
-  //     // Replace with your actual API endpoint
-  //     const response = await fetch("/api/auth/login", {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify(formData),
-  //     });
+    try {
+      const response = await api.post(
+        "/login",
+        JSON.stringify({
+          email: formData.email,
+          password: formData.password,
+        })
+      );
 
-  //     if (!response.ok) {
-  //       throw new Error("Login failed");
-  //     }
+      console.log(response?.data);
 
-  //     const data = await response.json();
+      if (response.status === 401) {
+        toast.error("Incorrect credentials", {
+          description: "Please try again",
+          position: "top-center",
+        });
+        throw new Error("Incorrect credentials");
+      }
 
-  //     // Store the token in localStorage or use a state management solution
-  //     localStorage.setItem("token", data.token);
-  //     localStorage.setItem("user", JSON.stringify(data.user));
+      const data = await response.data;
 
-  //     toast({
-  //       title: "Login successful",
-  //       description: "You have been logged in successfully.",
-  //     });
+      // Store the token in localStorage or use a state management solution
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("user", JSON.stringify(data.user));
 
-  //     // Redirect based on user role
-  //     if (data.user.role === "instructor") {
-  //       router.push("/dashboard/instructor");
-  //     } else if (data.user.role === "student") {
-  //       router.push("/dashboard/student");
-  //     } else if (data.user.role === "moderator") {
-  //       router.push("/dashboard/moderator");
-  //     } else {
-  //       router.push("/dashboard");
-  //     }
-  //   } catch (error) {
-  //     toast({
-  //       title: "Login failed",
-  //       description: "Please check your credentials and try again.",
-  //       variant: "destructive",
-  //     });
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // };
+      toast.success("Login successful", {
+        description: "You have been logged in successfully.",
+        position: "top-center",
+      });
+
+      // Redirect based on user role
+      // if (data.user.role === "instructor") {
+      //   router.push("/dashboard/instructor");
+      // } else if (data.user.role === "student") {
+      //   router.push("/dashboard/student");
+      // } else if (data.user.role === "moderator") {
+      //   router.push("/dashboard/moderator");
+      // } else {
+      //   router.push("/dashboard");
+      // }
+      setTimeout(() => {
+        navigate({ to: "/" });
+      }, 1500);
+    } catch (error) {
+      toast.error("Login failed", {
+        description: "Please check your credentials and try again.",
+      });
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <main className="min-h-screen pt-12">
+      <div className="flex items-center justify-center w-full">
+        <Toaster position="top-center" />
+      </div>
+
       <div className="w-full text-center">
         <Link to="/" className="font-bold text-3xl">
           DevLearn
@@ -94,9 +109,7 @@ function RouteComponent() {
               Enter your credentials to access your account
             </CardDescription>
           </CardHeader>
-          <form
-          //  onSubmit={handleSubmit}
-          >
+          <form onSubmit={handleSubmit}>
             <CardContent className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="email">Email</Label>

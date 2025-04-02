@@ -152,15 +152,15 @@ function Index() {
       </section>
       {/* FeaturedCourses Ends */}
 
-      <footer className="border-t py-6 md:py-8 px-12">
-        <div className="container flex flex-col gap-4 px-4 md:flex-row md:gap-8 md:px-6">
-          <div className="flex-1">
+      <footer className="border-t py-20 md:pt-20  px-12 bg-black text-white md:min-h-[40vh]   ">
+        <div className="container flex  gap-4 px-4 flex-col md:flex-row md:gap-8 md:px-6 ">
+          <div className="flex-1 ">
             <div className="text-lg font-semibold">DevLearn</div>
             <div className="text-sm text-muted-foreground mt-1">
               Your gateway to quality education
             </div>
           </div>
-          <div className="flex flex-col gap-2 text-sm">
+          <div className="  flex flex-col gap-2 text-sm">
             <div className="font-medium">Platform</div>
             <Link to="/" className="text-muted-foreground hover:underline">
               Courses
@@ -172,7 +172,7 @@ function Index() {
               Pricing
             </Link>
           </div>
-          <div className="flex flex-col gap-2 text-sm">
+          <div className=" flex flex-col gap-2 text-sm">
             <div className="font-medium">Support</div>
             <Link to="/" className="text-muted-foreground hover:underline">
               Help Center

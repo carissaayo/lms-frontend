@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
@@ -13,12 +13,15 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { toast, Toaster } from "sonner";
+import api from "@/lib/axios";
 
 export const Route = createFileRoute("/auth/register")({
   component: RouteComponent,
 });
 
 function RouteComponent() {
+  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
@@ -37,59 +40,58 @@ function RouteComponent() {
     setFormData((prev) => ({ ...prev, role: value }));
   };
 
-  // const handleSubmit = async (e: React.FormEvent) => {
-  //   e.preventDefault();
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
 
-  //   if (formData.password !== formData.confirmPassword) {
-  //     toast({
-  //       title: "Passwords do not match",
-  //       description: "Please make sure your passwords match.",
-  //       variant: "destructive",
-  //     });
-  //     return;
-  //   }
+    if (formData.password !== formData.confirmPassword) {
+      toast.warning("Passwords do not match", {
+        description: "Please make sure your passwords match.",
+      });
+      return;
+    }
 
-  //   setIsLoading(true);
+    setIsLoading(true);
 
-  //   try {
-  //     // Replace with your actual API endpoint
-  //     const response = await fetch("/api/auth/register", {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify({
-  //         name: formData.name,
-  //         email: formData.email,
-  //         password: formData.password,
-  //         role: formData.role,
-  //       }),
-  //     });
+    try {
+      const response = await api.post(
+        "/users/register",
+        JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          password: formData.password,
+          role: formData.role,
+        })
+      );
 
-  //     if (!response.ok) {
-  //       throw new Error("Registration failed");
-  //     }
+      console.log(response);
 
-  //     toast({
-  //       title: "Registration successful",
-  //       description: "Your account has been created successfully.",
-  //     });
+      if (!response.data) {
+        throw new Error("Registration failed");
+      }
 
-  //     // Redirect to login page
-  //     router.push("/auth/login");
-  //   } catch (error) {
-  //     toast({
-  //       title: "Registration failed",
-  //       description:
-  //         "There was an error creating your account. Please try again.",
-  //       variant: "destructive",
-  //     });
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // };
+      toast.success("Registration successful", {
+        description: "Your account has been created successfully.",
+        position: "top-center",
+      });
+
+      // Redirect to login page
+      setTimeout(() => {
+        navigate({ to: "/auth/login" });
+      }, 3000);
+    } catch (error) {
+      toast.error("Registration failed", {
+        description:
+          "There was an error creating your account. Please try again.",
+        position: "top-center",
+      });
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
   return (
     <main className="min-h-screen pt-12">
+      <Toaster />
       <div className="w-full text-center">
         <Link to="/" className="font-bold text-3xl">
           DevLearn
@@ -105,9 +107,7 @@ function RouteComponent() {
               Enter your information to create an account
             </CardDescription>
           </CardHeader>
-          <form
-          //    onSubmit={handleSubmit}
-          >
+          <form onSubmit={handleSubmit}>
             <CardContent className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="name">Full Name</Label>
