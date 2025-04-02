@@ -18,6 +18,7 @@ export const Route = createFileRoute("/")({
 function Index() {
   return (
     <main className="min-h-screen flex-col ">
+      {/* Header Starts */}
       <header className="bg-background border-b h-24 flex items-center px-6 md:px-12">
         <div className="container flex h-16 items-center justify-between px-4 md:px-6">
           <Link to="/" className="flex items-center gap-2 text-3xl font-bold">
@@ -55,8 +56,11 @@ function Index() {
           </div>
         </div>
       </header>
+      {/* Header Ends */}
 
-      <section className="w-full bg-muted/40 px-12 md:px-20 flex items-center py-16 lg:h-[85vh]">
+      {/* Hero Starts */}
+
+      <section className="w-full bg-black px-12 md:px-20 flex items-center py-16 lg:h-[87vh] text-white">
         <div className="w-full flex items-center  justify-between  flex-col lg:flex-row gap-24 lg:gap-16 xl:gap-24">
           <div className="w-full flex flex-col gap-4 lg:gap-8 xl:gap-12 text-center lg:text-left">
             <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl xl:text-5xl">
@@ -69,10 +73,16 @@ function Index() {
             </p>
             <div className="flex items-center justify-center lg:flex-col gap-2 lg:min-[400px]:flex-row">
               <Link to="/">
-                <Button size="lg">Browse Courses</Button>
+                <Button size="lg" variant="outline">
+                  Browse Courses
+                </Button>
               </Link>
               <Link to="/auth/register">
-                <Button size="lg" variant="outline">
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="bg-white text-black"
+                >
                   Register
                 </Button>
               </Link>
@@ -87,8 +97,11 @@ function Index() {
           </div>
         </div>
       </section>
-      <section className="w-full py-12 md:py-24 lg:py-32 px-12">
-        <div className="container px-4 md:px-6">
+      {/* Hero Starts */}
+
+      {/* FeaturedCourses Starts */}
+      <section className="w-full py-16 px-6 sm:px-12 md:px-20 ">
+        <div className="w-full">
           <div className="flex flex-col items-center justify-center space-y-4 text-center">
             <div className="space-y-2">
               <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
@@ -137,6 +150,7 @@ function Index() {
           </div>
         </div>
       </section>
+      {/* FeaturedCourses Ends */}
 
       <footer className="border-t py-6 md:py-8 px-12">
         <div className="container flex flex-col gap-4 px-4 md:flex-row md:gap-8 md:px-6">
