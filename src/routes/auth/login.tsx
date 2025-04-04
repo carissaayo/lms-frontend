@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -28,7 +28,7 @@ function RouteComponent() {
     email: "",
     password: "",
   });
-  const loginUser = useAuthStore((state) => state.loginUser);
+  const { loginUser, user } = useAuthStore((state) => state);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -60,8 +60,7 @@ function RouteComponent() {
       const data = await response.data;
 
       // Store the token in localStorage or use a state management solution
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("user", JSON.stringify(data.user));
+
       loginUser(data.user, data.token);
       toast.success("Login successful", {
         description: "You have been logged in successfully.",
@@ -91,6 +90,11 @@ function RouteComponent() {
     }
   };
 
+  useEffect(() => {
+    if (user.isVerified) {
+      navigate({ to: "/" });
+    }
+  }, [user]);
   return (
     <main className="min-h-screen pt-12">
       <div className="flex items-center justify-center w-full">

@@ -5,6 +5,7 @@ interface AuthState {
   user: any;
   token: any;
   loginUser: (user: any, token: any) => any;
+  isAuthenticated: boolean;
 }
 
 const useAuthStore = create<AuthState>()(
@@ -18,7 +19,7 @@ const useAuthStore = create<AuthState>()(
         set({
           user: userData,
           token,
-          // isAuthenticated: true
+          //   isAuthenticated: true
         });
       },
 

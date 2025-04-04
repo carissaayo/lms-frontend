@@ -11,11 +11,14 @@ import {
 } from "@/components/ui/card";
 
 import heroImg from "../assets/wes-hicks-4-EeTnaC1S4-unsplash.jpg";
+import useAuthStore from "@/store/useAuthStore";
 export const Route = createFileRoute("/")({
   component: Index,
 });
 
 function Index() {
+  const { user } = useAuthStore((state) => state);
+
   return (
     <main className="min-h-screen flex-col ">
       {/* Header Starts */}
@@ -44,16 +47,18 @@ function Index() {
               Contact
             </Link>
           </nav>
-          <div className="flex gap-4">
-            <Link to="/auth/login">
-              <Button variant="outline" className="cursor-pointer">
-                Log In
-              </Button>
-            </Link>
-            <Link to="/auth/register">
-              <Button className="cursor-pointer">Sign Up</Button>
-            </Link>
-          </div>
+          {!user && (
+            <div className="flex gap-4">
+              <Link to="/auth/login">
+                <Button variant="outline" className="cursor-pointer">
+                  Log In
+                </Button>
+              </Link>
+              <Link to="/auth/register">
+                <Button className="cursor-pointer">Sign Up</Button>
+              </Link>
+            </div>
+          )}
         </div>
       </header>
       {/* Header Ends */}
