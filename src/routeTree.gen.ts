@@ -15,6 +15,8 @@ import { Route as AboutImport } from './routes/about'
 import { Route as IndexImport } from './routes/index'
 import { Route as AuthRegisterImport } from './routes/auth/register'
 import { Route as AuthLoginImport } from './routes/auth/login'
+import { Route as DashboardStudentsStudentImport } from './routes/dashboard/students/student'
+import { Route as DashboardInstructorsInstructorImport } from './routes/dashboard/instructors/instructor'
 
 // Create/Update Routes
 
@@ -41,6 +43,19 @@ const AuthLoginRoute = AuthLoginImport.update({
   path: '/auth/login',
   getParentRoute: () => rootRoute,
 } as any)
+
+const DashboardStudentsStudentRoute = DashboardStudentsStudentImport.update({
+  id: '/dashboard/students/student',
+  path: '/dashboard/students/student',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const DashboardInstructorsInstructorRoute =
+  DashboardInstructorsInstructorImport.update({
+    id: '/dashboard/instructors/instructor',
+    path: '/dashboard/instructors/instructor',
+    getParentRoute: () => rootRoute,
+  } as any)
 
 // Populate the FileRoutesByPath interface
 
@@ -74,6 +89,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthRegisterImport
       parentRoute: typeof rootRoute
     }
+    '/dashboard/instructors/instructor': {
+      id: '/dashboard/instructors/instructor'
+      path: '/dashboard/instructors/instructor'
+      fullPath: '/dashboard/instructors/instructor'
+      preLoaderRoute: typeof DashboardInstructorsInstructorImport
+      parentRoute: typeof rootRoute
+    }
+    '/dashboard/students/student': {
+      id: '/dashboard/students/student'
+      path: '/dashboard/students/student'
+      fullPath: '/dashboard/students/student'
+      preLoaderRoute: typeof DashboardStudentsStudentImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -84,6 +113,8 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/register': typeof AuthRegisterRoute
+  '/dashboard/instructors/instructor': typeof DashboardInstructorsInstructorRoute
+  '/dashboard/students/student': typeof DashboardStudentsStudentRoute
 }
 
 export interface FileRoutesByTo {
@@ -91,6 +122,8 @@ export interface FileRoutesByTo {
   '/about': typeof AboutRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/register': typeof AuthRegisterRoute
+  '/dashboard/instructors/instructor': typeof DashboardInstructorsInstructorRoute
+  '/dashboard/students/student': typeof DashboardStudentsStudentRoute
 }
 
 export interface FileRoutesById {
@@ -99,14 +132,35 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/register': typeof AuthRegisterRoute
+  '/dashboard/instructors/instructor': typeof DashboardInstructorsInstructorRoute
+  '/dashboard/students/student': typeof DashboardStudentsStudentRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/auth/login' | '/auth/register'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/auth/login'
+    | '/auth/register'
+    | '/dashboard/instructors/instructor'
+    | '/dashboard/students/student'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/auth/login' | '/auth/register'
-  id: '__root__' | '/' | '/about' | '/auth/login' | '/auth/register'
+  to:
+    | '/'
+    | '/about'
+    | '/auth/login'
+    | '/auth/register'
+    | '/dashboard/instructors/instructor'
+    | '/dashboard/students/student'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/auth/login'
+    | '/auth/register'
+    | '/dashboard/instructors/instructor'
+    | '/dashboard/students/student'
   fileRoutesById: FileRoutesById
 }
 
@@ -115,6 +169,8 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   AuthLoginRoute: typeof AuthLoginRoute
   AuthRegisterRoute: typeof AuthRegisterRoute
+  DashboardInstructorsInstructorRoute: typeof DashboardInstructorsInstructorRoute
+  DashboardStudentsStudentRoute: typeof DashboardStudentsStudentRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
@@ -122,6 +178,8 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   AuthLoginRoute: AuthLoginRoute,
   AuthRegisterRoute: AuthRegisterRoute,
+  DashboardInstructorsInstructorRoute: DashboardInstructorsInstructorRoute,
+  DashboardStudentsStudentRoute: DashboardStudentsStudentRoute,
 }
 
 export const routeTree = rootRoute
@@ -137,7 +195,9 @@ export const routeTree = rootRoute
         "/",
         "/about",
         "/auth/login",
-        "/auth/register"
+        "/auth/register",
+        "/dashboard/instructors/instructor",
+        "/dashboard/students/student"
       ]
     },
     "/": {
@@ -151,6 +211,12 @@ export const routeTree = rootRoute
     },
     "/auth/register": {
       "filePath": "auth/register.tsx"
+    },
+    "/dashboard/instructors/instructor": {
+      "filePath": "dashboard/instructors/instructor.tsx"
+    },
+    "/dashboard/students/student": {
+      "filePath": "dashboard/students/student.tsx"
     }
   }
 }
