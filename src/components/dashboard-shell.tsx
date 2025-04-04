@@ -31,8 +31,8 @@ export function DashboardShell({ children }: DashboardShellProps) {
 
   return (
     <div className="w-full h-screen overflow-hidden winky-sans-custom">
-      <header className="sticky top-0 z-10 border-b-2 border-gray-300  bg-background py-2 ">
-        <div className=" flex h-16 items-center justify-between px-4 md:px-6 gap-20 w-full">
+      <header className="sticky top-0 z-10 border-b-2 border-gray-300  bg-background py-2 px-6 md:px-0">
+        <div className=" flex h-16 items-center justify-between sm:px-4 md:px-6 gap-20 w-full">
           <div className="flex items-center gap-4 justify-between flex-[1.5]">
             <Link to="/" className="flex items-center gap-2 text-3xl font-bold">
               <span className="text-primary">DevLearn</span>
@@ -68,7 +68,7 @@ export function DashboardShell({ children }: DashboardShellProps) {
               {/* )} */}
             </nav>
           </div>
-          <div className="flex items-center gap-4 flex-1 justify-end pr-30 ">
+          <div className="flex items-center gap-4 flex-1 justify-end md:pr-30 ">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
@@ -129,14 +129,14 @@ export function DashboardShell({ children }: DashboardShellProps) {
         </div>
       </header>
       <div className=" flex flex-1 h-full ">
-        <aside className="hidden w-64  border-r-2 border-gray-300 bg-muted/40 md:block">
+        <aside className="hidden w-52 lg:w-64  border-r-2 border-gray-300 bg-muted/40 md:block">
           <div className="flex h-full flex-col gap-2 p-4">
             <div className="py-2">
               <h2 className="px-4 text-2xl font-semibold tracking-tight">
                 Dashboard
               </h2>
             </div>
-            <nav className="flex-1 space-y-4 text-lg font-medium">
+            <nav className="flex-1 space-y-4 text-base lg:text-lg font-medium">
               <Link
                 to="/"
                 className="flex items-center gap-3 rounded-lg px-4 py-2   hover:bg-muted"
@@ -212,7 +212,7 @@ export function DashboardShell({ children }: DashboardShellProps) {
             </nav>
           </div>
         </aside>
-        <main className="flex-1 py-6 h-full overflow-y-scroll pb-32 px-12">
+        <main className="flex-1 py-6 h-full overflow-y-scroll pb-32  px-6 sm:px-12 md:px-6 lg:px-12">
           <div className="">{children}</div>
         </main>
       </div>

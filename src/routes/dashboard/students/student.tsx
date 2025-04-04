@@ -153,7 +153,7 @@ function RouteComponent() {
           {isLoading ? (
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
               {[1, 2, 3].map((i) => (
-                <Card key={i} className="animate-pulse  ">
+                <Card key={i} className="animate-pulse">
                   <div className="h-48 bg-muted rounded-t-lg" />
                   <CardHeader>
                     <div className="h-5 bg-muted rounded w-3/4" />
@@ -169,11 +169,11 @@ function RouteComponent() {
               ))}
             </div>
           ) : courses.length > 0 ? (
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 w-full">
               {courses.map((course) => (
                 <Card
                   key={course.id}
-                  className="overflow-hidden cursor-pointer border-gray-500"
+                  className="overflow-hidden cursor-pointer border-gray-500 min-h-[450px] w-[90%] sm:w-[70%] md:w-full mx-auto md:mx-auto mb-4 md:mb-0"
                 >
                   <img
                     src={course.thumbnail || "/placeholder.svg"}
@@ -205,7 +205,7 @@ function RouteComponent() {
                       to="/"
                       className="w-full"
                     >
-                      <Button className="w-full bg-black text-white cursor-pointer hover:scale-105">
+                      <Button className="w-full bg-black text-white cursor-pointer hover:scale-105 h-12 text-base">
                         Continue Learning
                       </Button>
                     </Link>
