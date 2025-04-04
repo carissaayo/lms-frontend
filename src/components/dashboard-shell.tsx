@@ -30,15 +30,12 @@ export function DashboardShell({ children }: DashboardShellProps) {
   const userRole = "instructor"; // or "student" or "moderator"
 
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="w-full h-screen overflow-hidden winky-sans-custom">
       <header className="sticky top-0 z-10 border-b bg-background">
         <div className="container flex h-16 items-center justify-between px-4 md:px-6">
-          <div className="flex items-center gap-4">
-            <Link
-              to="/"
-              className="flex items-center gap-2 text-lg font-semibold"
-            >
-              <span className="text-primary">EduLearn</span>
+          <div className="flex items-center gap-4 justify-between">
+            <Link to="/" className="flex items-center gap-2 text-3xl font-bold">
+              <span className="text-primary">DevLearn</span>
             </Link>
             <nav className="hidden md:flex gap-6">
               <Link
@@ -80,7 +77,7 @@ export function DashboardShell({ children }: DashboardShellProps) {
                 >
                   <Avatar className="h-8 w-8">
                     <AvatarImage src="/placeholder-user.jpg" alt="@username" />
-                    <AvatarFallback>JD</AvatarFallback>
+                    <AvatarFallback>=</AvatarFallback>
                   </Avatar>
                 </Button>
               </DropdownMenuTrigger>

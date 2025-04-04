@@ -20,7 +20,7 @@ function Index() {
   const { user } = useAuthStore((state) => state);
 
   return (
-    <main className="min-h-screen flex-col ">
+    <main className="min-h-screen flex-col winky-sans-custom ">
       {/* Header Starts */}
       <header className="bg-background border-b h-24 flex items-center px-6 md:px-12">
         <div className="container flex h-16 items-center justify-between px-4 md:px-6">
