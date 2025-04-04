@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -13,6 +13,7 @@ import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { DashboardShell } from "@/components/dashboard-shell";
 import { EmptyState } from "@/components/empty-state";
+import { toast } from "sonner";
 export const Route = createFileRoute("/dashboard/students/student")({
   component: RouteComponent,
 });
@@ -124,10 +125,8 @@ function RouteComponent() {
           setIsLoading(false);
         }, 1000);
       } catch (error) {
-        toast({
-          title: "Error",
+        toast.error("Error", {
           description: "Failed to load your data. Please try again.",
-          variant: "destructive",
         });
         setIsLoading(false);
       }
@@ -189,7 +188,9 @@ function RouteComponent() {
                 </CardContent>
                 <CardFooter>
                   <Link
-                    href={`/dashboard/student/courses/${course.id}`}
+                    // href={`/dashboard/student/courses/${course.id}`}
+
+                    to="/"
                     className="w-full"
                   >
                     <Button className="w-full">Continue Learning</Button>
@@ -203,7 +204,10 @@ function RouteComponent() {
             title="No enrolled courses"
             description="You haven't enrolled in any courses yet. Browse our catalog to find courses."
             action={
-              <Link href="/courses">
+              <Link
+                //   href="/courses"
+                to="/"
+              >
                 <Button>Browse Courses</Button>
               </Link>
             }
@@ -249,7 +253,9 @@ function RouteComponent() {
                       </CardHeader>
                       <CardFooter>
                         <Link
-                          href={`/dashboard/student/assignments/${assignment.id}`}
+                          to="/"
+
+                          //   href={`/dashboard/student/assignments/${assignment.id}`}
                         >
                           <Button>Submit Assignment</Button>
                         </Link>
@@ -285,7 +291,9 @@ function RouteComponent() {
                       </CardHeader>
                       <CardFooter>
                         <Link
-                          href={`/dashboard/student/assignments/${assignment.id}`}
+                          to="/"
+
+                          //   href={`/dashboard/student/assignments/${assignment.id}`}
                         >
                           <Button variant="outline">View Submission</Button>
                         </Link>
@@ -317,7 +325,9 @@ function RouteComponent() {
                       </CardHeader>
                       <CardFooter>
                         <Link
-                          href={`/dashboard/student/assignments/${assignment.id}`}
+                          to="/"
+
+                          //   href={`/dashboard/student/assignments/${assignment.id}`}
                         >
                           <Button variant="outline">View Feedback</Button>
                         </Link>
