@@ -28,8 +28,7 @@ const useAuthStore = create<AuthState>()(
       //   },
     }),
     {
-      name: "auth-storage", // Stores in localStorage
-      //   getStorage: () => localStorage, // Explicitly use localStorage
+      name: "auth-storage",
     }
   )
 );

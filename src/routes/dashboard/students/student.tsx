@@ -9,11 +9,12 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
+
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { DashboardShell } from "@/components/dashboard-shell";
 import { EmptyState } from "@/components/empty-state";
 import { toast } from "sonner";
+
 export const Route = createFileRoute("/dashboard/students/student")({
   component: RouteComponent,
 });
@@ -137,208 +138,224 @@ function RouteComponent() {
 
   return (
     <DashboardShell>
-      <div>
-        <h1 className="text-2xl font-bold tracking-tight">Student Dashboard</h1>
-        <p className="text-muted-foreground">
-          Track your progress, manage assignments, and continue learning
-        </p>
-      </div>
+      <main className="h-full ">
+        <div>
+          <h1 className="text-2xl font-bold tracking-tight">
+            Student Dashboard
+          </h1>
+          <p className="text-muted-foreground">
+            Track your progress, manage assignments, and continue learning
+          </p>
+        </div>
 
-      <div className="mt-6">
-        <h2 className="text-lg font-semibold mb-4">Continue Learning</h2>
-        {isLoading ? (
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {[1, 2, 3].map((i) => (
-              <Card key={i} className="animate-pulse">
-                <div className="h-48 bg-muted rounded-t-lg" />
-                <CardHeader>
-                  <div className="h-5 bg-muted rounded w-3/4" />
-                  <div className="h-4 bg-muted rounded w-1/2 mt-2" />
-                </CardHeader>
-                <CardContent>
-                  <div className="h-4 bg-muted rounded" />
-                </CardContent>
-                <CardFooter>
-                  <div className="h-9 bg-muted rounded w-full" />
-                </CardFooter>
-              </Card>
-            ))}
-          </div>
-        ) : courses.length > 0 ? (
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {courses.map((course) => (
-              <Card key={course.id} className="overflow-hidden">
-                <img
-                  src={course.thumbnail || "/placeholder.svg"}
-                  alt={course.title}
-                  className="w-full h-48 object-cover"
+        <div className="mt-6">
+          <h2 className="text-lg font-semibold mb-4">Continue Learning</h2>
+          {isLoading ? (
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+              {[1, 2, 3].map((i) => (
+                <Card key={i} className="animate-pulse  ">
+                  <div className="h-48 bg-muted rounded-t-lg" />
+                  <CardHeader>
+                    <div className="h-5 bg-muted rounded w-3/4" />
+                    <div className="h-4 bg-muted rounded w-1/2 mt-2" />
+                  </CardHeader>
+                  <CardContent>
+                    <div className="h-4 bg-muted rounded" />
+                  </CardContent>
+                  <CardFooter>
+                    <div className="h-9 bg-muted rounded w-full" />
+                  </CardFooter>
+                </Card>
+              ))}
+            </div>
+          ) : courses.length > 0 ? (
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+              {courses.map((course) => (
+                <Card
+                  key={course.id}
+                  className="overflow-hidden cursor-pointer border-gray-500"
+                >
+                  <img
+                    src={course.thumbnail || "/placeholder.svg"}
+                    alt={course.title}
+                    className="w-full h-48 object-cover"
+                  />
+                  <CardHeader>
+                    <CardTitle>{course.title}</CardTitle>
+                    <CardDescription>
+                      Instructor: {course.instructor}
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-2">
+                    <div className="flex justify-between text-sm">
+                      <span>Progress</span>
+                      <span>{course.progress}%</span>
+                    </div>
+                    <div className="w-full h-2 bg-gray-200 rounded-md overflow-hidden">
+                      <div
+                        className="h-full bg-blue-500 transition-all duration-300"
+                        style={{ width: `${course.progress}%` }}
+                      />
+                    </div>
+                  </CardContent>
+                  <CardFooter>
+                    <Link
+                      // href={`/dashboard/student/courses/${course.id}`}
+
+                      to="/"
+                      className="w-full"
+                    >
+                      <Button className="w-full bg-black text-white cursor-pointer hover:scale-105">
+                        Continue Learning
+                      </Button>
+                    </Link>
+                  </CardFooter>
+                </Card>
+              ))}
+            </div>
+          ) : (
+            <EmptyState
+              title="No enrolled courses"
+              description="You haven't enrolled in any courses yet. Browse our catalog to find courses."
+              action={
+                <Link
+                  //   href="/courses"
+                  to="/"
+                >
+                  <Button>Browse Courses</Button>
+                </Link>
+              }
+            />
+          )}
+        </div>
+
+        <div className="mt-8">
+          <h2 className="text-lg font-semibold mb-4">Assignments</h2>
+          <Tabs defaultValue="pending">
+            <TabsList>
+              <TabsTrigger value="pending">Pending</TabsTrigger>
+              <TabsTrigger value="submitted">Submitted</TabsTrigger>
+              <TabsTrigger value="graded">Graded</TabsTrigger>
+            </TabsList>
+            <TabsContent value="pending" className="mt-4">
+              {isLoading ? (
+                <div className="space-y-4">
+                  {[1, 2].map((i) => (
+                    <Card key={i} className="animate-pulse">
+                      <CardHeader>
+                        <div className="h-5 bg-muted rounded w-3/4" />
+                        <div className="h-4 bg-muted rounded w-1/2 mt-2" />
+                      </CardHeader>
+                      <CardFooter>
+                        <div className="h-9 bg-muted rounded w-32" />
+                      </CardFooter>
+                    </Card>
+                  ))}
+                </div>
+              ) : assignments.filter((a) => a.status === "pending").length >
+                0 ? (
+                <div className="space-y-4">
+                  {assignments
+                    .filter((assignment) => assignment.status === "pending")
+                    .map((assignment) => (
+                      <Card key={assignment.id}>
+                        <CardHeader>
+                          <CardTitle>{assignment.title}</CardTitle>
+                          <CardDescription>
+                            Course: {assignment.courseTitle} | Due:{" "}
+                            {assignment.dueDate}
+                          </CardDescription>
+                        </CardHeader>
+                        <CardFooter>
+                          <Link
+                            to="/"
+
+                            //   href={`/dashboard/student/assignments/${assignment.id}`}
+                          >
+                            <Button>Submit Assignment</Button>
+                          </Link>
+                        </CardFooter>
+                      </Card>
+                    ))}
+                </div>
+              ) : (
+                <EmptyState
+                  title="No pending assignments"
+                  description="You don't have any pending assignments at the moment."
                 />
-                <CardHeader>
-                  <CardTitle>{course.title}</CardTitle>
-                  <CardDescription>
-                    Instructor: {course.instructor}
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-2">
-                  <div className="flex justify-between text-sm">
-                    <span>Progress</span>
-                    <span>{course.progress}%</span>
-                  </div>
-                  <Progress value={course.progress} className="h-2" />
-                </CardContent>
-                <CardFooter>
-                  <Link
-                    // href={`/dashboard/student/courses/${course.id}`}
+              )}
+            </TabsContent>
+            <TabsContent value="submitted" className="mt-4">
+              {!isLoading &&
+              assignments.filter((a) => a.status === "submitted").length ===
+                0 ? (
+                <EmptyState
+                  title="No submitted assignments"
+                  description="You haven't submitted any assignments yet."
+                />
+              ) : (
+                <div className="space-y-4">
+                  {assignments
+                    .filter((assignment) => assignment.status === "submitted")
+                    .map((assignment) => (
+                      <Card key={assignment.id}>
+                        <CardHeader>
+                          <CardTitle>{assignment.title}</CardTitle>
+                          <CardDescription>
+                            Course: {assignment.courseTitle} | Submitted
+                          </CardDescription>
+                        </CardHeader>
+                        <CardFooter>
+                          <Link
+                            to="/"
 
-                    to="/"
-                    className="w-full"
-                  >
-                    <Button className="w-full">Continue Learning</Button>
-                  </Link>
-                </CardFooter>
-              </Card>
-            ))}
-          </div>
-        ) : (
-          <EmptyState
-            title="No enrolled courses"
-            description="You haven't enrolled in any courses yet. Browse our catalog to find courses."
-            action={
-              <Link
-                //   href="/courses"
-                to="/"
-              >
-                <Button>Browse Courses</Button>
-              </Link>
-            }
-          />
-        )}
-      </div>
+                            //   href={`/dashboard/student/assignments/${assignment.id}`}
+                          >
+                            <Button variant="outline">View Submission</Button>
+                          </Link>
+                        </CardFooter>
+                      </Card>
+                    ))}
+                </div>
+              )}
+            </TabsContent>
+            <TabsContent value="graded" className="mt-4">
+              {!isLoading &&
+              assignments.filter((a) => a.status === "graded").length === 0 ? (
+                <EmptyState
+                  title="No graded assignments"
+                  description="You don't have any graded assignments yet."
+                />
+              ) : (
+                <div className="space-y-4">
+                  {assignments
+                    .filter((assignment) => assignment.status === "graded")
+                    .map((assignment) => (
+                      <Card key={assignment.id}>
+                        <CardHeader>
+                          <CardTitle>{assignment.title}</CardTitle>
+                          <CardDescription>
+                            Course: {assignment.courseTitle} | Grade:{" "}
+                            {assignment.grade}/100
+                          </CardDescription>
+                        </CardHeader>
+                        <CardFooter>
+                          <Link
+                            to="/"
 
-      <div className="mt-8">
-        <h2 className="text-lg font-semibold mb-4">Assignments</h2>
-        <Tabs defaultValue="pending">
-          <TabsList>
-            <TabsTrigger value="pending">Pending</TabsTrigger>
-            <TabsTrigger value="submitted">Submitted</TabsTrigger>
-            <TabsTrigger value="graded">Graded</TabsTrigger>
-          </TabsList>
-          <TabsContent value="pending" className="mt-4">
-            {isLoading ? (
-              <div className="space-y-4">
-                {[1, 2].map((i) => (
-                  <Card key={i} className="animate-pulse">
-                    <CardHeader>
-                      <div className="h-5 bg-muted rounded w-3/4" />
-                      <div className="h-4 bg-muted rounded w-1/2 mt-2" />
-                    </CardHeader>
-                    <CardFooter>
-                      <div className="h-9 bg-muted rounded w-32" />
-                    </CardFooter>
-                  </Card>
-                ))}
-              </div>
-            ) : assignments.filter((a) => a.status === "pending").length > 0 ? (
-              <div className="space-y-4">
-                {assignments
-                  .filter((assignment) => assignment.status === "pending")
-                  .map((assignment) => (
-                    <Card key={assignment.id}>
-                      <CardHeader>
-                        <CardTitle>{assignment.title}</CardTitle>
-                        <CardDescription>
-                          Course: {assignment.courseTitle} | Due:{" "}
-                          {assignment.dueDate}
-                        </CardDescription>
-                      </CardHeader>
-                      <CardFooter>
-                        <Link
-                          to="/"
-
-                          //   href={`/dashboard/student/assignments/${assignment.id}`}
-                        >
-                          <Button>Submit Assignment</Button>
-                        </Link>
-                      </CardFooter>
-                    </Card>
-                  ))}
-              </div>
-            ) : (
-              <EmptyState
-                title="No pending assignments"
-                description="You don't have any pending assignments at the moment."
-              />
-            )}
-          </TabsContent>
-          <TabsContent value="submitted" className="mt-4">
-            {!isLoading &&
-            assignments.filter((a) => a.status === "submitted").length === 0 ? (
-              <EmptyState
-                title="No submitted assignments"
-                description="You haven't submitted any assignments yet."
-              />
-            ) : (
-              <div className="space-y-4">
-                {assignments
-                  .filter((assignment) => assignment.status === "submitted")
-                  .map((assignment) => (
-                    <Card key={assignment.id}>
-                      <CardHeader>
-                        <CardTitle>{assignment.title}</CardTitle>
-                        <CardDescription>
-                          Course: {assignment.courseTitle} | Submitted
-                        </CardDescription>
-                      </CardHeader>
-                      <CardFooter>
-                        <Link
-                          to="/"
-
-                          //   href={`/dashboard/student/assignments/${assignment.id}`}
-                        >
-                          <Button variant="outline">View Submission</Button>
-                        </Link>
-                      </CardFooter>
-                    </Card>
-                  ))}
-              </div>
-            )}
-          </TabsContent>
-          <TabsContent value="graded" className="mt-4">
-            {!isLoading &&
-            assignments.filter((a) => a.status === "graded").length === 0 ? (
-              <EmptyState
-                title="No graded assignments"
-                description="You don't have any graded assignments yet."
-              />
-            ) : (
-              <div className="space-y-4">
-                {assignments
-                  .filter((assignment) => assignment.status === "graded")
-                  .map((assignment) => (
-                    <Card key={assignment.id}>
-                      <CardHeader>
-                        <CardTitle>{assignment.title}</CardTitle>
-                        <CardDescription>
-                          Course: {assignment.courseTitle} | Grade:{" "}
-                          {assignment.grade}/100
-                        </CardDescription>
-                      </CardHeader>
-                      <CardFooter>
-                        <Link
-                          to="/"
-
-                          //   href={`/dashboard/student/assignments/${assignment.id}`}
-                        >
-                          <Button variant="outline">View Feedback</Button>
-                        </Link>
-                      </CardFooter>
-                    </Card>
-                  ))}
-              </div>
-            )}
-          </TabsContent>
-        </Tabs>
-      </div>
+                            //   href={`/dashboard/student/assignments/${assignment.id}`}
+                          >
+                            <Button variant="outline">View Feedback</Button>
+                          </Link>
+                        </CardFooter>
+                      </Card>
+                    ))}
+                </div>
+              )}
+            </TabsContent>
+          </Tabs>
+        </div>
+      </main>
     </DashboardShell>
   );
 }
