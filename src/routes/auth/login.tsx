@@ -14,6 +14,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast, Toaster } from "sonner";
 import api from "@/lib/axios";
+import useAuthStore from "@/store/useAuthStore";
 
 export const Route = createFileRoute("/auth/login")({
   component: RouteComponent,
@@ -27,7 +28,7 @@ function RouteComponent() {
     email: "",
     password: "",
   });
-
+  const loginUser = useAuthStore((state) => state.loginUser);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -61,7 +62,7 @@ function RouteComponent() {
       // Store the token in localStorage or use a state management solution
       localStorage.setItem("token", data.token);
       localStorage.setItem("user", JSON.stringify(data.user));
-
+      loginUser(data.user, data.token);
       toast.success("Login successful", {
         description: "You have been logged in successfully.",
         position: "top-center",
