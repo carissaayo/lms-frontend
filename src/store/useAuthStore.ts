@@ -19,7 +19,7 @@ const useAuthStore = create<AuthState>()(
         set({
           user: userData,
           token,
-          //   isAuthenticated: true
+          isAuthenticated: true,
         });
       },
 

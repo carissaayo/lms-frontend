@@ -1,5 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -21,7 +20,7 @@ export const Route = createFileRoute("/auth/login")({
 });
 
 function RouteComponent() {
-  const navigate = useNavigate();
+  const router = useRouter();
 
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -78,7 +77,9 @@ function RouteComponent() {
       //   router.push("/dashboard");
       // }
       setTimeout(() => {
-        navigate({ to: "/" });
+        const lastRoute = localStorage.getItem("lastRoute") || "/dashboard";
+        localStorage.removeItem("lastRoute");
+        router.navigate({ to: lastRoute });
       }, 1500);
     } catch (error) {
       toast.error("Login failed", {
@@ -91,8 +92,11 @@ function RouteComponent() {
   };
 
   useEffect(() => {
-    if (user.isVerified) {
-      navigate({ to: "/" });
+    if (user) {
+      const lastRoute =
+        localStorage.getItem("lastRoute") || "/dashboard/students/student";
+      localStorage.removeItem("lastRoute");
+      router.navigate({ to: lastRoute });
     }
   }, [user]);
   return (

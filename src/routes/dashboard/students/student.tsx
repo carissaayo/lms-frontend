@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -14,30 +14,54 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { DashboardShell } from "@/components/dashboard-shell";
 import { EmptyState } from "@/components/empty-state";
 import { toast } from "sonner";
+import useAuthStore from "@/store/useAuthStore";
+import api from "@/lib/axios";
 
 export const Route = createFileRoute("/dashboard/students/student")({
   component: RouteComponent,
 });
 interface Course {
-  id: string;
+  _id: string;
   title: string;
+  category: string;
   description: string;
-  thumbnail: string;
+  duration: number;
+  image: {
+    caption: string;
+    imageName: string;
+    url: string;
+  };
   instructor: string;
-  progress: number;
-  lastAccessed: string;
+  isApproved: boolean;
+  isPublished: boolean;
+  lectures: string[];
+  price: string;
+  quizz: string;
+  studentsEnrolled: string[];
+  createdAt: string;
+  updatedAt: string;
+  deleted: boolean;
+  __v: number;
 }
 
 interface Assignment {
-  id: string;
+  _id: string;
   title: string;
-  courseTitle: string;
-  dueDate: string;
-  status: "pending" | "submitted" | "graded";
-  grade?: number;
+  description: string;
+  dueDate: number;
+  file: string;
+  instructor: string;
+  interestedStudents: Array<{ studentId: string; status: string }>;
+  lecture: string;
+  createdAt: string;
+  updatedAt: string;
+  deleted: boolean;
+  __v: number;
 }
 
 function RouteComponent() {
+  const { user, token } = useAuthStore((state) => state);
+  const router = useRouter();
   const [courses, setCourses] = useState<Course[]>([]);
   const [assignments, setAssignments] = useState<Assignment[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -45,86 +69,21 @@ function RouteComponent() {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setIsLoading(true);
+
         // Replace with your actual API endpoints
-        // const coursesResponse = await fetch("/api/student/courses", {
-        //   headers: {
-        //     Authorization: `Bearer ${localStorage.getItem("token")}`,
-        //   },
-        // })
-        // const assignmentsResponse = await fetch("/api/student/assignments", {
-        //   headers: {
-        //     Authorization: `Bearer ${localStorage.getItem("token")}`,
-        //   },
-        // })
+        const response = await api.get(`/users/user-details/${user.id}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
-        // if (!coursesResponse.ok || !assignmentsResponse.ok) {
-        //   throw new Error("Failed to fetch data")
-        // }
+        const data = response?.data?.student;
+        console.log(data.assignments);
 
-        // const coursesData = await coursesResponse.json()
-        // const assignmentsData = await assignmentsResponse.json()
-
-        // setCourses(coursesData.courses)
-        // setAssignments(assignmentsData.assignments)
-
-        // Mock data for preview
-        setTimeout(() => {
-          setCourses([
-            {
-              id: "1",
-              title: "Introduction to Web Development",
-              description: "Learn the basics of HTML, CSS, and JavaScript",
-              thumbnail: "/placeholder.svg?height=150&width=250&text=Web+Dev",
-              instructor: "John Smith",
-              progress: 75,
-              lastAccessed: "2023-05-15",
-            },
-            {
-              id: "2",
-              title: "Python for Data Science",
-              description: "Master Python for data analysis and visualization",
-              thumbnail: "/placeholder.svg?height=150&width=250&text=Python",
-              instructor: "Sarah Johnson",
-              progress: 30,
-              lastAccessed: "2023-05-10",
-            },
-            {
-              id: "3",
-              title: "UI/UX Design Principles",
-              description: "Learn modern design principles and practices",
-              thumbnail: "/placeholder.svg?height=150&width=250&text=UI/UX",
-              instructor: "Michael Chen",
-              progress: 10,
-              lastAccessed: "2023-05-05",
-            },
-          ]);
-
-          setAssignments([
-            {
-              id: "1",
-              title: "HTML & CSS Project",
-              courseTitle: "Introduction to Web Development",
-              dueDate: "2023-05-20",
-              status: "pending",
-            },
-            {
-              id: "2",
-              title: "JavaScript Quiz",
-              courseTitle: "Introduction to Web Development",
-              dueDate: "2023-05-18",
-              status: "submitted",
-            },
-            {
-              id: "3",
-              title: "Data Visualization Project",
-              courseTitle: "Python for Data Science",
-              dueDate: "2023-05-25",
-              status: "graded",
-              grade: 92,
-            },
-          ]);
-          setIsLoading(false);
-        }, 1000);
+        setCourses(data.enrolledCourses);
+        setAssignments(data.assignments);
+        setIsLoading(false);
       } catch (error) {
         toast.error("Error", {
           description: "Failed to load your data. Please try again.",
@@ -135,6 +94,14 @@ function RouteComponent() {
 
     fetchData();
   }, [toast]);
+
+  useEffect(() => {
+    if (!user) {
+      const lastPath = router.state.location.pathname;
+      localStorage.setItem("lastRoute", lastPath);
+      router.navigate({ to: "/auth/login" });
+    }
+  }, [user]);
 
   return (
     <DashboardShell>
@@ -176,7 +143,7 @@ function RouteComponent() {
                   className="overflow-hidden cursor-pointer border-gray-500 min-h-[450px] w-[90%] sm:w-[70%] md:w-full mx-auto md:mx-auto mb-4 md:mb-0"
                 >
                   <img
-                    src={course.thumbnail || "/placeholder.svg"}
+                    src={course.image.url || "/placeholder.svg"}
                     alt={course.title}
                     className="w-full h-48 object-cover"
                   />
@@ -189,12 +156,12 @@ function RouteComponent() {
                   <CardContent className="space-y-2">
                     <div className="flex justify-between text-sm">
                       <span>Progress</span>
-                      <span>{course.progress}%</span>
+                      {/* <span>{course.progress}%</span> */}
                     </div>
                     <div className="w-full h-2 bg-gray-200 rounded-md overflow-hidden">
                       <div
                         className="h-full bg-blue-500 transition-all duration-300"
-                        style={{ width: `${course.progress}%` }}
+                        // style={{ width: `${course.progress}%` }}
                       />
                     </div>
                   </CardContent>
@@ -252,31 +219,27 @@ function RouteComponent() {
                     </Card>
                   ))}
                 </div>
-              ) : assignments.filter((a) => a.status === "pending").length >
-                0 ? (
+              ) : assignments.length > 0 ? (
                 <div className="space-y-4">
-                  {assignments
-                    .filter((assignment) => assignment.status === "pending")
-                    .map((assignment) => (
-                      <Card key={assignment.id}>
-                        <CardHeader>
-                          <CardTitle>{assignment.title}</CardTitle>
-                          <CardDescription>
-                            Course: {assignment.courseTitle} | Due:{" "}
-                            {assignment.dueDate}
-                          </CardDescription>
-                        </CardHeader>
-                        <CardFooter>
-                          <Link
-                            to="/"
+                  {assignments.map((assignment) => (
+                    <Card key={assignment._id}>
+                      <CardHeader>
+                        <CardTitle>{assignment.title}</CardTitle>
+                        <CardDescription>
+                          Course: {assignment.title} | Due: {assignment.dueDate}
+                        </CardDescription>
+                      </CardHeader>
+                      <CardFooter>
+                        <Link
+                          to="/"
 
-                            //   href={`/dashboard/student/assignments/${assignment.id}`}
-                          >
-                            <Button>Submit Assignment</Button>
-                          </Link>
-                        </CardFooter>
-                      </Card>
-                    ))}
+                          //   href={`/dashboard/student/assignments/${assignment.id}`}
+                        >
+                          <Button>Submit Assignment</Button>
+                        </Link>
+                      </CardFooter>
+                    </Card>
+                  ))}
                 </div>
               ) : (
                 <EmptyState
@@ -285,7 +248,7 @@ function RouteComponent() {
                 />
               )}
             </TabsContent>
-            <TabsContent value="submitted" className="mt-4">
+            {/* <TabsContent value="submitted" className="mt-4">
               {!isLoading &&
               assignments.filter((a) => a.status === "submitted").length ===
                 0 ? (
@@ -352,7 +315,7 @@ function RouteComponent() {
                     ))}
                 </div>
               )}
-            </TabsContent>
+            </TabsContent> */}
           </Tabs>
         </div>
       </main>
