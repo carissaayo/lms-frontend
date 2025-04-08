@@ -20,14 +20,16 @@ import {
   Users,
 } from "lucide-react";
 import { Link } from "@tanstack/react-router";
+import useAuthStore from "@/store/useAuthStore";
 
 interface DashboardShellProps {
   children: ReactNode;
 }
 
 export function DashboardShell({ children }: DashboardShellProps) {
-  // In a real app, you would get the user role from your auth context/state
-  const userRole = "instructor"; // or "student" or "moderator"
+  const { user } = useAuthStore((state) => state);
+
+  const userRole = user.role;
 
   return (
     <div className="w-full h-screen overflow-hidden winky-sans-custom">
@@ -58,14 +60,14 @@ export function DashboardShell({ children }: DashboardShellProps) {
                   My Courses
                 </Link>
               )}
-              {/* {userRole === "moderator" && ( */}
-              <Link
-                to="/"
-                className=" font-medium hover:underline underline-offset-4"
-              >
-                Moderation
-              </Link>
-              {/* )} */}
+              {userRole === "moderator" && (
+                <Link
+                  to="/"
+                  className=" font-medium hover:underline underline-offset-4"
+                >
+                  Moderation
+                </Link>
+              )}
             </nav>
           </div>
           <div className="flex items-center gap-4 flex-1 justify-end md:pr-30 ">
@@ -164,62 +166,62 @@ export function DashboardShell({ children }: DashboardShellProps) {
                 Home
               </Link>
 
-              {/* {userRole === "instructor" && ( */}
-              <>
-                <Link
-                  to="/"
-                  className="flex items-center gap-3 rounded-lg px-4 py-2   hover:bg-muted"
-                >
-                  <BookOpen className="h-4 w-4" />
-                  My Courses
-                </Link>
-                <Link
-                  to="/"
-                  className="flex items-center gap-3 rounded-lg px-4 py-2   hover:bg-muted"
-                >
-                  <FileText className="h-4 w-4" />
-                  Analytics
-                </Link>
-              </>
-              {/* )} */}
+              {userRole === "instructor" && (
+                <>
+                  <Link
+                    to="/"
+                    className="flex items-center gap-3 rounded-lg px-4 py-2   hover:bg-muted"
+                  >
+                    <BookOpen className="h-4 w-4" />
+                    My Courses
+                  </Link>
+                  <Link
+                    to="/"
+                    className="flex items-center gap-3 rounded-lg px-4 py-2   hover:bg-muted"
+                  >
+                    <FileText className="h-4 w-4" />
+                    Analytics
+                  </Link>
+                </>
+              )}
 
-              {/* {userRole === "student" && ( */}
-              <>
-                <Link
-                  to="/"
-                  className="flex items-center gap-3 rounded-lg px-4 py-2   hover:bg-muted"
-                >
-                  <BookOpen className="h-4 w-4" />
-                  My Learning
-                </Link>
-                <Link
-                  to="/"
-                  className="flex items-center gap-3 rounded-lg px-4 py-2   hover:bg-muted"
-                >
-                  <FileText className="h-4 w-4" />
-                  Assignments
-                </Link>
-              </>
-              {/* )} */}
+              {userRole === "student" && (
+                <>
+                  <Link
+                    to="/"
+                    className="flex items-center gap-3 rounded-lg px-4 py-2   hover:bg-muted"
+                  >
+                    <BookOpen className="h-4 w-4" />
+                    My Learning
+                  </Link>
+                  <Link
+                    to="/"
+                    className="flex items-center gap-3 rounded-lg px-4 py-2   hover:bg-muted"
+                  >
+                    <FileText className="h-4 w-4" />
+                    Assignments
+                  </Link>
+                </>
+              )}
 
-              {/* {userRole === "moderator" && ( */}
-              <>
-                <Link
-                  to="/"
-                  className="flex items-center gap-3 rounded-lg px-4 py-2   hover:bg-muted"
-                >
-                  <BookOpen className="h-4 w-4" />
-                  Course Reviews
-                </Link>
-                <Link
-                  to="/"
-                  className="flex items-center gap-3 rounded-lg px-4 py-2   hover:bg-muted"
-                >
-                  <Users className="h-4 w-4" />
-                  User Management
-                </Link>
-              </>
-              {/* )} */}
+              {userRole === "moderator" && (
+                <>
+                  <Link
+                    to="/"
+                    className="flex items-center gap-3 rounded-lg px-4 py-2   hover:bg-muted"
+                  >
+                    <BookOpen className="h-4 w-4" />
+                    Course Reviews
+                  </Link>
+                  <Link
+                    to="/"
+                    className="flex items-center gap-3 rounded-lg px-4 py-2   hover:bg-muted"
+                  >
+                    <Users className="h-4 w-4" />
+                    User Management
+                  </Link>
+                </>
+              )}
 
               <Link
                 to="/"

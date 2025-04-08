@@ -67,15 +67,15 @@ function RouteComponent() {
       });
 
       // Redirect based on user role
-      // if (data.user.role === "instructor") {
-      //   router.push("/dashboard/instructor");
-      // } else if (data.user.role === "student") {
-      //   router.push("/dashboard/student");
-      // } else if (data.user.role === "moderator") {
-      //   router.push("/dashboard/moderator");
-      // } else {
-      //   router.push("/dashboard");
-      // }
+      if (data.user.role === "instructor") {
+        router.navigate({ to: "/dashboard/instructors/instructor" });
+      } else if (data.user.role === "student") {
+        router.navigate({ to: "/dashboard/students/student" });
+      } else if (data.user.role === "moderator") {
+        router.navigate({ to: "/dashboard/students/student" });
+      } else {
+        router.navigate({ to: "/dashboard/students/student" });
+      }
       setTimeout(() => {
         const lastRoute =
           localStorage.getItem("lastRoute") || "/dashboard/students/student";
@@ -96,12 +96,10 @@ function RouteComponent() {
     if (user) {
       const lastRoute =
         localStorage.getItem("lastRoute") || "/dashboard/students/student";
-      console.log(lastRoute);
-
-      // localStorage.removeItem("lastRoute");
-      // router.navigate({ to: lastRoute });
+      localStorage.removeItem("lastRoute");
+      router.navigate({ to: lastRoute });
     }
-  }, [user]);
+  }, [user, router]);
   return (
     <main className="min-h-screen pt-12">
       <div className="flex items-center justify-center w-full">
