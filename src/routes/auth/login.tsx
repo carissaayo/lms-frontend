@@ -77,7 +77,8 @@ function RouteComponent() {
       //   router.push("/dashboard");
       // }
       setTimeout(() => {
-        const lastRoute = localStorage.getItem("lastRoute") || "/dashboard";
+        const lastRoute =
+          localStorage.getItem("lastRoute") || "/dashboard/students/student";
         localStorage.removeItem("lastRoute");
         router.navigate({ to: lastRoute });
       }, 1500);
@@ -95,8 +96,10 @@ function RouteComponent() {
     if (user) {
       const lastRoute =
         localStorage.getItem("lastRoute") || "/dashboard/students/student";
-      localStorage.removeItem("lastRoute");
-      router.navigate({ to: lastRoute });
+      console.log(lastRoute);
+
+      // localStorage.removeItem("lastRoute");
+      // router.navigate({ to: lastRoute });
     }
   }, [user]);
   return (

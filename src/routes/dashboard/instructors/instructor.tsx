@@ -1,5 +1,5 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState, useEffect } from "react";
+import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
+import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -15,39 +15,55 @@ import { DashboardShell } from "@/components/dashboard-shell";
 import { EmptyState } from "@/components/empty-state";
 import { toast } from "sonner";
 import { CourseCard } from "@/components/course-card";
+import api from "@/lib/axios";
+import useAuthStore from "@/store/useAuthStore";
 export const Route = createFileRoute("/dashboard/instructors/instructor")({
   component: RouteComponent,
 });
 
 interface Course {
-  id: string;
+  _id: string;
   title: string;
   description: string;
-  thumbnail: string;
-  status: "draft" | "published" | "pending" | "rejected";
-  studentsEnrolled: number;
+  category: string;
+  duration: number;
+  price: string;
+  instructor: string; // user ID
+  isApproved: boolean;
+  isPublished: boolean;
+  deleted: boolean;
+  image: {
+    url: string;
+    imageName: string;
+    caption: string;
+  };
+  lectures: string[];
+  quizz: string;
+  studentsEnrolled: string[];
   createdAt: string;
+  updatedAt: string;
+  __v: number;
 }
 
 function RouteComponent() {
+  const { user, token } = useAuthStore((state) => state);
+  const router = useRouter();
+
   const [courses, setCourses] = useState<Course[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-
+  const initialPath = useRef(router.state.location.pathname);
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        // Replace with your actual API endpoint
-        const response = await fetch("/api/instructor/courses", {
+        // Replace with your actual API endpoints
+        const response = await api.get(`/courses/instructor/${user.id}`, {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            Authorization: `Bearer ${token}`,
           },
         });
+        console.log(response);
 
-        if (!response.ok) {
-          throw new Error("Failed to fetch courses");
-        }
-
-        const data = await response.json();
+        const data = response?.data;
         setCourses(data.courses);
       } catch (error) {
         toast.error("Error", {
@@ -58,47 +74,20 @@ function RouteComponent() {
       }
     };
 
-    // Mock data for preview
-    setTimeout(() => {
-      setCourses([
-        {
-          id: "1",
-          title: "Introduction to Web Development",
-          description: "Learn the basics of HTML, CSS, and JavaScript",
-          thumbnail: "/placeholder.svg?height=150&width=250&text=Web+Dev",
-          status: "published",
-          studentsEnrolled: 125,
-          createdAt: "2023-01-15",
-        },
-        {
-          id: "2",
-          title: "Advanced React Patterns",
-          description: "Master advanced React concepts and patterns",
-          thumbnail: "/placeholder.svg?height=150&width=250&text=React",
-          status: "draft",
-          studentsEnrolled: 0,
-          createdAt: "2023-03-10",
-        },
-        {
-          id: "3",
-          title: "Node.js for Beginners",
-          description: "Build server-side applications with Node.js",
-          thumbnail: "/placeholder.svg?height=150&width=250&text=Node.js",
-          status: "pending",
-          studentsEnrolled: 0,
-          createdAt: "2023-04-22",
-        },
-      ]);
-      setIsLoading(false);
-    }, 1000);
-
-    // Uncomment to use real API
-    // fetchCourses()
+    fetchCourses();
   }, [toast]);
 
+  useEffect(() => {
+    if (!user) {
+      const lastPath = initialPath.current;
+      localStorage.setItem("lastRoute", lastPath);
+      // console.log(router.state.location);
+      router.navigate({ to: "/auth/login" });
+    }
+  }, [user]);
   return (
     <DashboardShell>
-      <div className="flex items-center justify-between">
+      <div className="flex sm:items-center justify-between flex-col sm:flex-row gap-4">
         <div>
           <h1 className="text-2xl font-bold tracking-tight">
             Instructor Dashboard
@@ -111,12 +100,14 @@ function RouteComponent() {
           to="/"
           //  href="/dashboard/instructor/courses/new"
         >
-          <Button>Create New Course</Button>
+          <Button className="border-white bg-black text-white rounded-lg">
+            Create New Course
+          </Button>
         </Link>
       </div>
 
-      <Tabs defaultValue="all" className="mt-6">
-        <TabsList>
+      <Tabs defaultValue="all" className="mt-6 ">
+        <TabsList className="flex flex-wrap justify-start mb-6">
           <TabsTrigger value="all">All Courses</TabsTrigger>
           <TabsTrigger value="published">Published</TabsTrigger>
           <TabsTrigger value="draft">Drafts</TabsTrigger>
@@ -145,9 +136,9 @@ function RouteComponent() {
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
               {courses.map((course) => (
                 <CourseCard
-                  key={course.id}
+                  key={course._id}
                   course={course}
-                  href={`/dashboard/instructor/courses/${course.id}`}
+                  href={`/dashboard/instructor/courses/${course._id}`}
                   actions={
                     <>
                       <Link
@@ -187,8 +178,7 @@ function RouteComponent() {
           )}
         </TabsContent>
         <TabsContent value="published" className="mt-4">
-          {!isLoading &&
-          courses.filter((c) => c.status === "published").length === 0 ? (
+          {!isLoading && courses.length === 0 ? (
             <EmptyState
               title="No published courses"
               description="You don't have any published courses yet."
@@ -204,12 +194,12 @@ function RouteComponent() {
           ) : (
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
               {courses
-                .filter((course) => course.status === "published")
+                .filter((course) => course.isPublished)
                 .map((course) => (
                   <CourseCard
-                    key={course.id}
+                    key={course._id}
                     course={course}
-                    href={`/dashboard/instructor/courses/${course.id}`}
+                    href={`/dashboard/instructor/courses/${course._id}`}
                     actions={
                       <>
                         <Link
@@ -254,7 +244,7 @@ function RouteComponent() {
                 <div className="h-9 bg-muted rounded w-16 animate-pulse" />
               ) : (
                 courses.reduce(
-                  (total, course) => total + course.studentsEnrolled,
+                  (total, course) => total + Number(course.studentsEnrolled),
                   0
                 )
               )}

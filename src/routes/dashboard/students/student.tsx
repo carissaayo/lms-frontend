@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import {
@@ -65,6 +65,7 @@ function RouteComponent() {
   const [courses, setCourses] = useState<Course[]>([]);
   const [assignments, setAssignments] = useState<Assignment[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const initialPath = useRef(router.state.location.pathname);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -97,7 +98,7 @@ function RouteComponent() {
 
   useEffect(() => {
     if (!user) {
-      const lastPath = router.state.location.pathname;
+      const lastPath = initialPath.current;
       localStorage.setItem("lastRoute", lastPath);
       router.navigate({ to: "/auth/login" });
     }
@@ -139,7 +140,7 @@ function RouteComponent() {
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 w-full">
               {courses.map((course) => (
                 <Card
-                  key={course.id}
+                  key={course._id}
                   className="overflow-hidden cursor-pointer border-gray-500 min-h-[450px] w-[90%] sm:w-[70%] md:w-full mx-auto md:mx-auto mb-4 md:mb-0"
                 >
                   <img
