@@ -15,6 +15,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { EmptyState } from "@/components/empty-state";
 import { toast } from "sonner";
 import { CourseCard } from "@/components/course-card";
+import CourseStatCard from "@/components/courses/courseStatsCard";
 export const Route = createFileRoute("/dashboard/courses/")({
   component: RouteComponent,
 });
@@ -41,106 +42,54 @@ function RouteComponent() {
 
       <div className="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {/* Total Courses */}
-        <Card className="transition duration-200 hover:scale-[1.02] hover:shadow-lg cursor-pointer border-none bg-primary-light">
-          <CardHeader className="text-center">
-            <CardTitle className="text-xl font-heading text-gray-900">
-              Total Courses
-            </CardTitle>
-            <CardDescription className="font-secondary text-lg text-gray-700">
-              All the courses you have created
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="text-4xl font-heading text-center text-gray-900">
-              12
-            </div>
-          </CardContent>
-        </Card>
+        <CourseStatCard
+          title="Total Courses"
+          description=" All the courses you have created"
+          count={12}
+          bgColor="bg-primary-light"
+        />
 
         {/* Published Courses */}
-        <Card className="transition duration-200 hover:scale-[1.02] hover:shadow-lg cursor-pointer border-none bg-secondary-light">
-          <CardHeader className="text-center">
-            <CardTitle className="text-xl font-heading text-gray-900">
-              Published Courses
-            </CardTitle>
-            <CardDescription className="font-secondary text-lg text-gray-700">
-              Courses approved and published by you
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="text-4xl font-heading text-center text-gray-900">
-              16
-            </div>
-          </CardContent>
-        </Card>
+        <CourseStatCard
+          title="  Published Courses"
+          description="Courses approved and published by you"
+          count={16}
+          bgColor="bg-secondary-light"
+        />
 
         {/* Approved Courses */}
-        <Card className="transition duration-200 hover:scale-[1.02] hover:shadow-lg cursor-pointer border-none bg-success">
-          <CardHeader className="text-center">
-            <CardTitle className="text-xl font-heading text-white">
-              Approved Courses
-            </CardTitle>
-            <CardDescription className="font-secondary text-lg text-white/90">
-              Approved by moderators
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="text-4xl font-heading text-center text-white">
-              16
-            </div>
-          </CardContent>
-        </Card>
+        <CourseStatCard
+          title="Approved Courses"
+          description="Courses approved by moderators"
+          count={26}
+          bgColor="bg-success"
+          textColor="text-white"
+          descriptionTextColor="text-white/90"
+        />
 
         {/* Pending Courses */}
-        <Card className="transition duration-200 hover:scale-[1.02] hover:shadow-lg cursor-pointer border-none bg-accent-light">
-          <CardHeader className="text-center">
-            <CardTitle className="text-xl font-heading text-gray-900">
-              Pending Courses
-            </CardTitle>
-            <CardDescription className="font-secondary text-lg text-gray-700">
-              Awaiting approval by moderators
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="text-4xl font-heading text-center text-gray-900">
-              12
-            </div>
-          </CardContent>
-        </Card>
+        <CourseStatCard
+          title="Pending Courses"
+          description="Courses awaiting approval by moderators"
+          count={9}
+          bgColor="bg-accent-light"
+        />
 
         {/* Drafted Courses */}
-        <Card className="transition duration-200 hover:scale-[1.02] hover:shadow-lg cursor-pointer border-none bg-background">
-          <CardHeader className="text-center">
-            <CardTitle className="text-xl font-heading text-gray-900">
-              Drafted Courses
-            </CardTitle>
-            <CardDescription className="font-secondary text-lg text-gray-700">
-              Not yet submitted for approval
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="text-4xl font-heading text-center text-gray-900">
-              12
-            </div>
-          </CardContent>
-        </Card>
+        <CourseStatCard
+          title="Drafted Courses"
+          description="Courses not yet submitted for approval"
+          count={9}
+          bgColor="bg-background"
+        />
 
         {/* Rejected Courses */}
-        <Card className="transition duration-200 hover:scale-[1.02] hover:shadow-lg cursor-pointer border-none bg-error-light">
-          <CardHeader className="text-center">
-            <CardTitle className="text-xl font-heading text-gray-900">
-              Rejected Courses
-            </CardTitle>
-            <CardDescription className="font-secondary text-lg text-gray-700">
-              Rejected by moderators
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="text-4xl font-heading text-center text-gray-900">
-              12
-            </div>
-          </CardContent>
-        </Card>
+        <CourseStatCard
+          title="Rejected Courses"
+          description="Courses rejected by moderators"
+          count={9}
+          bgColor="bg-error-light"
+        />
       </div>
     </DashboardShell>
   );
