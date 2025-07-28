@@ -16,6 +16,7 @@ import { EmptyState } from "@/components/empty-state";
 import { toast } from "sonner";
 import { CourseCard } from "@/components/course-card";
 import CourseStatCard from "@/components/courses/courseStatsCard";
+import RecentCoursesTable from "@/components/courses/recentCoursesTable";
 export const Route = createFileRoute("/dashboard/courses/")({
   component: RouteComponent,
 });
@@ -40,7 +41,8 @@ function RouteComponent() {
         </Link>
       </div>
 
-      <div className="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+      {/* Courses Stats */}
+      <div className="my-10 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {/* Total Courses */}
         <CourseStatCard
           title="Total Courses"
@@ -51,7 +53,7 @@ function RouteComponent() {
 
         {/* Published Courses */}
         <CourseStatCard
-          title="  Published Courses"
+          title="Published Courses"
           description="Courses approved and published by you"
           count={16}
           bgColor="bg-secondary-light"
@@ -90,6 +92,11 @@ function RouteComponent() {
           count={9}
           bgColor="bg-error-light"
         />
+      </div>
+
+      <div className="w-full flex items-center justify-between my-10 gap-24">
+        <RecentCoursesTable />
+        <RecentCoursesTable />
       </div>
     </DashboardShell>
   );
