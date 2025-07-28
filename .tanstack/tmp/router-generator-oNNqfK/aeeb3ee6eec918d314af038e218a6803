@@ -13,7 +13,6 @@ import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthRegisterRouteImport } from './routes/auth/register'
 import { Route as AuthLoginRouteImport } from './routes/auth/login'
-import { Route as DashboardCoursesIndexRouteImport } from './routes/dashboard/courses/index'
 import { Route as DashboardStudentsStudentRouteImport } from './routes/dashboard/students/student'
 import { Route as DashboardInstructorsInstructorRouteImport } from './routes/dashboard/instructors/instructor'
 
@@ -37,11 +36,6 @@ const AuthLoginRoute = AuthLoginRouteImport.update({
   path: '/auth/login',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DashboardCoursesIndexRoute = DashboardCoursesIndexRouteImport.update({
-  id: '/dashboard/courses/',
-  path: '/dashboard/courses/',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const DashboardStudentsStudentRoute =
   DashboardStudentsStudentRouteImport.update({
     id: '/dashboard/students/student',
@@ -62,7 +56,6 @@ export interface FileRoutesByFullPath {
   '/auth/register': typeof AuthRegisterRoute
   '/dashboard/instructors/instructor': typeof DashboardInstructorsInstructorRoute
   '/dashboard/students/student': typeof DashboardStudentsStudentRoute
-  '/dashboard/courses': typeof DashboardCoursesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -71,7 +64,6 @@ export interface FileRoutesByTo {
   '/auth/register': typeof AuthRegisterRoute
   '/dashboard/instructors/instructor': typeof DashboardInstructorsInstructorRoute
   '/dashboard/students/student': typeof DashboardStudentsStudentRoute
-  '/dashboard/courses': typeof DashboardCoursesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -81,7 +73,6 @@ export interface FileRoutesById {
   '/auth/register': typeof AuthRegisterRoute
   '/dashboard/instructors/instructor': typeof DashboardInstructorsInstructorRoute
   '/dashboard/students/student': typeof DashboardStudentsStudentRoute
-  '/dashboard/courses/': typeof DashboardCoursesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -92,7 +83,6 @@ export interface FileRouteTypes {
     | '/auth/register'
     | '/dashboard/instructors/instructor'
     | '/dashboard/students/student'
-    | '/dashboard/courses'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -101,7 +91,6 @@ export interface FileRouteTypes {
     | '/auth/register'
     | '/dashboard/instructors/instructor'
     | '/dashboard/students/student'
-    | '/dashboard/courses'
   id:
     | '__root__'
     | '/'
@@ -110,7 +99,6 @@ export interface FileRouteTypes {
     | '/auth/register'
     | '/dashboard/instructors/instructor'
     | '/dashboard/students/student'
-    | '/dashboard/courses/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -120,7 +108,6 @@ export interface RootRouteChildren {
   AuthRegisterRoute: typeof AuthRegisterRoute
   DashboardInstructorsInstructorRoute: typeof DashboardInstructorsInstructorRoute
   DashboardStudentsStudentRoute: typeof DashboardStudentsStudentRoute
-  DashboardCoursesIndexRoute: typeof DashboardCoursesIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -153,13 +140,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthLoginRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/dashboard/courses/': {
-      id: '/dashboard/courses/'
-      path: '/dashboard/courses'
-      fullPath: '/dashboard/courses'
-      preLoaderRoute: typeof DashboardCoursesIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/dashboard/students/student': {
       id: '/dashboard/students/student'
       path: '/dashboard/students/student'
@@ -184,7 +164,6 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRegisterRoute: AuthRegisterRoute,
   DashboardInstructorsInstructorRoute: DashboardInstructorsInstructorRoute,
   DashboardStudentsStudentRoute: DashboardStudentsStudentRoute,
-  DashboardCoursesIndexRoute: DashboardCoursesIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -37,9 +37,10 @@ interface CourseCardProps {
   };
   href: string;
   actions?: ReactNode;
+  user: any;
 }
 
-export function CourseCard({ course, href, actions }: CourseCardProps) {
+export function CourseCard({ course, href, actions, user }: CourseCardProps) {
   return (
     <Card className="overflow-hidden">
       <Link
@@ -73,9 +74,7 @@ export function CourseCard({ course, href, actions }: CourseCardProps) {
           )} */}
         </div>
         <CardDescription className="line-clamp-2">
-          {course.instructor
-            ? `Instructor: ${course.instructor}`
-            : course.description}
+          {course.instructor ? `Instructor: ${user.name}` : course.description}
         </CardDescription>
       </CardHeader>
       <CardContent>

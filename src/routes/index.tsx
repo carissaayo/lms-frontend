@@ -12,13 +12,24 @@ import {
 
 import heroImg from "../assets/wes-hicks-4-EeTnaC1S4-unsplash.jpg";
 import useAuthStore from "@/store/useAuthStore";
+import { useEffect } from "react";
+import { useRouter } from "@tanstack/react-router";
 export const Route = createFileRoute("/")({
   component: Index,
 });
 
 function Index() {
+  const router = useRouter();
   const { user } = useAuthStore((state) => state);
-
+  useEffect(() => {
+    if (user) {
+      if (user.role === "instructor") {
+        router.navigate({ to: "/dashboard/instructors/instructor" });
+      } else {
+        router.navigate({ to: "/dashboard/students/student" });
+      }
+    }
+  }, [user, router]);
   return (
     <main className="min-h-screen flex-col winky-sans-custom ">
       {/* Header Starts */}
