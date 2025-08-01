@@ -1,3 +1,4 @@
+import { formattedPrice } from "@/lib/utils";
 import { TableCell, TableRow } from "../ui/table";
 
 export enum CourseStatus {
@@ -14,7 +15,7 @@ const RecentCourseTableRow = ({
   status,
 }: {
   title: string;
-  price: string;
+  price: number;
   status: string;
 }) => {
   const color =
@@ -33,7 +34,7 @@ const RecentCourseTableRow = ({
   return (
     <TableRow>
       <TableCell className="font-medium text-base ">{title}</TableCell>
-      <TableCell className="font-medium">{price}</TableCell>
+      <TableCell className="font-medium">{formattedPrice(price)}</TableCell>
 
       <TableCell className={`text-right ${color}`}>{status}</TableCell>
     </TableRow>

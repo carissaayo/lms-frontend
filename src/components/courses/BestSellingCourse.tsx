@@ -7,44 +7,41 @@ import {
   TableBody,
 } from "@/components/ui/table";
 import RecentCourseTableRow from "./recentCourseTableRow";
+import BestCourseTableRow from "./BestSellingCoursesRow";
 
-const RecentCoursesTable = () => {
+const BestSellingCourse = () => {
   return (
     <section className="w-1/2">
       <h1 className="font-primary text-2xl font-semibold pb-6">
-        Recent Courses
+        Best Selling Courses
       </h1>
       <Table className="border-1 border-text-muted  ">
-        <TableCaption>A list of your recent courses.</TableCaption>
+        <TableCaption>Your 5 best selling courses.</TableCaption>
         <TableHeader>
           <TableRow className="font-secondary text-lg">
             <TableHead className="w-[250px] font-secondary">Title</TableHead>
             <TableHead>Price</TableHead>
-            <TableHead className="text-right">Status</TableHead>
+            <TableHead className="text-right">Students</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody className="text-base">
-          <RecentCourseTableRow
+          <BestCourseTableRow
             title=" Intro to JavaScript"
             price={49.99}
-            status="Published"
+            students={40}
           />
 
-          <RecentCourseTableRow
+          <BestCourseTableRow
             title="Advanced React"
-            price={49.99}
-            status="Pending"
+            price={89.0}
+            students={40}
           />
 
-          <RecentCourseTableRow
-            title="UI/UX Basics"
-            price={49.99}
-            status="Rejected"
-          />
+          <BestCourseTableRow title="UI/UX Basics" price={20.0} students={40} />
         </TableBody>
       </Table>
     </section>
   );
 };
 
-export default RecentCoursesTable;
+export default BestSellingCourse;

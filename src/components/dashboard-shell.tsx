@@ -37,8 +37,8 @@ export function DashboardShell({ children }: DashboardShellProps) {
   const userRole = user?.role;
 
   return (
-    <div className="w-full h-screen overflow-hidden font-primary text-text">
-      <div className=" flex flex-1 h-full ">
+    <div className="w-full h-screen flex flex-col font-primary text-text overflow-hidden">
+      <div className="flex flex-1 overflow-hidden">
         <aside className="hidden w-52 lg:w-64  border-r-2  md:block bg-primary-light text-white ">
           <div className="flex h-full flex-col gap-2 p-4">
             <div className="py-2">
@@ -146,8 +146,8 @@ export function DashboardShell({ children }: DashboardShellProps) {
             </nav>
           </div>
         </aside>
-        <main className="flex-1 h-full overflow-y-scroll pb-32  ">
-          <header className="sticky top-0 z-10 border-b-2 border-gray-300   py-2 px-6 sm:px-12 md:px-6 lg:px-12 bg-background-light text-text">
+        <main className="flex-1 flex flex-col overflow-hidden">
+          <header className="sticky top-0 z-10 border-b-2 border-gray-300 py-2 px-6 sm:px-12 md:px-6 lg:px-12 bg-background-light text-text">
             <div className=" flex h-16 items-center justify-between gap-20 w-full">
               <div className="flex items-center gap-4 justify-between flex-[1.5]">
                 <h1 className="text-primary-dark text-3xl font-heading">
@@ -190,8 +190,8 @@ export function DashboardShell({ children }: DashboardShellProps) {
               </div>
             </div>
           </header>
-          <section className="px-6 sm:px-12 md:px-6 lg:px-12 pt-12">
-            <div className="">{children}</div>
+          <section className="px-6 sm:px-12 md:px-6 lg:px-12 pt-12 overflow-auto flex-1">
+            {children}
           </section>
         </main>
       </div>
