@@ -61,7 +61,7 @@ export function DashboardShell({ children }: DashboardShellProps) {
               {userRole === "instructor" && (
                 <>
                   <Link
-                    to="/dashboard/courses"
+                    to="/dashboard/instructor/courses"
                     className="flex items-center gap-3 rounded-lg px-4 py-2   hover:bg-muted"
                   >
                     <BookOpen className="h-4 w-4" />
@@ -75,7 +75,7 @@ export function DashboardShell({ children }: DashboardShellProps) {
                     Assignments
                   </Link>
                   <Link
-                    to="/"
+                    to="/dashboard/instructor/students"
                     className="flex items-center gap-3 rounded-lg px-4 py-2   hover:bg-muted"
                   >
                     <UsersRound className="h-4 w-4" />

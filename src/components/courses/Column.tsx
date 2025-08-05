@@ -1,8 +1,6 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
-import { Button } from "../ui/button";
-// This type is used to define the shape of our data.
-// You can use a Zod schema here if you want.
+
 export type Payment = {
   id: string;
   price: number;
@@ -14,7 +12,7 @@ export type Payment = {
 export const columns: ColumnDef<Payment>[] = [
   {
     accessorKey: "title",
-    header: () => <h1 className="text-lg">title</h1>,
+    header: () => <h1 className="text-lg">Title</h1>,
   },
   {
     accessorKey: "price",

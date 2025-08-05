@@ -9,7 +9,7 @@ import BestSellingCourse from "@/components/courses/BestSellingCourse";
 import { columns, Payment } from "@/components/courses/Column";
 import { DataTable } from "@/components/courses/CoursesTable";
 
-export const Route = createFileRoute("/dashboard/courses/")({
+export const Route = createFileRoute("/dashboard/instructor/courses/")({
   component: RouteComponent,
 });
 
@@ -205,7 +205,7 @@ async function RouteComponent() {
         </div>
 
         <section className="">
-          <h1 className="">Courses</h1>
+          <h1 className="font-primary text-2xl font-semibold ">Courses</h1>
           <div className="container mx-auto py-10">
             <DataTable columns={columns} data={data} />
           </div>

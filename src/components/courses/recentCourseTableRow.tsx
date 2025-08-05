@@ -1,13 +1,6 @@
 import { formattedPrice } from "@/lib/utils";
 import { TableCell, TableRow } from "../ui/table";
-
-export enum CourseStatus {
-  Drafted = "drafted",
-  Pending = "Pending",
-  Approved = "Approved",
-  Published = "Published",
-  Rejected = "Rejected",
-}
+import { CourseStatus } from "@/types/courseTypes";
 
 const RecentCourseTableRow = ({
   title,

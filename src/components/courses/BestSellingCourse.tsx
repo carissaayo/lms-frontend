@@ -6,7 +6,7 @@ import {
   TableHead,
   TableBody,
 } from "@/components/ui/table";
-import RecentCourseTableRow from "./recentCourseTableRow";
+
 import BestCourseTableRow from "./BestSellingCoursesRow";
 
 const BestSellingCourse = () => {

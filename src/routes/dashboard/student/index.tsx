@@ -17,7 +17,7 @@ import { toast } from "sonner";
 import useAuthStore from "@/store/useAuthStore";
 import api from "@/lib/axios";
 
-export const Route = createFileRoute("/dashboard/students/student")({
+export const Route = createFileRoute("/dashboard/student/")({
   component: RouteComponent,
 });
 interface Course {
