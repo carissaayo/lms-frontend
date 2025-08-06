@@ -7,8 +7,8 @@ body,
   margin: 0;
   padding: 0;
   overflow: hidden;
+  overscroll-behavior: none;
 }
-
 @theme {
   --color-primary: #4f8ef7; /* Light Blue - Primary actions */
   --color-primary-dark: #3b82f6;
