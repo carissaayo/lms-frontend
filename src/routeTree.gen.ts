@@ -11,12 +11,16 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as LandingPageIndexRouteImport } from './routes/landing-page/index'
 import { Route as AuthRegisterRouteImport } from './routes/auth/register'
 import { Route as AuthLoginRouteImport } from './routes/auth/login'
 import { Route as DashboardStudentIndexRouteImport } from './routes/dashboard/student/index'
 import { Route as DashboardInstructorIndexRouteImport } from './routes/dashboard/instructor/index'
 import { Route as DashboardInstructorStudentsIndexRouteImport } from './routes/dashboard/instructor/students/index'
+import { Route as DashboardInstructorEarningsIndexRouteImport } from './routes/dashboard/instructor/earnings/index'
 import { Route as DashboardInstructorCoursesIndexRouteImport } from './routes/dashboard/instructor/courses/index'
+import { Route as DashboardInstructorAssignmentsIndexRouteImport } from './routes/dashboard/instructor/assignments/index'
+import { Route as DashboardInstructorAnalyticsIndexRouteImport } from './routes/dashboard/instructor/analytics/index'
 
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
@@ -26,6 +30,11 @@ const AboutRoute = AboutRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LandingPageIndexRoute = LandingPageIndexRouteImport.update({
+  id: '/landing-page/',
+  path: '/landing-page/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthRegisterRoute = AuthRegisterRouteImport.update({
@@ -55,10 +64,28 @@ const DashboardInstructorStudentsIndexRoute =
     path: '/dashboard/instructor/students/',
     getParentRoute: () => rootRouteImport,
   } as any)
+const DashboardInstructorEarningsIndexRoute =
+  DashboardInstructorEarningsIndexRouteImport.update({
+    id: '/dashboard/instructor/earnings/',
+    path: '/dashboard/instructor/earnings/',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const DashboardInstructorCoursesIndexRoute =
   DashboardInstructorCoursesIndexRouteImport.update({
     id: '/dashboard/instructor/courses/',
     path: '/dashboard/instructor/courses/',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const DashboardInstructorAssignmentsIndexRoute =
+  DashboardInstructorAssignmentsIndexRouteImport.update({
+    id: '/dashboard/instructor/assignments/',
+    path: '/dashboard/instructor/assignments/',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const DashboardInstructorAnalyticsIndexRoute =
+  DashboardInstructorAnalyticsIndexRouteImport.update({
+    id: '/dashboard/instructor/analytics/',
+    path: '/dashboard/instructor/analytics/',
     getParentRoute: () => rootRouteImport,
   } as any)
 
@@ -67,9 +94,13 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/register': typeof AuthRegisterRoute
+  '/landing-page': typeof LandingPageIndexRoute
   '/dashboard/instructor': typeof DashboardInstructorIndexRoute
   '/dashboard/student': typeof DashboardStudentIndexRoute
+  '/dashboard/instructor/analytics': typeof DashboardInstructorAnalyticsIndexRoute
+  '/dashboard/instructor/assignments': typeof DashboardInstructorAssignmentsIndexRoute
   '/dashboard/instructor/courses': typeof DashboardInstructorCoursesIndexRoute
+  '/dashboard/instructor/earnings': typeof DashboardInstructorEarningsIndexRoute
   '/dashboard/instructor/students': typeof DashboardInstructorStudentsIndexRoute
 }
 export interface FileRoutesByTo {
@@ -77,9 +108,13 @@ export interface FileRoutesByTo {
   '/about': typeof AboutRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/register': typeof AuthRegisterRoute
+  '/landing-page': typeof LandingPageIndexRoute
   '/dashboard/instructor': typeof DashboardInstructorIndexRoute
   '/dashboard/student': typeof DashboardStudentIndexRoute
+  '/dashboard/instructor/analytics': typeof DashboardInstructorAnalyticsIndexRoute
+  '/dashboard/instructor/assignments': typeof DashboardInstructorAssignmentsIndexRoute
   '/dashboard/instructor/courses': typeof DashboardInstructorCoursesIndexRoute
+  '/dashboard/instructor/earnings': typeof DashboardInstructorEarningsIndexRoute
   '/dashboard/instructor/students': typeof DashboardInstructorStudentsIndexRoute
 }
 export interface FileRoutesById {
@@ -88,9 +123,13 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/register': typeof AuthRegisterRoute
+  '/landing-page/': typeof LandingPageIndexRoute
   '/dashboard/instructor/': typeof DashboardInstructorIndexRoute
   '/dashboard/student/': typeof DashboardStudentIndexRoute
+  '/dashboard/instructor/analytics/': typeof DashboardInstructorAnalyticsIndexRoute
+  '/dashboard/instructor/assignments/': typeof DashboardInstructorAssignmentsIndexRoute
   '/dashboard/instructor/courses/': typeof DashboardInstructorCoursesIndexRoute
+  '/dashboard/instructor/earnings/': typeof DashboardInstructorEarningsIndexRoute
   '/dashboard/instructor/students/': typeof DashboardInstructorStudentsIndexRoute
 }
 export interface FileRouteTypes {
@@ -100,9 +139,13 @@ export interface FileRouteTypes {
     | '/about'
     | '/auth/login'
     | '/auth/register'
+    | '/landing-page'
     | '/dashboard/instructor'
     | '/dashboard/student'
+    | '/dashboard/instructor/analytics'
+    | '/dashboard/instructor/assignments'
     | '/dashboard/instructor/courses'
+    | '/dashboard/instructor/earnings'
     | '/dashboard/instructor/students'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -110,9 +153,13 @@ export interface FileRouteTypes {
     | '/about'
     | '/auth/login'
     | '/auth/register'
+    | '/landing-page'
     | '/dashboard/instructor'
     | '/dashboard/student'
+    | '/dashboard/instructor/analytics'
+    | '/dashboard/instructor/assignments'
     | '/dashboard/instructor/courses'
+    | '/dashboard/instructor/earnings'
     | '/dashboard/instructor/students'
   id:
     | '__root__'
@@ -120,9 +167,13 @@ export interface FileRouteTypes {
     | '/about'
     | '/auth/login'
     | '/auth/register'
+    | '/landing-page/'
     | '/dashboard/instructor/'
     | '/dashboard/student/'
+    | '/dashboard/instructor/analytics/'
+    | '/dashboard/instructor/assignments/'
     | '/dashboard/instructor/courses/'
+    | '/dashboard/instructor/earnings/'
     | '/dashboard/instructor/students/'
   fileRoutesById: FileRoutesById
 }
@@ -131,9 +182,13 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   AuthLoginRoute: typeof AuthLoginRoute
   AuthRegisterRoute: typeof AuthRegisterRoute
+  LandingPageIndexRoute: typeof LandingPageIndexRoute
   DashboardInstructorIndexRoute: typeof DashboardInstructorIndexRoute
   DashboardStudentIndexRoute: typeof DashboardStudentIndexRoute
+  DashboardInstructorAnalyticsIndexRoute: typeof DashboardInstructorAnalyticsIndexRoute
+  DashboardInstructorAssignmentsIndexRoute: typeof DashboardInstructorAssignmentsIndexRoute
   DashboardInstructorCoursesIndexRoute: typeof DashboardInstructorCoursesIndexRoute
+  DashboardInstructorEarningsIndexRoute: typeof DashboardInstructorEarningsIndexRoute
   DashboardInstructorStudentsIndexRoute: typeof DashboardInstructorStudentsIndexRoute
 }
 
@@ -151,6 +206,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/landing-page/': {
+      id: '/landing-page/'
+      path: '/landing-page'
+      fullPath: '/landing-page'
+      preLoaderRoute: typeof LandingPageIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth/register': {
@@ -188,11 +250,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardInstructorStudentsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/dashboard/instructor/earnings/': {
+      id: '/dashboard/instructor/earnings/'
+      path: '/dashboard/instructor/earnings'
+      fullPath: '/dashboard/instructor/earnings'
+      preLoaderRoute: typeof DashboardInstructorEarningsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/dashboard/instructor/courses/': {
       id: '/dashboard/instructor/courses/'
       path: '/dashboard/instructor/courses'
       fullPath: '/dashboard/instructor/courses'
       preLoaderRoute: typeof DashboardInstructorCoursesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard/instructor/assignments/': {
+      id: '/dashboard/instructor/assignments/'
+      path: '/dashboard/instructor/assignments'
+      fullPath: '/dashboard/instructor/assignments'
+      preLoaderRoute: typeof DashboardInstructorAssignmentsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard/instructor/analytics/': {
+      id: '/dashboard/instructor/analytics/'
+      path: '/dashboard/instructor/analytics'
+      fullPath: '/dashboard/instructor/analytics'
+      preLoaderRoute: typeof DashboardInstructorAnalyticsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -203,9 +286,15 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   AuthLoginRoute: AuthLoginRoute,
   AuthRegisterRoute: AuthRegisterRoute,
+  LandingPageIndexRoute: LandingPageIndexRoute,
   DashboardInstructorIndexRoute: DashboardInstructorIndexRoute,
   DashboardStudentIndexRoute: DashboardStudentIndexRoute,
+  DashboardInstructorAnalyticsIndexRoute:
+    DashboardInstructorAnalyticsIndexRoute,
+  DashboardInstructorAssignmentsIndexRoute:
+    DashboardInstructorAssignmentsIndexRoute,
   DashboardInstructorCoursesIndexRoute: DashboardInstructorCoursesIndexRoute,
+  DashboardInstructorEarningsIndexRoute: DashboardInstructorEarningsIndexRoute,
   DashboardInstructorStudentsIndexRoute: DashboardInstructorStudentsIndexRoute,
 }
 export const routeTree = rootRouteImport

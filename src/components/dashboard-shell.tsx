@@ -1,22 +1,13 @@
 import type { ReactNode } from "react";
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarImage } from "@/components/ui/avatar";
+
 import {
   Bell,
   BookOpen,
   CircleUser,
   FileText,
   Home,
-  LayoutDashboard,
   LogOut,
   NotebookPen,
   Settings,
@@ -42,22 +33,23 @@ export function DashboardShell({ children }: DashboardShellProps) {
         <aside className="hidden w-52 lg:w-64  border-r-2  md:block bg-primary-light text-white ">
           <div className="flex h-full flex-col gap-2 p-4">
             <div className="py-2">
-              <Link
-                to="/"
-                className="flex items-center gap-2 text-3xl font-bold"
-              >
-                <span className="">DevLearn</span>
-              </Link>
+              <h1 className="flex items-center gap-2 text-3xl font-bold">
+                DevLearn
+              </h1>
             </div>
             <nav className="flex-1 space-y-4 text-base lg:text-xl font-medium pt-12 font-heading">
               <Link
-                to="/"
+                to={
+                  userRole === "instructor"
+                    ? "/dashboard/instructor"
+                    : "/dashboard/student"
+                }
                 className="flex items-center gap-3 rounded-lg px-4 py-2   hover:bg-muted"
               >
                 <Home className="h-4 w-4" />
-                Home
+                Dashboard
               </Link>
-
+              {/* Instructor Navs */}
               {userRole === "instructor" && (
                 <>
                   <Link
@@ -68,7 +60,7 @@ export function DashboardShell({ children }: DashboardShellProps) {
                     My Courses
                   </Link>
                   <Link
-                    to="/"
+                    to="/dashboard/instructor/assignments"
                     className="flex items-center gap-3 rounded-lg px-4 py-2   hover:bg-muted"
                   >
                     <NotebookPen className="h-4 w-4" />
@@ -82,14 +74,14 @@ export function DashboardShell({ children }: DashboardShellProps) {
                     Students
                   </Link>
                   <Link
-                    to="/"
+                    to="/dashboard/instructor/earnings"
                     className="flex items-center gap-3 rounded-lg px-4 py-2   hover:bg-muted"
                   >
                     <Wallet className="h-4 w-4" />
                     Earnings
                   </Link>
                   <Link
-                    to="/"
+                    to="/dashboard/instructor/analytics"
                     className="flex items-center gap-3 rounded-lg px-4 py-2   hover:bg-muted"
                   >
                     <FileText className="h-4 w-4" />

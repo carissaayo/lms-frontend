@@ -14,11 +14,11 @@ import heroImg from "../assets/wes-hicks-4-EeTnaC1S4-unsplash.jpg";
 import useAuthStore from "@/store/useAuthStore";
 import { useEffect } from "react";
 import { useRouter } from "@tanstack/react-router";
-export const Route = createFileRoute("/")({
-  component: Index,
+export const Route = createFileRoute("/landing-page/")({
+  component: LandingPage,
 });
 
-function Index() {
+function LandingPage() {
   const router = useRouter();
   const { user } = useAuthStore((state) => state);
   useEffect(() => {
