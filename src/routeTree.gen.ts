@@ -11,16 +11,25 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as StudentIndexRouteImport } from './routes/student/index'
+import { Route as SettingsIndexRouteImport } from './routes/settings/index'
+import { Route as ProfileIndexRouteImport } from './routes/profile/index'
 import { Route as LandingPageIndexRouteImport } from './routes/landing-page/index'
+import { Route as InstructorIndexRouteImport } from './routes/instructor/index'
 import { Route as AuthRegisterRouteImport } from './routes/auth/register'
 import { Route as AuthLoginRouteImport } from './routes/auth/login'
-import { Route as DashboardStudentIndexRouteImport } from './routes/dashboard/student/index'
-import { Route as DashboardInstructorIndexRouteImport } from './routes/dashboard/instructor/index'
-import { Route as DashboardInstructorStudentsIndexRouteImport } from './routes/dashboard/instructor/students/index'
-import { Route as DashboardInstructorEarningsIndexRouteImport } from './routes/dashboard/instructor/earnings/index'
-import { Route as DashboardInstructorCoursesIndexRouteImport } from './routes/dashboard/instructor/courses/index'
-import { Route as DashboardInstructorAssignmentsIndexRouteImport } from './routes/dashboard/instructor/assignments/index'
-import { Route as DashboardInstructorAnalyticsIndexRouteImport } from './routes/dashboard/instructor/analytics/index'
+import { Route as StudentSettingsIndexRouteImport } from './routes/student/settings/index'
+import { Route as StudentProfileIndexRouteImport } from './routes/student/profile/index'
+import { Route as StudentMyCoursesIndexRouteImport } from './routes/student/my-courses/index'
+import { Route as StudentCoursesIndexRouteImport } from './routes/student/courses/index'
+import { Route as StudentAssigmentsIndexRouteImport } from './routes/student/assigments/index'
+import { Route as InstructorStudentsIndexRouteImport } from './routes/instructor/students/index'
+import { Route as InstructorSettingsIndexRouteImport } from './routes/instructor/settings/index'
+import { Route as InstructorProfileIndexRouteImport } from './routes/instructor/profile/index'
+import { Route as InstructorEarningsIndexRouteImport } from './routes/instructor/earnings/index'
+import { Route as InstructorCoursesIndexRouteImport } from './routes/instructor/courses/index'
+import { Route as InstructorAssignmentsIndexRouteImport } from './routes/instructor/assignments/index'
+import { Route as InstructorAnalyticsIndexRouteImport } from './routes/instructor/analytics/index'
 
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
@@ -32,9 +41,29 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const StudentIndexRoute = StudentIndexRouteImport.update({
+  id: '/student/',
+  path: '/student/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SettingsIndexRoute = SettingsIndexRouteImport.update({
+  id: '/settings/',
+  path: '/settings/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProfileIndexRoute = ProfileIndexRouteImport.update({
+  id: '/profile/',
+  path: '/profile/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LandingPageIndexRoute = LandingPageIndexRouteImport.update({
   id: '/landing-page/',
   path: '/landing-page/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InstructorIndexRoute = InstructorIndexRouteImport.update({
+  id: '/instructor/',
+  path: '/instructor/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthRegisterRoute = AuthRegisterRouteImport.update({
@@ -47,45 +76,66 @@ const AuthLoginRoute = AuthLoginRouteImport.update({
   path: '/auth/login',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DashboardStudentIndexRoute = DashboardStudentIndexRouteImport.update({
-  id: '/dashboard/student/',
-  path: '/dashboard/student/',
+const StudentSettingsIndexRoute = StudentSettingsIndexRouteImport.update({
+  id: '/student/settings/',
+  path: '/student/settings/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DashboardInstructorIndexRoute =
-  DashboardInstructorIndexRouteImport.update({
-    id: '/dashboard/instructor/',
-    path: '/dashboard/instructor/',
+const StudentProfileIndexRoute = StudentProfileIndexRouteImport.update({
+  id: '/student/profile/',
+  path: '/student/profile/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StudentMyCoursesIndexRoute = StudentMyCoursesIndexRouteImport.update({
+  id: '/student/my-courses/',
+  path: '/student/my-courses/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StudentCoursesIndexRoute = StudentCoursesIndexRouteImport.update({
+  id: '/student/courses/',
+  path: '/student/courses/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StudentAssigmentsIndexRoute = StudentAssigmentsIndexRouteImport.update({
+  id: '/student/assigments/',
+  path: '/student/assigments/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InstructorStudentsIndexRoute = InstructorStudentsIndexRouteImport.update({
+  id: '/instructor/students/',
+  path: '/instructor/students/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InstructorSettingsIndexRoute = InstructorSettingsIndexRouteImport.update({
+  id: '/instructor/settings/',
+  path: '/instructor/settings/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InstructorProfileIndexRoute = InstructorProfileIndexRouteImport.update({
+  id: '/instructor/profile/',
+  path: '/instructor/profile/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InstructorEarningsIndexRoute = InstructorEarningsIndexRouteImport.update({
+  id: '/instructor/earnings/',
+  path: '/instructor/earnings/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InstructorCoursesIndexRoute = InstructorCoursesIndexRouteImport.update({
+  id: '/instructor/courses/',
+  path: '/instructor/courses/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InstructorAssignmentsIndexRoute =
+  InstructorAssignmentsIndexRouteImport.update({
+    id: '/instructor/assignments/',
+    path: '/instructor/assignments/',
     getParentRoute: () => rootRouteImport,
   } as any)
-const DashboardInstructorStudentsIndexRoute =
-  DashboardInstructorStudentsIndexRouteImport.update({
-    id: '/dashboard/instructor/students/',
-    path: '/dashboard/instructor/students/',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const DashboardInstructorEarningsIndexRoute =
-  DashboardInstructorEarningsIndexRouteImport.update({
-    id: '/dashboard/instructor/earnings/',
-    path: '/dashboard/instructor/earnings/',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const DashboardInstructorCoursesIndexRoute =
-  DashboardInstructorCoursesIndexRouteImport.update({
-    id: '/dashboard/instructor/courses/',
-    path: '/dashboard/instructor/courses/',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const DashboardInstructorAssignmentsIndexRoute =
-  DashboardInstructorAssignmentsIndexRouteImport.update({
-    id: '/dashboard/instructor/assignments/',
-    path: '/dashboard/instructor/assignments/',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const DashboardInstructorAnalyticsIndexRoute =
-  DashboardInstructorAnalyticsIndexRouteImport.update({
-    id: '/dashboard/instructor/analytics/',
-    path: '/dashboard/instructor/analytics/',
+const InstructorAnalyticsIndexRoute =
+  InstructorAnalyticsIndexRouteImport.update({
+    id: '/instructor/analytics/',
+    path: '/instructor/analytics/',
     getParentRoute: () => rootRouteImport,
   } as any)
 
@@ -94,28 +144,46 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/register': typeof AuthRegisterRoute
+  '/instructor': typeof InstructorIndexRoute
   '/landing-page': typeof LandingPageIndexRoute
-  '/dashboard/instructor': typeof DashboardInstructorIndexRoute
-  '/dashboard/student': typeof DashboardStudentIndexRoute
-  '/dashboard/instructor/analytics': typeof DashboardInstructorAnalyticsIndexRoute
-  '/dashboard/instructor/assignments': typeof DashboardInstructorAssignmentsIndexRoute
-  '/dashboard/instructor/courses': typeof DashboardInstructorCoursesIndexRoute
-  '/dashboard/instructor/earnings': typeof DashboardInstructorEarningsIndexRoute
-  '/dashboard/instructor/students': typeof DashboardInstructorStudentsIndexRoute
+  '/profile': typeof ProfileIndexRoute
+  '/settings': typeof SettingsIndexRoute
+  '/student': typeof StudentIndexRoute
+  '/instructor/analytics': typeof InstructorAnalyticsIndexRoute
+  '/instructor/assignments': typeof InstructorAssignmentsIndexRoute
+  '/instructor/courses': typeof InstructorCoursesIndexRoute
+  '/instructor/earnings': typeof InstructorEarningsIndexRoute
+  '/instructor/profile': typeof InstructorProfileIndexRoute
+  '/instructor/settings': typeof InstructorSettingsIndexRoute
+  '/instructor/students': typeof InstructorStudentsIndexRoute
+  '/student/assigments': typeof StudentAssigmentsIndexRoute
+  '/student/courses': typeof StudentCoursesIndexRoute
+  '/student/my-courses': typeof StudentMyCoursesIndexRoute
+  '/student/profile': typeof StudentProfileIndexRoute
+  '/student/settings': typeof StudentSettingsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/register': typeof AuthRegisterRoute
+  '/instructor': typeof InstructorIndexRoute
   '/landing-page': typeof LandingPageIndexRoute
-  '/dashboard/instructor': typeof DashboardInstructorIndexRoute
-  '/dashboard/student': typeof DashboardStudentIndexRoute
-  '/dashboard/instructor/analytics': typeof DashboardInstructorAnalyticsIndexRoute
-  '/dashboard/instructor/assignments': typeof DashboardInstructorAssignmentsIndexRoute
-  '/dashboard/instructor/courses': typeof DashboardInstructorCoursesIndexRoute
-  '/dashboard/instructor/earnings': typeof DashboardInstructorEarningsIndexRoute
-  '/dashboard/instructor/students': typeof DashboardInstructorStudentsIndexRoute
+  '/profile': typeof ProfileIndexRoute
+  '/settings': typeof SettingsIndexRoute
+  '/student': typeof StudentIndexRoute
+  '/instructor/analytics': typeof InstructorAnalyticsIndexRoute
+  '/instructor/assignments': typeof InstructorAssignmentsIndexRoute
+  '/instructor/courses': typeof InstructorCoursesIndexRoute
+  '/instructor/earnings': typeof InstructorEarningsIndexRoute
+  '/instructor/profile': typeof InstructorProfileIndexRoute
+  '/instructor/settings': typeof InstructorSettingsIndexRoute
+  '/instructor/students': typeof InstructorStudentsIndexRoute
+  '/student/assigments': typeof StudentAssigmentsIndexRoute
+  '/student/courses': typeof StudentCoursesIndexRoute
+  '/student/my-courses': typeof StudentMyCoursesIndexRoute
+  '/student/profile': typeof StudentProfileIndexRoute
+  '/student/settings': typeof StudentSettingsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -123,14 +191,23 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/register': typeof AuthRegisterRoute
+  '/instructor/': typeof InstructorIndexRoute
   '/landing-page/': typeof LandingPageIndexRoute
-  '/dashboard/instructor/': typeof DashboardInstructorIndexRoute
-  '/dashboard/student/': typeof DashboardStudentIndexRoute
-  '/dashboard/instructor/analytics/': typeof DashboardInstructorAnalyticsIndexRoute
-  '/dashboard/instructor/assignments/': typeof DashboardInstructorAssignmentsIndexRoute
-  '/dashboard/instructor/courses/': typeof DashboardInstructorCoursesIndexRoute
-  '/dashboard/instructor/earnings/': typeof DashboardInstructorEarningsIndexRoute
-  '/dashboard/instructor/students/': typeof DashboardInstructorStudentsIndexRoute
+  '/profile/': typeof ProfileIndexRoute
+  '/settings/': typeof SettingsIndexRoute
+  '/student/': typeof StudentIndexRoute
+  '/instructor/analytics/': typeof InstructorAnalyticsIndexRoute
+  '/instructor/assignments/': typeof InstructorAssignmentsIndexRoute
+  '/instructor/courses/': typeof InstructorCoursesIndexRoute
+  '/instructor/earnings/': typeof InstructorEarningsIndexRoute
+  '/instructor/profile/': typeof InstructorProfileIndexRoute
+  '/instructor/settings/': typeof InstructorSettingsIndexRoute
+  '/instructor/students/': typeof InstructorStudentsIndexRoute
+  '/student/assigments/': typeof StudentAssigmentsIndexRoute
+  '/student/courses/': typeof StudentCoursesIndexRoute
+  '/student/my-courses/': typeof StudentMyCoursesIndexRoute
+  '/student/profile/': typeof StudentProfileIndexRoute
+  '/student/settings/': typeof StudentSettingsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -139,42 +216,69 @@ export interface FileRouteTypes {
     | '/about'
     | '/auth/login'
     | '/auth/register'
+    | '/instructor'
     | '/landing-page'
-    | '/dashboard/instructor'
-    | '/dashboard/student'
-    | '/dashboard/instructor/analytics'
-    | '/dashboard/instructor/assignments'
-    | '/dashboard/instructor/courses'
-    | '/dashboard/instructor/earnings'
-    | '/dashboard/instructor/students'
+    | '/profile'
+    | '/settings'
+    | '/student'
+    | '/instructor/analytics'
+    | '/instructor/assignments'
+    | '/instructor/courses'
+    | '/instructor/earnings'
+    | '/instructor/profile'
+    | '/instructor/settings'
+    | '/instructor/students'
+    | '/student/assigments'
+    | '/student/courses'
+    | '/student/my-courses'
+    | '/student/profile'
+    | '/student/settings'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/about'
     | '/auth/login'
     | '/auth/register'
+    | '/instructor'
     | '/landing-page'
-    | '/dashboard/instructor'
-    | '/dashboard/student'
-    | '/dashboard/instructor/analytics'
-    | '/dashboard/instructor/assignments'
-    | '/dashboard/instructor/courses'
-    | '/dashboard/instructor/earnings'
-    | '/dashboard/instructor/students'
+    | '/profile'
+    | '/settings'
+    | '/student'
+    | '/instructor/analytics'
+    | '/instructor/assignments'
+    | '/instructor/courses'
+    | '/instructor/earnings'
+    | '/instructor/profile'
+    | '/instructor/settings'
+    | '/instructor/students'
+    | '/student/assigments'
+    | '/student/courses'
+    | '/student/my-courses'
+    | '/student/profile'
+    | '/student/settings'
   id:
     | '__root__'
     | '/'
     | '/about'
     | '/auth/login'
     | '/auth/register'
+    | '/instructor/'
     | '/landing-page/'
-    | '/dashboard/instructor/'
-    | '/dashboard/student/'
-    | '/dashboard/instructor/analytics/'
-    | '/dashboard/instructor/assignments/'
-    | '/dashboard/instructor/courses/'
-    | '/dashboard/instructor/earnings/'
-    | '/dashboard/instructor/students/'
+    | '/profile/'
+    | '/settings/'
+    | '/student/'
+    | '/instructor/analytics/'
+    | '/instructor/assignments/'
+    | '/instructor/courses/'
+    | '/instructor/earnings/'
+    | '/instructor/profile/'
+    | '/instructor/settings/'
+    | '/instructor/students/'
+    | '/student/assigments/'
+    | '/student/courses/'
+    | '/student/my-courses/'
+    | '/student/profile/'
+    | '/student/settings/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -182,14 +286,23 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   AuthLoginRoute: typeof AuthLoginRoute
   AuthRegisterRoute: typeof AuthRegisterRoute
+  InstructorIndexRoute: typeof InstructorIndexRoute
   LandingPageIndexRoute: typeof LandingPageIndexRoute
-  DashboardInstructorIndexRoute: typeof DashboardInstructorIndexRoute
-  DashboardStudentIndexRoute: typeof DashboardStudentIndexRoute
-  DashboardInstructorAnalyticsIndexRoute: typeof DashboardInstructorAnalyticsIndexRoute
-  DashboardInstructorAssignmentsIndexRoute: typeof DashboardInstructorAssignmentsIndexRoute
-  DashboardInstructorCoursesIndexRoute: typeof DashboardInstructorCoursesIndexRoute
-  DashboardInstructorEarningsIndexRoute: typeof DashboardInstructorEarningsIndexRoute
-  DashboardInstructorStudentsIndexRoute: typeof DashboardInstructorStudentsIndexRoute
+  ProfileIndexRoute: typeof ProfileIndexRoute
+  SettingsIndexRoute: typeof SettingsIndexRoute
+  StudentIndexRoute: typeof StudentIndexRoute
+  InstructorAnalyticsIndexRoute: typeof InstructorAnalyticsIndexRoute
+  InstructorAssignmentsIndexRoute: typeof InstructorAssignmentsIndexRoute
+  InstructorCoursesIndexRoute: typeof InstructorCoursesIndexRoute
+  InstructorEarningsIndexRoute: typeof InstructorEarningsIndexRoute
+  InstructorProfileIndexRoute: typeof InstructorProfileIndexRoute
+  InstructorSettingsIndexRoute: typeof InstructorSettingsIndexRoute
+  InstructorStudentsIndexRoute: typeof InstructorStudentsIndexRoute
+  StudentAssigmentsIndexRoute: typeof StudentAssigmentsIndexRoute
+  StudentCoursesIndexRoute: typeof StudentCoursesIndexRoute
+  StudentMyCoursesIndexRoute: typeof StudentMyCoursesIndexRoute
+  StudentProfileIndexRoute: typeof StudentProfileIndexRoute
+  StudentSettingsIndexRoute: typeof StudentSettingsIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -208,11 +321,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/student/': {
+      id: '/student/'
+      path: '/student'
+      fullPath: '/student'
+      preLoaderRoute: typeof StudentIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/settings/': {
+      id: '/settings/'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/profile/': {
+      id: '/profile/'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof ProfileIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/landing-page/': {
       id: '/landing-page/'
       path: '/landing-page'
       fullPath: '/landing-page'
       preLoaderRoute: typeof LandingPageIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/instructor/': {
+      id: '/instructor/'
+      path: '/instructor'
+      fullPath: '/instructor'
+      preLoaderRoute: typeof InstructorIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth/register': {
@@ -229,53 +370,88 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthLoginRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/dashboard/student/': {
-      id: '/dashboard/student/'
-      path: '/dashboard/student'
-      fullPath: '/dashboard/student'
-      preLoaderRoute: typeof DashboardStudentIndexRouteImport
+    '/student/settings/': {
+      id: '/student/settings/'
+      path: '/student/settings'
+      fullPath: '/student/settings'
+      preLoaderRoute: typeof StudentSettingsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/dashboard/instructor/': {
-      id: '/dashboard/instructor/'
-      path: '/dashboard/instructor'
-      fullPath: '/dashboard/instructor'
-      preLoaderRoute: typeof DashboardInstructorIndexRouteImport
+    '/student/profile/': {
+      id: '/student/profile/'
+      path: '/student/profile'
+      fullPath: '/student/profile'
+      preLoaderRoute: typeof StudentProfileIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/dashboard/instructor/students/': {
-      id: '/dashboard/instructor/students/'
-      path: '/dashboard/instructor/students'
-      fullPath: '/dashboard/instructor/students'
-      preLoaderRoute: typeof DashboardInstructorStudentsIndexRouteImport
+    '/student/my-courses/': {
+      id: '/student/my-courses/'
+      path: '/student/my-courses'
+      fullPath: '/student/my-courses'
+      preLoaderRoute: typeof StudentMyCoursesIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/dashboard/instructor/earnings/': {
-      id: '/dashboard/instructor/earnings/'
-      path: '/dashboard/instructor/earnings'
-      fullPath: '/dashboard/instructor/earnings'
-      preLoaderRoute: typeof DashboardInstructorEarningsIndexRouteImport
+    '/student/courses/': {
+      id: '/student/courses/'
+      path: '/student/courses'
+      fullPath: '/student/courses'
+      preLoaderRoute: typeof StudentCoursesIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/dashboard/instructor/courses/': {
-      id: '/dashboard/instructor/courses/'
-      path: '/dashboard/instructor/courses'
-      fullPath: '/dashboard/instructor/courses'
-      preLoaderRoute: typeof DashboardInstructorCoursesIndexRouteImport
+    '/student/assigments/': {
+      id: '/student/assigments/'
+      path: '/student/assigments'
+      fullPath: '/student/assigments'
+      preLoaderRoute: typeof StudentAssigmentsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/dashboard/instructor/assignments/': {
-      id: '/dashboard/instructor/assignments/'
-      path: '/dashboard/instructor/assignments'
-      fullPath: '/dashboard/instructor/assignments'
-      preLoaderRoute: typeof DashboardInstructorAssignmentsIndexRouteImport
+    '/instructor/students/': {
+      id: '/instructor/students/'
+      path: '/instructor/students'
+      fullPath: '/instructor/students'
+      preLoaderRoute: typeof InstructorStudentsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/dashboard/instructor/analytics/': {
-      id: '/dashboard/instructor/analytics/'
-      path: '/dashboard/instructor/analytics'
-      fullPath: '/dashboard/instructor/analytics'
-      preLoaderRoute: typeof DashboardInstructorAnalyticsIndexRouteImport
+    '/instructor/settings/': {
+      id: '/instructor/settings/'
+      path: '/instructor/settings'
+      fullPath: '/instructor/settings'
+      preLoaderRoute: typeof InstructorSettingsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/instructor/profile/': {
+      id: '/instructor/profile/'
+      path: '/instructor/profile'
+      fullPath: '/instructor/profile'
+      preLoaderRoute: typeof InstructorProfileIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/instructor/earnings/': {
+      id: '/instructor/earnings/'
+      path: '/instructor/earnings'
+      fullPath: '/instructor/earnings'
+      preLoaderRoute: typeof InstructorEarningsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/instructor/courses/': {
+      id: '/instructor/courses/'
+      path: '/instructor/courses'
+      fullPath: '/instructor/courses'
+      preLoaderRoute: typeof InstructorCoursesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/instructor/assignments/': {
+      id: '/instructor/assignments/'
+      path: '/instructor/assignments'
+      fullPath: '/instructor/assignments'
+      preLoaderRoute: typeof InstructorAssignmentsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/instructor/analytics/': {
+      id: '/instructor/analytics/'
+      path: '/instructor/analytics'
+      fullPath: '/instructor/analytics'
+      preLoaderRoute: typeof InstructorAnalyticsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -286,16 +462,23 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   AuthLoginRoute: AuthLoginRoute,
   AuthRegisterRoute: AuthRegisterRoute,
+  InstructorIndexRoute: InstructorIndexRoute,
   LandingPageIndexRoute: LandingPageIndexRoute,
-  DashboardInstructorIndexRoute: DashboardInstructorIndexRoute,
-  DashboardStudentIndexRoute: DashboardStudentIndexRoute,
-  DashboardInstructorAnalyticsIndexRoute:
-    DashboardInstructorAnalyticsIndexRoute,
-  DashboardInstructorAssignmentsIndexRoute:
-    DashboardInstructorAssignmentsIndexRoute,
-  DashboardInstructorCoursesIndexRoute: DashboardInstructorCoursesIndexRoute,
-  DashboardInstructorEarningsIndexRoute: DashboardInstructorEarningsIndexRoute,
-  DashboardInstructorStudentsIndexRoute: DashboardInstructorStudentsIndexRoute,
+  ProfileIndexRoute: ProfileIndexRoute,
+  SettingsIndexRoute: SettingsIndexRoute,
+  StudentIndexRoute: StudentIndexRoute,
+  InstructorAnalyticsIndexRoute: InstructorAnalyticsIndexRoute,
+  InstructorAssignmentsIndexRoute: InstructorAssignmentsIndexRoute,
+  InstructorCoursesIndexRoute: InstructorCoursesIndexRoute,
+  InstructorEarningsIndexRoute: InstructorEarningsIndexRoute,
+  InstructorProfileIndexRoute: InstructorProfileIndexRoute,
+  InstructorSettingsIndexRoute: InstructorSettingsIndexRoute,
+  InstructorStudentsIndexRoute: InstructorStudentsIndexRoute,
+  StudentAssigmentsIndexRoute: StudentAssigmentsIndexRoute,
+  StudentCoursesIndexRoute: StudentCoursesIndexRoute,
+  StudentMyCoursesIndexRoute: StudentMyCoursesIndexRoute,
+  StudentProfileIndexRoute: StudentProfileIndexRoute,
+  StudentSettingsIndexRoute: StudentSettingsIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

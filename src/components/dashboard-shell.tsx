@@ -11,6 +11,7 @@ import {
   LogOut,
   NotebookPen,
   Settings,
+  User,
   Users,
   UsersRound,
   Wallet,
@@ -39,68 +40,79 @@ export function DashboardShell({ children }: DashboardShellProps) {
             </div>
             <nav className="flex-1 space-y-4 text-base lg:text-xl font-medium pt-12 font-heading">
               <Link
-                to={
-                  userRole === "instructor"
-                    ? "/dashboard/instructor"
-                    : "/dashboard/student"
-                }
+                to={userRole === "student" ? "/instructor" : "/student"}
                 className="flex items-center gap-3 rounded-lg px-4 py-2   hover:bg-muted"
               >
                 <Home className="h-4 w-4" />
                 Dashboard
               </Link>
               {/* Instructor Navs */}
-              {userRole === "instructor" && (
+              {userRole === "student" && (
                 <>
                   <Link
-                    to="/dashboard/instructor/courses"
+                    to="/instructor/courses"
                     className="flex items-center gap-3 rounded-lg px-4 py-2   hover:bg-muted"
                   >
                     <BookOpen className="h-4 w-4" />
                     My Courses
                   </Link>
                   <Link
-                    to="/dashboard/instructor/assignments"
+                    to="/instructor/assignments"
                     className="flex items-center gap-3 rounded-lg px-4 py-2   hover:bg-muted"
                   >
                     <NotebookPen className="h-4 w-4" />
                     Assignments
                   </Link>
                   <Link
-                    to="/dashboard/instructor/students"
+                    to="/instructor/students"
                     className="flex items-center gap-3 rounded-lg px-4 py-2   hover:bg-muted"
                   >
                     <UsersRound className="h-4 w-4" />
                     Students
                   </Link>
                   <Link
-                    to="/dashboard/instructor/earnings"
+                    to="/instructor/earnings"
                     className="flex items-center gap-3 rounded-lg px-4 py-2   hover:bg-muted"
                   >
                     <Wallet className="h-4 w-4" />
                     Earnings
                   </Link>
                   <Link
-                    to="/dashboard/instructor/analytics"
+                    to="/instructor/analytics"
                     className="flex items-center gap-3 rounded-lg px-4 py-2   hover:bg-muted"
                   >
                     <FileText className="h-4 w-4" />
                     Analytics
                   </Link>
+
+                  <Link
+                    to="/instructor/profile"
+                    className="flex items-center gap-3 rounded-lg px-4 py-2   hover:bg-muted"
+                  >
+                    <User className="h-4 w-4" />
+                    Profile
+                  </Link>
                 </>
               )}
 
-              {userRole === "student" && (
+              {userRole == "instructor" && (
                 <>
                   <Link
-                    to="/"
+                    to="/student/my-courses"
                     className="flex items-center gap-3 rounded-lg px-4 py-2   hover:bg-muted"
                   >
                     <BookOpen className="h-4 w-4" />
-                    My Learning
+                    My Courses
                   </Link>
                   <Link
-                    to="/"
+                    to="/student/courses"
+                    className="flex items-center gap-3 rounded-lg px-4 py-2   hover:bg-muted"
+                  >
+                    <BookOpen className="h-4 w-4" />
+                    Courses
+                  </Link>
+                  <Link
+                    to="/student/assigments"
                     className="flex items-center gap-3 rounded-lg px-4 py-2   hover:bg-muted"
                   >
                     <FileText className="h-4 w-4" />
@@ -129,7 +141,15 @@ export function DashboardShell({ children }: DashboardShellProps) {
               )}
 
               <Link
-                to="/"
+                to="/profile"
+                className="flex items-center gap-3 rounded-lg px-4 py-2   hover:bg-muted"
+              >
+                <User className="h-4 w-4" />
+                Profile
+              </Link>
+
+              <Link
+                to="/settings"
                 className="flex items-center gap-3 rounded-lg px-4 py-2   hover:bg-muted"
               >
                 <Settings className="h-4 w-4" />
