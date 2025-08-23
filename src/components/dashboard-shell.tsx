@@ -47,7 +47,7 @@ export function DashboardShell({ children }: DashboardShellProps) {
                 Dashboard
               </Link>
               {/* Instructor Navs */}
-              {userRole === "student" && (
+              {userRole === "instructor" && (
                 <>
                   <Link
                     to="/instructor/courses"
@@ -95,7 +95,7 @@ export function DashboardShell({ children }: DashboardShellProps) {
                 </>
               )}
 
-              {userRole == "instructor" && (
+              {userRole == "students" && (
                 <>
                   <Link
                     to="/student/my-courses"

@@ -9,7 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { DashboardShell } from "@/components/dashboard-shell";
 import { FiltersBar } from "@/components/course-catalog/FiltersBar";
 import { CourseCard } from "@/components/course-catalog/CourseCard";
@@ -20,7 +20,7 @@ export const Route = createFileRoute("/student/courses/")({
 function RouteComponent() {
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("all");
-
+  const [viewMode, setViewMode] = useState("grid");
   // Dummy data for now
   const courses = [
     {
@@ -29,6 +29,8 @@ function RouteComponent() {
       category: "frontend",
       price: "Free",
       description: "Learn the basics of React.",
+      image: "https://source.unsplash.com/400x250/?react,code",
+      tags: ["React", "JavaScript", "Frontend"],
     },
     {
       id: 2,
@@ -36,6 +38,8 @@ function RouteComponent() {
       category: "frontend",
       price: "$15",
       description: "Master modern CSS techniques.",
+      image: "https://source.unsplash.com/400x250/?css,web",
+      tags: ["CSS", "Styling", "Responsive"],
     },
     {
       id: 3,
@@ -43,216 +47,8 @@ function RouteComponent() {
       category: "backend",
       price: "$20",
       description: "Build powerful APIs.",
-    },
-    {
-      id: 1,
-      title: "React Fundamentals",
-      category: "frontend",
-      price: "Free",
-      description: "Learn the basics of React.",
-    },
-    {
-      id: 2,
-      title: "Advanced CSS",
-      category: "frontend",
-      price: "$15",
-      description: "Master modern CSS techniques.",
-    },
-    {
-      id: 3,
-      title: "NestJS API Development",
-      category: "backend",
-      price: "$20",
-      description: "Build powerful APIs.",
-    },
-    {
-      id: 1,
-      title: "React Fundamentals",
-      category: "frontend",
-      price: "Free",
-      description: "Learn the basics of React.",
-    },
-    {
-      id: 2,
-      title: "Advanced CSS",
-      category: "frontend",
-      price: "$15",
-      description: "Master modern CSS techniques.",
-    },
-    {
-      id: 3,
-      title: "NestJS API Development",
-      category: "backend",
-      price: "$20",
-      description: "Build powerful APIs.",
-    },
-    {
-      id: 1,
-      title: "React Fundamentals",
-      category: "frontend",
-      price: "Free",
-      description: "Learn the basics of React.",
-    },
-    {
-      id: 2,
-      title: "Advanced CSS",
-      category: "frontend",
-      price: "$15",
-      description: "Master modern CSS techniques.",
-    },
-    {
-      id: 3,
-      title: "NestJS API Development",
-      category: "backend",
-      price: "$20",
-      description: "Build powerful APIs.",
-    },
-    {
-      id: 1,
-      title: "React Fundamentals",
-      category: "frontend",
-      price: "Free",
-      description: "Learn the basics of React.",
-    },
-    {
-      id: 2,
-      title: "Advanced CSS",
-      category: "frontend",
-      price: "$15",
-      description: "Master modern CSS techniques.",
-    },
-    {
-      id: 3,
-      title: "NestJS API Development",
-      category: "backend",
-      price: "$20",
-      description: "Build powerful APIs.",
-    },
-    {
-      id: 1,
-      title: "React Fundamentals",
-      category: "frontend",
-      price: "Free",
-      description: "Learn the basics of React.",
-    },
-    {
-      id: 2,
-      title: "Advanced CSS",
-      category: "frontend",
-      price: "$15",
-      description: "Master modern CSS techniques.",
-    },
-    {
-      id: 3,
-      title: "NestJS API Development",
-      category: "backend",
-      price: "$20",
-      description: "Build powerful APIs.",
-    },
-    {
-      id: 1,
-      title: "React Fundamentals",
-      category: "frontend",
-      price: "Free",
-      description: "Learn the basics of React.",
-    },
-    {
-      id: 2,
-      title: "Advanced CSS",
-      category: "frontend",
-      price: "$15",
-      description: "Master modern CSS techniques.",
-    },
-    {
-      id: 3,
-      title: "NestJS API Development",
-      category: "backend",
-      price: "$20",
-      description: "Build powerful APIs.",
-    },
-    {
-      id: 1,
-      title: "React Fundamentals",
-      category: "frontend",
-      price: "Free",
-      description: "Learn the basics of React.",
-    },
-    {
-      id: 2,
-      title: "Advanced CSS",
-      category: "frontend",
-      price: "$15",
-      description: "Master modern CSS techniques.",
-    },
-    {
-      id: 3,
-      title: "NestJS API Development",
-      category: "backend",
-      price: "$20",
-      description: "Build powerful APIs.",
-    },
-    {
-      id: 1,
-      title: "React Fundamentals",
-      category: "frontend",
-      price: "Free",
-      description: "Learn the basics of React.",
-    },
-    {
-      id: 2,
-      title: "Advanced CSS",
-      category: "frontend",
-      price: "$15",
-      description: "Master modern CSS techniques.",
-    },
-    {
-      id: 3,
-      title: "NestJS API Development",
-      category: "backend",
-      price: "$20",
-      description: "Build powerful APIs.",
-    },
-    {
-      id: 1,
-      title: "React Fundamentals",
-      category: "frontend",
-      price: "Free",
-      description: "Learn the basics of React.",
-    },
-    {
-      id: 2,
-      title: "Advanced CSS",
-      category: "frontend",
-      price: "$15",
-      description: "Master modern CSS techniques.",
-    },
-    {
-      id: 3,
-      title: "NestJS API Development",
-      category: "backend",
-      price: "$20",
-      description: "Build powerful APIs.",
-    },
-    {
-      id: 1,
-      title: "React Fundamentals",
-      category: "frontend",
-      price: "Free",
-      description: "Learn the basics of React.",
-    },
-    {
-      id: 2,
-      title: "Advanced CSS",
-      category: "frontend",
-      price: "$15",
-      description: "Master modern CSS techniques.",
-    },
-    {
-      id: 3,
-      title: "NestJS API Development",
-      category: "backend",
-      price: "$20",
-      description: "Build powerful APIs.",
+      image: "https://source.unsplash.com/400x250/?api,backend",
+      tags: ["NestJS", "API", "Backend"],
     },
   ];
 
@@ -276,7 +72,27 @@ function RouteComponent() {
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
               />
-
+              {/* View Mode Switch */}
+              <ToggleGroup
+                type="single"
+                value={viewMode}
+                onValueChange={(val) => val && setViewMode(val)}
+              >
+                <ToggleGroupItem
+                  value="grid"
+                  aria-label="Grid View"
+                  className={`${viewMode === "grid" && "bg-primary-dark"}`}
+                >
+                  Grid
+                </ToggleGroupItem>
+                <ToggleGroupItem
+                  value="list"
+                  aria-label="List View"
+                  className={`${viewMode === "list" && "bg-primary-dark"}`}
+                >
+                  List
+                </ToggleGroupItem>
+              </ToggleGroup>
               <Select value={category} onValueChange={setCategory}>
                 <SelectTrigger className="w-40">
                   <SelectValue placeholder="Category" />
@@ -296,7 +112,13 @@ function RouteComponent() {
         <FiltersBar />
 
         {/* Courses Grid */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div
+          className={
+            viewMode === "grid"
+              ? "grid sm:grid-cols-2 lg:grid-cols-3 gap-6"
+              : "flex flex-col gap-6"
+          }
+        >
           {filteredCourses.map((course) => (
             <CourseCard key={course.id} course={course} />
           ))}
