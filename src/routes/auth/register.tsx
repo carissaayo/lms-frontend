@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
-
+import { useRegister } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -14,7 +14,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { toast, Toaster } from "sonner";
-import api from "@/lib/axios";
+import { Role } from "@/types/user.types";
 
 export const Route = createFileRoute("/auth/register")({
   component: RouteComponent,
@@ -22,13 +22,16 @@ export const Route = createFileRoute("/auth/register")({
 
 function RouteComponent() {
   const navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState(false);
+  const { mutate: register, isPending } = useRegister();
+
   const [formData, setFormData] = useState({
-    name: "",
+    firstName: "",
+    lastName: "",
+    phoneNumber: "",
     email: "",
     password: "",
     confirmPassword: "",
-    role: "student",
+    role: Role.STUDENT,
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -37,10 +40,10 @@ function RouteComponent() {
   };
 
   const handleRoleChange = (value: string) => {
-    setFormData((prev) => ({ ...prev, role: value }));
+    setFormData((prev) => ({ ...prev, role: value as Role }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
     if (formData.password !== formData.confirmPassword) {
@@ -50,45 +53,29 @@ function RouteComponent() {
       return;
     }
 
-    setIsLoading(true);
-
-    try {
-      const response = await api.post(
-        "/users/register",
-        JSON.stringify({
-          name: formData.name,
-          email: formData.email,
-          password: formData.password,
-          role: formData.role,
-        })
-      );
-
-      console.log(response);
-
-      if (!response.data) {
-        throw new Error("Registration failed");
+    register(
+      { ...formData },
+      {
+        onSuccess: () => {
+          toast.success("Registration successful", {
+            description: "Your account has been created successfully.",
+            position: "top-center",
+          });
+          setTimeout(() => {
+            navigate({ to: "/auth/login" });
+          }, 2000);
+        },
+        onError: () => {
+          toast.error("Registration failed", {
+            description:
+              "There was an error creating your account. Please try again.",
+            position: "top-center",
+          });
+        },
       }
-
-      toast.success("Registration successful", {
-        description: "Your account has been created successfully.",
-        position: "top-center",
-      });
-
-      // Redirect to login page
-      setTimeout(() => {
-        navigate({ to: "/auth/login" });
-      }, 3000);
-    } catch (error) {
-      toast.error("Registration failed", {
-        description:
-          "There was an error creating your account. Please try again.",
-        position: "top-center",
-      });
-      console.log(error);
-    } finally {
-      setIsLoading(false);
-    }
+    );
   };
+
   return (
     <main className="min-h-screen pt-12">
       <Toaster />
@@ -97,8 +84,8 @@ function RouteComponent() {
           DevLearn
         </Link>
       </div>
-      <div className="flex  items-center justify-center px-4  py-12 ">
-        <Card className="w-full max-w-md">
+      <div className="flex items-center justify-center px-4 py-16">
+        <Card className="w-[50%] h-[70vh] pt-4">
           <CardHeader className="space-y-1 text-center">
             <CardTitle className="text-2xl font-bold">
               Create an account
@@ -107,71 +94,114 @@ function RouteComponent() {
               Enter your information to create an account
             </CardDescription>
           </CardHeader>
+
           <form onSubmit={handleSubmit}>
-            <CardContent className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="name">Full Name</Label>
-                <Input
-                  id="name"
-                  name="name"
-                  placeholder="John Doe"
-                  required
-                  value={formData.name}
-                  onChange={handleChange}
-                />
+            <CardContent className="space-y-6">
+              {/* First & Last Name */}
+              <div className="grid grid-cols-2 gap-6">
+                <div className="space-y-2">
+                  <Label htmlFor="firstName">First Name</Label>
+                  <Input
+                    id="firstName"
+                    name="firstName"
+                    placeholder="John"
+                    required
+                    value={formData.firstName}
+                    onChange={handleChange}
+                    className="w-full border border-gray-300/50"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="lastName">Last Name</Label>
+                  <Input
+                    id="lastName"
+                    name="lastName"
+                    placeholder="Doe"
+                    required
+                    value={formData.lastName}
+                    onChange={handleChange}
+                    className="w-full border border-gray-300/50"
+                  />
+                </div>
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  id="email"
-                  name="email"
-                  type="email"
-                  placeholder="name@example.com"
-                  required
-                  value={formData.email}
-                  onChange={handleChange}
-                />
+
+              {/* Phone & Email */}
+              <div className="grid grid-cols-2 gap-6">
+                <div className="space-y-2">
+                  <Label htmlFor="phoneNumber">Phone</Label>
+                  <Input
+                    id="phoneNumber"
+                    name="phoneNumber"
+                    type="tel"
+                    placeholder="+234 801 234 5678"
+                    required
+                    value={formData.phoneNumber}
+                    onChange={handleChange}
+                    className="w-full border border-gray-300/50"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="email">Email</Label>
+                  <Input
+                    id="email"
+                    name="email"
+                    type="email"
+                    placeholder="name@example.com"
+                    required
+                    value={formData.email}
+                    onChange={handleChange}
+                    className="w-full border border-gray-300/50"
+                  />
+                </div>
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="password">Password</Label>
-                <Input
-                  id="password"
-                  name="password"
-                  type="password"
-                  required
-                  value={formData.password}
-                  onChange={handleChange}
-                />
+
+              {/* Password & Confirm */}
+              <div className="grid grid-cols-2 gap-6">
+                <div className="space-y-2">
+                  <Label htmlFor="password">Password</Label>
+                  <Input
+                    id="password"
+                    name="password"
+                    type="password"
+                    required
+                    value={formData.password}
+                    onChange={handleChange}
+                    className="w-full border border-gray-300/50"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="confirmPassword">Confirm Password</Label>
+                  <Input
+                    id="confirmPassword"
+                    name="confirmPassword"
+                    type="password"
+                    required
+                    value={formData.confirmPassword}
+                    onChange={handleChange}
+                    className="w-full border border-gray-300/50"
+                  />
+                </div>
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="confirmPassword">Confirm Password</Label>
-                <Input
-                  id="confirmPassword"
-                  name="confirmPassword"
-                  type="password"
-                  required
-                  value={formData.confirmPassword}
-                  onChange={handleChange}
-                />
-              </div>
-              <div className="space-y-2">
+
+              {/* Role Selection */}
+              <div className="space-y-2 ">
                 <Label>Account Type</Label>
                 <RadioGroup
                   value={formData.role}
                   onValueChange={handleRoleChange}
-                  className="flex flex-col space-y-1"
+                  className="flex flex-row gap-6"
                 >
-                  <div className="flex items-center space-x-2 ">
+                  <div className="flex items-center space-x-2">
                     <RadioGroupItem
-                      value="student"
+                      value={Role.STUDENT}
                       id="student"
                       className="cursor-pointer"
                     />
                     <Label htmlFor="student">Student</Label>
                   </div>
-                  <div className="flex items-center space-x-2 ">
+                  <div className="flex items-center space-x-2">
                     <RadioGroupItem
-                      value="instructor"
+                      value={Role.INSTRUCTOR}
                       id="instructor"
                       className="cursor-pointer"
                     />
@@ -180,13 +210,14 @@ function RouteComponent() {
                 </RadioGroup>
               </div>
             </CardContent>
-            <CardFooter className="flex flex-col">
+
+            <CardFooter className="flex flex-col mt-8">
               <Button
                 type="submit"
-                className="w-2/5 border cursor-pointer mt-4"
-                disabled={isLoading}
+                className="w-3/5 border border-gray-600 cursor-pointer py-4 text-base mt-4 "
+                disabled={isPending}
               >
-                {isLoading ? "Creating account..." : "Create account"}
+                {isPending ? "Creating Account..." : "Create Account"}
               </Button>
               <div className="mt-4 text-center text-sm text-blue-900">
                 Already have an account?{" "}

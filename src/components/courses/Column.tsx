@@ -42,22 +42,22 @@ export const columns: ColumnDef<Payment>[] = [
     header: () => <div className="text-lg">Status</div>,
   },
   {
-    accessorKey: "students",
+    accessorKey: "enrollments",
     header: ({ column }) => {
       return (
         <h1
           className="cursor-pointer flex text-lg items-center"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Students
+          Enrollment
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </h1>
       );
     },
     cell: ({ row }) => {
-      const students = parseFloat(row.getValue("students"));
+      const enrollment = parseInt(row.getValue("enrollments"));
 
-      return <div className="font-medium pl-6">{students}</div>;
+      return <div className="font-medium pl-6">{enrollment}</div>;
     },
   },
 ];

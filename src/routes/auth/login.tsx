@@ -1,5 +1,5 @@
-import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -12,115 +12,88 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast, Toaster } from "sonner";
-import api from "@/lib/axios";
-import useAuthStore from "@/store/useAuthStore";
+
+import { useLogin } from "@/hooks/use-auth";
+import { Role } from "@/types/user.types";
 
 export const Route = createFileRoute("/auth/login")({
   component: RouteComponent,
 });
 
 function RouteComponent() {
-  const router = useRouter();
+  const navigate = useNavigate();
+  const { mutate: login, isPending } = useLogin();
 
-  const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
-  const { loginUser, user } = useAuthStore((state) => state);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
 
-    try {
-      const response = await api.post(
-        "/login",
-        JSON.stringify({
-          email: formData.email,
-          password: formData.password,
-        })
-      );
+    login(
+      { ...formData },
+      {
+        onSuccess: (data) => {
+          toast.success("Welcome back", {
+            // description: "Your account has been created successfully.",
+            position: "top-center",
+          });
 
-      console.log(response?.data);
+          console.log("Login data", data);
 
-      if (response.status === 401) {
-        toast.error("Incorrect credentials", {
-          description: "Please try again",
-          position: "top-center",
-        });
-        throw new Error("Incorrect credentials");
+          // Save tokens
+          localStorage.setItem("accessToken", data.accessToken);
+          localStorage.setItem("refreshToken", data.refreshToken);
+
+          // Save user profile
+          localStorage.setItem("user", JSON.stringify(data.profile));
+
+          setTimeout(() => {
+            if (data.profile.role === Role.INSTRUCTOR) {
+              navigate({ to: "/instructor/courses" });
+            } else if (data.profile.role === Role.STUDENT) {
+              navigate({ to: "/student/my-courses" });
+            } else {
+              navigate({ to: "/" }); // fallback
+            }
+          }, 1000);
+        },
+        onError: () => {
+          toast.error("Login  failed", {
+            description: "There was an error logging in. Please try again.",
+            position: "top-center",
+          });
+        },
       }
-
-      const data = await response.data;
-
-      // Store the token in localStorage or use a state management solution
-
-      loginUser(data.user, data.token);
-      toast.success("Login successful", {
-        description: "You have been logged in successfully.",
-        position: "top-center",
-      });
-
-      // Redirect based on user role
-      if (data.user.role === "instructor") {
-        router.navigate({ to: "/dashboard/instructors/instructor" });
-      } else if (data.user.role === "student") {
-        router.navigate({ to: "/dashboard/students/student" });
-      } else if (data.user.role === "moderator") {
-        router.navigate({ to: "/dashboard/students/student" });
-      } else {
-        router.navigate({ to: "/dashboard/students/student" });
-      }
-      setTimeout(() => {
-        const lastRoute =
-          localStorage.getItem("lastRoute") || "/dashboard/students/student";
-        localStorage.removeItem("lastRoute");
-        router.navigate({ to: lastRoute });
-      }, 1500);
-    } catch (error) {
-      toast.error("Login failed", {
-        description: "Please check your credentials and try again.",
-      });
-      console.log(error);
-    } finally {
-      setIsLoading(false);
-    }
+    );
   };
-
-  useEffect(() => {
-    if (user) {
-      const lastRoute =
-        localStorage.getItem("lastRoute") || "/dashboard/students/student";
-      localStorage.removeItem("lastRoute");
-      router.navigate({ to: lastRoute });
-    }
-  }, [user, router]);
   return (
     <main className="min-h-screen pt-12">
-      <div className="flex items-center justify-center w-full">
-        <Toaster position="top-center" />
-      </div>
-
+      <Toaster />
       <div className="w-full text-center">
         <Link to="/" className="font-bold text-3xl">
           DevLearn
         </Link>
       </div>
-      <div className="flex h-[90%] items-center justify-center px-4 py-12 pt-24 ">
-        <Card className="w-full max-w-md ">
+      <div className="flex items-center justify-center px-4 py-16">
+        <Card className="w-full max-w-md pt-4">
           <CardHeader className="space-y-1 text-center">
             <CardTitle className="text-2xl font-bold">Login</CardTitle>
             <CardDescription>
               Enter your credentials to access your account
             </CardDescription>
           </CardHeader>
+
           <form onSubmit={handleSubmit}>
-            <CardContent className="space-y-4">
+            <CardContent className="space-y-6">
+              {/* Email */}
               <div className="space-y-2">
                 <Label htmlFor="email">Email</Label>
                 <Input
@@ -131,8 +104,11 @@ function RouteComponent() {
                   required
                   value={formData.email}
                   onChange={handleChange}
+                  className="w-full border border-gray-300/50"
                 />
               </div>
+
+              {/* Password */}
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
                   <Label htmlFor="password">Password</Label>
@@ -147,16 +123,18 @@ function RouteComponent() {
                   required
                   value={formData.password}
                   onChange={handleChange}
+                  className="w-full border border-gray-300/50"
                 />
               </div>
             </CardContent>
-            <CardFooter className="flex flex-col">
+
+            <CardFooter className="flex flex-col mt-8">
               <Button
                 type="submit"
-                className=" w-2/5 border cursor-pointer mt-4"
-                disabled={isLoading}
+                className="w-3/5 border border-gray-600 cursor-pointer py-4 text-base mt-4"
+                disabled={isPending}
               >
-                {isLoading ? "Logging in..." : "Login"}
+                {isPending ? "Logging in..." : "Login"}
               </Button>
               <div className="mt-4 text-center text-sm text-blue-900">
                 Don&apos;t have an account?{" "}
