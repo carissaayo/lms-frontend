@@ -15,6 +15,7 @@ import { toast, Toaster } from "sonner";
 
 import { useLogin } from "@/hooks/use-auth";
 import { Role } from "@/types/user.types";
+import useAuthStore from "@/store/useAuthStore";
 
 export const Route = createFileRoute("/auth/login")({
   component: RouteComponent,
@@ -54,6 +55,7 @@ function RouteComponent() {
 
           // Save user profile
           localStorage.setItem("user", JSON.stringify(data.profile));
+          useAuthStore.getState().loginUser(data.profile);
 
           setTimeout(() => {
             if (data.profile.role === Role.INSTRUCTOR) {

@@ -49,6 +49,7 @@ const RecentCoursesTable = ({ courses = [] }: RecentCoursesTableProps) => {
                 title={course.title}
                 price={course.price ?? 0}
                 status={course.status}
+                id={course._id}
               />
             ))
           ) : (

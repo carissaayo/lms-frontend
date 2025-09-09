@@ -43,6 +43,7 @@ const BestSellingCourse = ({ courses = [] }: BestSellingCourseProps) => {
                 title={course.title}
                 price={course.price ?? 0}
                 students={course.enrollments ?? 0}
+                id={course._id}
               />
             ))
           ) : (

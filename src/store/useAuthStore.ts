@@ -3,8 +3,8 @@ import { persist } from "zustand/middleware";
 
 interface AuthState {
   user: any;
-  token: any;
-  loginUser: (user: any, token: any) => any;
+
+  loginUser: (user: any) => any;
   isAuthenticated: boolean;
 }
 
@@ -15,10 +15,9 @@ const useAuthStore = create<AuthState>()(
       token: null,
       isAuthenticated: false,
 
-      loginUser: (userData, token) => {
+      loginUser: (userData) => {
         set({
           user: userData,
-          token,
           isAuthenticated: true,
         });
       },

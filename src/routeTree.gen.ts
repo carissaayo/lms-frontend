@@ -30,6 +30,7 @@ import { Route as InstructorEarningsIndexRouteImport } from './routes/instructor
 import { Route as InstructorCoursesIndexRouteImport } from './routes/instructor/courses/index'
 import { Route as InstructorAssignmentsIndexRouteImport } from './routes/instructor/assignments/index'
 import { Route as InstructorAnalyticsIndexRouteImport } from './routes/instructor/analytics/index'
+import { Route as InstructorCoursesIdRouteImport } from './routes/instructor/courses/$id'
 import { Route as InstructorCoursesNewIndexRouteImport } from './routes/instructor/courses/new/index'
 
 const AboutRoute = AboutRouteImport.update({
@@ -139,6 +140,11 @@ const InstructorAnalyticsIndexRoute =
     path: '/instructor/analytics/',
     getParentRoute: () => rootRouteImport,
   } as any)
+const InstructorCoursesIdRoute = InstructorCoursesIdRouteImport.update({
+  id: '/instructor/courses/$id',
+  path: '/instructor/courses/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const InstructorCoursesNewIndexRoute =
   InstructorCoursesNewIndexRouteImport.update({
     id: '/instructor/courses/new/',
@@ -156,6 +162,7 @@ export interface FileRoutesByFullPath {
   '/profile': typeof ProfileIndexRoute
   '/settings': typeof SettingsIndexRoute
   '/student': typeof StudentIndexRoute
+  '/instructor/courses/$id': typeof InstructorCoursesIdRoute
   '/instructor/analytics': typeof InstructorAnalyticsIndexRoute
   '/instructor/assignments': typeof InstructorAssignmentsIndexRoute
   '/instructor/courses': typeof InstructorCoursesIndexRoute
@@ -180,6 +187,7 @@ export interface FileRoutesByTo {
   '/profile': typeof ProfileIndexRoute
   '/settings': typeof SettingsIndexRoute
   '/student': typeof StudentIndexRoute
+  '/instructor/courses/$id': typeof InstructorCoursesIdRoute
   '/instructor/analytics': typeof InstructorAnalyticsIndexRoute
   '/instructor/assignments': typeof InstructorAssignmentsIndexRoute
   '/instructor/courses': typeof InstructorCoursesIndexRoute
@@ -205,6 +213,7 @@ export interface FileRoutesById {
   '/profile/': typeof ProfileIndexRoute
   '/settings/': typeof SettingsIndexRoute
   '/student/': typeof StudentIndexRoute
+  '/instructor/courses/$id': typeof InstructorCoursesIdRoute
   '/instructor/analytics/': typeof InstructorAnalyticsIndexRoute
   '/instructor/assignments/': typeof InstructorAssignmentsIndexRoute
   '/instructor/courses/': typeof InstructorCoursesIndexRoute
@@ -231,6 +240,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/settings'
     | '/student'
+    | '/instructor/courses/$id'
     | '/instructor/analytics'
     | '/instructor/assignments'
     | '/instructor/courses'
@@ -255,6 +265,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/settings'
     | '/student'
+    | '/instructor/courses/$id'
     | '/instructor/analytics'
     | '/instructor/assignments'
     | '/instructor/courses'
@@ -279,6 +290,7 @@ export interface FileRouteTypes {
     | '/profile/'
     | '/settings/'
     | '/student/'
+    | '/instructor/courses/$id'
     | '/instructor/analytics/'
     | '/instructor/assignments/'
     | '/instructor/courses/'
@@ -304,6 +316,7 @@ export interface RootRouteChildren {
   ProfileIndexRoute: typeof ProfileIndexRoute
   SettingsIndexRoute: typeof SettingsIndexRoute
   StudentIndexRoute: typeof StudentIndexRoute
+  InstructorCoursesIdRoute: typeof InstructorCoursesIdRoute
   InstructorAnalyticsIndexRoute: typeof InstructorAnalyticsIndexRoute
   InstructorAssignmentsIndexRoute: typeof InstructorAssignmentsIndexRoute
   InstructorCoursesIndexRoute: typeof InstructorCoursesIndexRoute
@@ -468,6 +481,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof InstructorAnalyticsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/instructor/courses/$id': {
+      id: '/instructor/courses/$id'
+      path: '/instructor/courses/$id'
+      fullPath: '/instructor/courses/$id'
+      preLoaderRoute: typeof InstructorCoursesIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/instructor/courses/new/': {
       id: '/instructor/courses/new/'
       path: '/instructor/courses/new'
@@ -488,6 +508,7 @@ const rootRouteChildren: RootRouteChildren = {
   ProfileIndexRoute: ProfileIndexRoute,
   SettingsIndexRoute: SettingsIndexRoute,
   StudentIndexRoute: StudentIndexRoute,
+  InstructorCoursesIdRoute: InstructorCoursesIdRoute,
   InstructorAnalyticsIndexRoute: InstructorAnalyticsIndexRoute,
   InstructorAssignmentsIndexRoute: InstructorAssignmentsIndexRoute,
   InstructorCoursesIndexRoute: InstructorCoursesIndexRoute,

@@ -1,18 +1,30 @@
+import { Link } from "@tanstack/react-router";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
-
-export type Payment = {
-  id: string;
+import { Route } from "@/routes/instructor/courses/$id";
+import { CourseStatus } from "@/types/course.types";
+export type Course = {
+  _id: string;
   price: number;
-  status: "pending" | "processing" | "success" | "failed";
+  status: CourseStatus;
   title: string;
   students: number;
 };
 
-export const columns: ColumnDef<Payment>[] = [
+export const columns: ColumnDef<Course>[] = [
   {
     accessorKey: "title",
     header: () => <h1 className="text-lg">Title</h1>,
+    cell: ({ row }) => {
+      console.log("id", row.original._id);
+      return (
+        <div className="font-medium text-base">
+          <Link to={`/instructor/courses/${row.original._id}`}>
+            {row.getValue("title")}
+          </Link>
+        </div>
+      );
+    },
   },
   {
     accessorKey: "price",
@@ -40,6 +52,11 @@ export const columns: ColumnDef<Payment>[] = [
   {
     accessorKey: "status",
     header: () => <div className="text-lg">Status</div>,
+    cell: ({ row }) => {
+      return (
+        <div className="font-medium text-base">{row.getValue("status")}</div>
+      );
+    },
   },
   {
     accessorKey: "enrollments",
