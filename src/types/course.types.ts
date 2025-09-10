@@ -20,3 +20,22 @@ export enum CourseCategory {
   MUSIC = "Music",
   TEACHING_ACADEMICS = "Teaching & Academics",
 }
+
+export type Course = {
+  _id: string;
+  title: string;
+  description: string;
+  instructor: string;
+  instructorName: string;
+  coverImage?: string;
+  category?: CourseCategory;
+  price: number;
+  status: CourseStatus; // you can replace with CourseStatus enum
+  enrollments: number; // total students enrolled
+  lessons?: {
+    number: number;
+    name: string;
+  }[];
+  createdAt?: string;
+  updatedAt?: string;
+};

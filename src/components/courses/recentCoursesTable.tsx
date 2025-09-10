@@ -7,15 +7,10 @@ import {
   TableBody,
 } from "@/components/ui/table";
 import RecentCourseTableRow from "./recentCourseTableRow";
-import { CourseStatus } from "@/types/course.types";
+import { Course } from "@/types/course.types";
 
 interface RecentCoursesTableProps {
-  courses?: Array<{
-    title: string;
-    price?: number;
-    status: CourseStatus;
-    updatedAt?: string | Date;
-  }>;
+  courses?: Course[];
 }
 
 const RecentCoursesTable = ({ courses = [] }: RecentCoursesTableProps) => {

@@ -10,7 +10,7 @@ import { columns } from "@/components/courses/Column";
 import { DataTable } from "@/components/courses/CoursesTable";
 
 import { useCourses } from "@/hooks/use-course";
-import { CourseStatus } from "@/types/course.types";
+import { Course, CourseStatus } from "@/types/course.types";
 
 export const Route = createFileRoute("/instructor/courses/")({
   component: RouteComponent,
@@ -19,7 +19,7 @@ export const Route = createFileRoute("/instructor/courses/")({
 function RouteComponent() {
   const { data, isLoading, error } = useCourses();
 
-  const courses = data?.courses ?? [];
+  const courses: Course[] = data?.courses ?? [];
   const results = data?.results ?? 0;
 
   console.log(courses, "courses");

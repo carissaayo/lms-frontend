@@ -1,12 +1,10 @@
 import { useState } from "react";
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useCreateCourse } from "@/hooks/use-course";
 import { DashboardShell } from "@/components/dashboard-shell";
 import { Button } from "@/components/ui/button";
 import { CourseCategory } from "@/types/course.types";
 import { toast, Toaster } from "sonner";
-import { Route as CourseRoute } from "../index";
-
 export const Route = createFileRoute("/instructor/courses/new/")({
   component: RouteComponent,
 });

@@ -26,11 +26,13 @@ import { Route as StudentAssigmentsIndexRouteImport } from './routes/student/ass
 import { Route as InstructorStudentsIndexRouteImport } from './routes/instructor/students/index'
 import { Route as InstructorSettingsIndexRouteImport } from './routes/instructor/settings/index'
 import { Route as InstructorProfileIndexRouteImport } from './routes/instructor/profile/index'
+import { Route as InstructorLessonsIndexRouteImport } from './routes/instructor/lessons/index'
 import { Route as InstructorEarningsIndexRouteImport } from './routes/instructor/earnings/index'
 import { Route as InstructorCoursesIndexRouteImport } from './routes/instructor/courses/index'
 import { Route as InstructorAssignmentsIndexRouteImport } from './routes/instructor/assignments/index'
 import { Route as InstructorAnalyticsIndexRouteImport } from './routes/instructor/analytics/index'
 import { Route as InstructorCoursesIdRouteImport } from './routes/instructor/courses/$id'
+import { Route as InstructorLessonsNewIndexRouteImport } from './routes/instructor/lessons/new/index'
 import { Route as InstructorCoursesNewIndexRouteImport } from './routes/instructor/courses/new/index'
 
 const AboutRoute = AboutRouteImport.update({
@@ -118,6 +120,11 @@ const InstructorProfileIndexRoute = InstructorProfileIndexRouteImport.update({
   path: '/instructor/profile/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const InstructorLessonsIndexRoute = InstructorLessonsIndexRouteImport.update({
+  id: '/instructor/lessons/',
+  path: '/instructor/lessons/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const InstructorEarningsIndexRoute = InstructorEarningsIndexRouteImport.update({
   id: '/instructor/earnings/',
   path: '/instructor/earnings/',
@@ -145,6 +152,12 @@ const InstructorCoursesIdRoute = InstructorCoursesIdRouteImport.update({
   path: '/instructor/courses/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const InstructorLessonsNewIndexRoute =
+  InstructorLessonsNewIndexRouteImport.update({
+    id: '/instructor/lessons/new/',
+    path: '/instructor/lessons/new/',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const InstructorCoursesNewIndexRoute =
   InstructorCoursesNewIndexRouteImport.update({
     id: '/instructor/courses/new/',
@@ -167,6 +180,7 @@ export interface FileRoutesByFullPath {
   '/instructor/assignments': typeof InstructorAssignmentsIndexRoute
   '/instructor/courses': typeof InstructorCoursesIndexRoute
   '/instructor/earnings': typeof InstructorEarningsIndexRoute
+  '/instructor/lessons': typeof InstructorLessonsIndexRoute
   '/instructor/profile': typeof InstructorProfileIndexRoute
   '/instructor/settings': typeof InstructorSettingsIndexRoute
   '/instructor/students': typeof InstructorStudentsIndexRoute
@@ -176,6 +190,7 @@ export interface FileRoutesByFullPath {
   '/student/profile': typeof StudentProfileIndexRoute
   '/student/settings': typeof StudentSettingsIndexRoute
   '/instructor/courses/new': typeof InstructorCoursesNewIndexRoute
+  '/instructor/lessons/new': typeof InstructorLessonsNewIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -192,6 +207,7 @@ export interface FileRoutesByTo {
   '/instructor/assignments': typeof InstructorAssignmentsIndexRoute
   '/instructor/courses': typeof InstructorCoursesIndexRoute
   '/instructor/earnings': typeof InstructorEarningsIndexRoute
+  '/instructor/lessons': typeof InstructorLessonsIndexRoute
   '/instructor/profile': typeof InstructorProfileIndexRoute
   '/instructor/settings': typeof InstructorSettingsIndexRoute
   '/instructor/students': typeof InstructorStudentsIndexRoute
@@ -201,6 +217,7 @@ export interface FileRoutesByTo {
   '/student/profile': typeof StudentProfileIndexRoute
   '/student/settings': typeof StudentSettingsIndexRoute
   '/instructor/courses/new': typeof InstructorCoursesNewIndexRoute
+  '/instructor/lessons/new': typeof InstructorLessonsNewIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -218,6 +235,7 @@ export interface FileRoutesById {
   '/instructor/assignments/': typeof InstructorAssignmentsIndexRoute
   '/instructor/courses/': typeof InstructorCoursesIndexRoute
   '/instructor/earnings/': typeof InstructorEarningsIndexRoute
+  '/instructor/lessons/': typeof InstructorLessonsIndexRoute
   '/instructor/profile/': typeof InstructorProfileIndexRoute
   '/instructor/settings/': typeof InstructorSettingsIndexRoute
   '/instructor/students/': typeof InstructorStudentsIndexRoute
@@ -227,6 +245,7 @@ export interface FileRoutesById {
   '/student/profile/': typeof StudentProfileIndexRoute
   '/student/settings/': typeof StudentSettingsIndexRoute
   '/instructor/courses/new/': typeof InstructorCoursesNewIndexRoute
+  '/instructor/lessons/new/': typeof InstructorLessonsNewIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -245,6 +264,7 @@ export interface FileRouteTypes {
     | '/instructor/assignments'
     | '/instructor/courses'
     | '/instructor/earnings'
+    | '/instructor/lessons'
     | '/instructor/profile'
     | '/instructor/settings'
     | '/instructor/students'
@@ -254,6 +274,7 @@ export interface FileRouteTypes {
     | '/student/profile'
     | '/student/settings'
     | '/instructor/courses/new'
+    | '/instructor/lessons/new'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -270,6 +291,7 @@ export interface FileRouteTypes {
     | '/instructor/assignments'
     | '/instructor/courses'
     | '/instructor/earnings'
+    | '/instructor/lessons'
     | '/instructor/profile'
     | '/instructor/settings'
     | '/instructor/students'
@@ -279,6 +301,7 @@ export interface FileRouteTypes {
     | '/student/profile'
     | '/student/settings'
     | '/instructor/courses/new'
+    | '/instructor/lessons/new'
   id:
     | '__root__'
     | '/'
@@ -295,6 +318,7 @@ export interface FileRouteTypes {
     | '/instructor/assignments/'
     | '/instructor/courses/'
     | '/instructor/earnings/'
+    | '/instructor/lessons/'
     | '/instructor/profile/'
     | '/instructor/settings/'
     | '/instructor/students/'
@@ -304,6 +328,7 @@ export interface FileRouteTypes {
     | '/student/profile/'
     | '/student/settings/'
     | '/instructor/courses/new/'
+    | '/instructor/lessons/new/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -321,6 +346,7 @@ export interface RootRouteChildren {
   InstructorAssignmentsIndexRoute: typeof InstructorAssignmentsIndexRoute
   InstructorCoursesIndexRoute: typeof InstructorCoursesIndexRoute
   InstructorEarningsIndexRoute: typeof InstructorEarningsIndexRoute
+  InstructorLessonsIndexRoute: typeof InstructorLessonsIndexRoute
   InstructorProfileIndexRoute: typeof InstructorProfileIndexRoute
   InstructorSettingsIndexRoute: typeof InstructorSettingsIndexRoute
   InstructorStudentsIndexRoute: typeof InstructorStudentsIndexRoute
@@ -330,6 +356,7 @@ export interface RootRouteChildren {
   StudentProfileIndexRoute: typeof StudentProfileIndexRoute
   StudentSettingsIndexRoute: typeof StudentSettingsIndexRoute
   InstructorCoursesNewIndexRoute: typeof InstructorCoursesNewIndexRoute
+  InstructorLessonsNewIndexRoute: typeof InstructorLessonsNewIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -453,6 +480,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof InstructorProfileIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/instructor/lessons/': {
+      id: '/instructor/lessons/'
+      path: '/instructor/lessons'
+      fullPath: '/instructor/lessons'
+      preLoaderRoute: typeof InstructorLessonsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/instructor/earnings/': {
       id: '/instructor/earnings/'
       path: '/instructor/earnings'
@@ -488,6 +522,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof InstructorCoursesIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/instructor/lessons/new/': {
+      id: '/instructor/lessons/new/'
+      path: '/instructor/lessons/new'
+      fullPath: '/instructor/lessons/new'
+      preLoaderRoute: typeof InstructorLessonsNewIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/instructor/courses/new/': {
       id: '/instructor/courses/new/'
       path: '/instructor/courses/new'
@@ -513,6 +554,7 @@ const rootRouteChildren: RootRouteChildren = {
   InstructorAssignmentsIndexRoute: InstructorAssignmentsIndexRoute,
   InstructorCoursesIndexRoute: InstructorCoursesIndexRoute,
   InstructorEarningsIndexRoute: InstructorEarningsIndexRoute,
+  InstructorLessonsIndexRoute: InstructorLessonsIndexRoute,
   InstructorProfileIndexRoute: InstructorProfileIndexRoute,
   InstructorSettingsIndexRoute: InstructorSettingsIndexRoute,
   InstructorStudentsIndexRoute: InstructorStudentsIndexRoute,
@@ -522,6 +564,7 @@ const rootRouteChildren: RootRouteChildren = {
   StudentProfileIndexRoute: StudentProfileIndexRoute,
   StudentSettingsIndexRoute: StudentSettingsIndexRoute,
   InstructorCoursesNewIndexRoute: InstructorCoursesNewIndexRoute,
+  InstructorLessonsNewIndexRoute: InstructorLessonsNewIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

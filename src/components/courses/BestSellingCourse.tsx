@@ -8,12 +8,9 @@ import {
 } from "@/components/ui/table";
 
 import BestCourseTableRow from "./BestSellingCoursesRow";
+import { Course } from "@/types/course.types";
 interface BestSellingCourseProps {
-  courses?: Array<{
-    title: string;
-    price: number;
-    enrollments: number; // optional if not present yet
-  }>;
+  courses?: Course[];
 }
 
 const BestSellingCourse = ({ courses = [] }: BestSellingCourseProps) => {
