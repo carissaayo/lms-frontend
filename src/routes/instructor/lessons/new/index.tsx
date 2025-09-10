@@ -66,6 +66,7 @@ function RouteComponent() {
       formDataToSend.append("note", noteFile);
     }
 
+    console.log("FormData to send:", formDataToSend.get("title"));
     createLesson(formDataToSend, {
       onSuccess: () => {
         toast.success("Lesson created successfully", {
@@ -91,6 +92,8 @@ function RouteComponent() {
         });
       },
     });
+
+    console.log("FormData to done:", formDataToSend.get("title"));
   };
 
   return (

@@ -1,7 +1,7 @@
 import { DashboardShell } from "@/components/dashboard-shell";
-
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Route as NewLessonRoute } from "./new";
+import { Route as LessonRoute } from "./$id";
 
 import { Button } from "@/components/ui/button";
 import { useLessons } from "@/hooks/use-lesson";
@@ -12,13 +12,8 @@ export const Route = createFileRoute("/instructor/lessons/")({
 });
 
 function RouteComponent() {
-  //   const { data, isLoading, error } = useLessons();
-
-  //   const lessons: Lesson[] = data?.lessons ?? [];
-
-  //   if (error) {
-  //     return <p className="text-red-600">Failed to load lessons.</p>;
-  //   }
+  const { data, isLoading, error } = useLessons();
+  const lessons: Lesson[] = data?.lessons ?? [];
 
   return (
     <DashboardShell>
@@ -40,27 +35,30 @@ function RouteComponent() {
           </Link>
         </div>
 
-        {/* {isLoading && (
+        {isLoading && (
           <div className="w-full flex justify-center items-center my-6 h-full">
             <div className="h-8 w-8 border-4 border-gray-300 border-t-primary rounded-full animate-spin"></div>
           </div>
-        )} */}
+        )}
 
-        {/* {!isLoading && lessons.length === 0 && (
+        {!isLoading && lessons.length === 0 && (
           <div className="text-center py-20">
             <h2 className="text-xl font-semibold">You have no lessons yet</h2>
             <p className="text-muted-foreground mt-2">
               Start by creating your first lesson to see it listed here.
             </p>
           </div>
-        )} */}
+        )}
 
-        {/* {!isLoading && lessons.length > 0 && (
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {!isLoading && lessons.length > 0 && (
+          <div className="grid gap-6 md:grid-cols-2 ">
             {lessons.map((lesson) => (
-              <div
+              <Link
+                to={LessonRoute.to}
+                params={{ id: lesson._id }}
+                search={{ lesson: lesson }}
                 key={lesson._id}
-                className="bg-background-light rounded-2xl shadow p-6 flex flex-col gap-3 hover:shadow-lg transition"
+                className="bg-background-light rounded-2xl shadow p-6 flex flex-col gap-3 hover:shadow-lg transition  cursor-pointer"
               >
                 <h2 className="text-xl font-semibold">{lesson.title}</h2>
                 <p className="text-sm text-muted-foreground line-clamp-2">
@@ -81,10 +79,10 @@ function RouteComponent() {
                     {new Date(lesson.updatedAt).toLocaleDateString()}
                   </p>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
-        )} */}
+        )}
       </main>
     </DashboardShell>
   );

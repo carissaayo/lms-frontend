@@ -9,8 +9,8 @@ export interface Lesson {
   assignments: string[] | Assignment[];
   courseId: string;
   videoUrl: string;
-  noteUrl?: string;
-  progress: string[]; // or could be populated with LessonProgress[]
-  createdAt: string; // ISO string from Mongo
-  updatedAt: string; // ISO string from Mongo
+  noteUrl: string;
+  progress: string[];
+  createdAt: string;
+  updatedAt: string;
 }

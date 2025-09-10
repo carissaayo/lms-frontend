@@ -1,5 +1,10 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { createLessonApi, getLessonsApi } from "@/api/lessons";
+import {
+  createLessonApi,
+  deleteLessonApi,
+  getLessonsApi,
+  updateLessonApi,
+} from "@/api/lessons";
 
 export function useLessons() {
   return useQuery({
@@ -13,5 +18,21 @@ export function useLessons() {
 export function useCreateLesson() {
   return useMutation({
     mutationFn: createLessonApi,
+    onError: (error: any) => console.log("Mutation failed:", error),
+  });
+}
+
+export function useUpdateLesson() {
+  return useMutation({
+    mutationFn: ({ id, formData }: { id: string; formData: FormData }) =>
+      updateLessonApi(id, formData),
+    onError: (error: any) => console.log("Mutation failed:", error),
+  });
+}
+
+export function useDeleteLesson() {
+  return useMutation({
+    mutationFn: deleteLessonApi,
+    onError: (error: any) => console.log("Mutation failed:", error),
   });
 }

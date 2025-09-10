@@ -8,10 +8,18 @@ export async function getLessonsApi() {
 }
 
 export async function createLessonApi(formData: FormData) {
-  const res = await api.post("/lessons/create", formData, {
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
-  });
+  const res = await api.post("/lessons/create", formData, {});
+  return res.data;
+}
+
+// Update a lesson by ID
+export async function updateLessonApi(id: string, formData: FormData) {
+  const res = await api.put(`/lessons/${id}`, formData);
+  return res.data.lesson;
+}
+
+// Delete a lesson by ID
+export async function deleteLessonApi(id: string) {
+  const res = await api.delete(`/lessons/${id}`);
   return res.data;
 }
