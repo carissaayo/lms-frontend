@@ -15,3 +15,18 @@ export async function createCourseApi(formData: FormData) {
   });
   return res.data;
 }
+
+export async function submitCourseApi(courseId: string) {
+  const res = await api.patch(`/courses/${courseId}/submit`);
+  return res.data;
+}
+
+export async function publishCourseApi(courseId: string) {
+  const res = await api.patch(`/courses/${courseId}/publish`);
+  return res.data;
+}
+
+export async function deleteCourseApi(courseId: string) {
+  const res = await api.delete(`/courses/${courseId}`);
+  return res.data;
+}

@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { toast, Toaster } from "sonner";
 import { Course } from "@/types/course.types";
 import { Lesson } from "@/types/lesson.types";
-import { Route as LessonsRoute } from "./index";
+import { ArrowLeft } from "lucide-react";
 
 export const Route = createFileRoute("/instructor/lessons/$id")({
   component: RouteComponent,
@@ -46,7 +46,7 @@ function RouteComponent() {
             The lesson you're looking for doesn't exist or you don't have access
             to it.
           </p>
-          <Link to={LessonsRoute.to} className="mt-4 inline-block">
+          <Link to="/instructor/lessons" className="mt-4 inline-block">
             <Button className="mt-4">Back to Lessons</Button>
           </Link>
         </div>
@@ -170,10 +170,10 @@ function RouteComponent() {
   return (
     <DashboardShell>
       <Toaster />
-      <main className="max-w-2xl mx-auto py-10">
+      <main className="max-w-3xl mx-auto py-10">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-bold">Edit Lesson</h1>
-          <Link to={LessonsRoute.to}>
+          <Link to="/instructor/lessons">
             <Button
               variant="outline"
               className="rounded-lg font-secondary text-base"
@@ -270,13 +270,13 @@ function RouteComponent() {
         </form>
 
         {/* Danger Zone */}
-        <div className="mt-12 pt-8 border-t border-gray-200">
+        <div className="mt-12 pt-8 border-t border-gray-200 mb-12">
           <h3 className="text-lg font-medium text-text mb-4">Danger Zone</h3>
           {!isDeleting ? (
             <Button
               onClick={handleDelete}
               variant="destructive"
-              className="rounded-lg font-secondary text-base"
+              className="rounded-lg font-secondary text-base bg-error"
             >
               Delete Lesson
             </Button>
@@ -291,7 +291,7 @@ function RouteComponent() {
                   onClick={handleDelete}
                   disabled={deleteLessonMutation.isPending}
                   variant="destructive"
-                  className="rounded-lg font-secondary text-base"
+                  className="rounded-lg font-secondary text-base bg-error"
                 >
                   {deleteLessonMutation.isPending
                     ? "Deleting..."
