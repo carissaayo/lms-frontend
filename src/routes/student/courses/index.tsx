@@ -13,6 +13,9 @@ import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { DashboardShell } from "@/components/dashboard-shell";
 import { FiltersBar } from "@/components/course-catalog/FiltersBar";
 import { CourseCard } from "@/components/course-catalog/CourseCard";
+import { useStudentsCourses } from "@/hooks/use-course";
+import { Course, CourseCategories } from "@/types/course.types";
+
 export const Route = createFileRoute("/student/courses/")({
   component: RouteComponent,
 });
@@ -20,58 +23,44 @@ export const Route = createFileRoute("/student/courses/")({
 function RouteComponent() {
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("all");
+  const [page, setPage] = useState(1);
   const [viewMode, setViewMode] = useState("grid");
-  // Dummy data for now
-  const courses = [
-    {
-      id: 1,
-      title: "React Fundamentals",
-      category: "frontend",
-      price: "Free",
-      description: "Learn the basics of React.",
-      image: "https://source.unsplash.com/400x250/?react,code",
-      tags: ["React", "JavaScript", "Frontend"],
-    },
-    {
-      id: 2,
-      title: "Advanced CSS",
-      category: "frontend",
-      price: "$15",
-      description: "Master modern CSS techniques.",
-      image: "https://source.unsplash.com/400x250/?css,web",
-      tags: ["CSS", "Styling", "Responsive"],
-    },
-    {
-      id: 3,
-      title: "NestJS API Development",
-      category: "backend",
-      price: "$20",
-      description: "Build powerful APIs.",
-      image: "https://source.unsplash.com/400x250/?api,backend",
-      tags: ["NestJS", "API", "Backend"],
-    },
-  ];
 
+  const { data, isLoading, error } = useStudentsCourses({
+    category,
+    search,
+    page,
+    limit: 9, // adjust grid size
+  });
+
+  const courses: Course[] = data?.courses ?? [];
+
+  // 🟢 Filter by category + search
   const filteredCourses = courses.filter(
     (course) =>
       (category === "all" || course.category === category) &&
       course.title.toLowerCase().includes(search.toLowerCase())
   );
+
   return (
     <DashboardShell>
       <div className="pb-12">
+        {/* Header */}
         <div className="flex sm:items-center justify-between flex-col sm:flex-row gap-4">
           <div className="w-full flex justify-between items-center mb-4">
             <h1 className="text-3xl font-bold font-primary tracking-normal pb-4 flex-1">
               Course Catalog
             </h1>
-            <div className="w-full flex  justify-end gap-8 mb-4 flex-1">
+
+            {/* 🔍 Search + View Mode + Category Filter */}
+            <div className="w-full flex justify-end gap-8 mb-4 flex-1">
               <Input
                 placeholder="Search courses..."
                 className="w-64"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
               />
+
               {/* View Mode Switch */}
               <ToggleGroup
                 type="single"
@@ -93,43 +82,85 @@ function RouteComponent() {
                   List
                 </ToggleGroupItem>
               </ToggleGroup>
+
+              {/* Dynamic Category Filter */}
               <Select value={category} onValueChange={setCategory}>
                 <SelectTrigger className="w-40">
                   <SelectValue placeholder="Category" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">All</SelectItem>
-                  <SelectItem value="frontend">Frontend</SelectItem>
-                  <SelectItem value="backend">Backend</SelectItem>
-                  <SelectItem value="design">Design</SelectItem>
+                  {CourseCategories.map((cat) => (
+                    <SelectItem key={cat} value={cat}>
+                      {cat}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>
           </div>
         </div>
 
-        {/* Filters Bar */}
+        {/* Filters Bar (Optional, can be wired to backend later) */}
         <FiltersBar />
 
-        {/* Courses Grid */}
-        <div
-          className={
-            viewMode === "grid"
-              ? "grid sm:grid-cols-2 lg:grid-cols-3 gap-6"
-              : "flex flex-col gap-6"
-          }
-        >
-          {filteredCourses.map((course) => (
-            <CourseCard key={course.id} course={course} />
-          ))}
-        </div>
+        {/* Loading State */}
+        {isLoading && (
+          <div className="flex justify-center items-center h-64">
+            <div className="h-10 w-10 border-4 border-gray-300 border-t-primary rounded-full animate-spin"></div>
+          </div>
+        )}
 
-        {/* Pagination / Load More */}
-        <div className="flex justify-center mt-6">
-          <Button variant="outline" className="hover:bg-primary-dark">
-            Load More
-          </Button>
-        </div>
+        {/* Error State */}
+        {error && !isLoading && (
+          <div className="text-center py-20">
+            <h2 className="text-xl font-semibold text-red-600">
+              Failed to load courses
+            </h2>
+            <p className="text-muted-foreground mt-2">
+              Please try refreshing the page.
+            </p>
+          </div>
+        )}
+
+        {/* Course List */}
+        {!isLoading && !error && (
+          <>
+            {filteredCourses.length > 0 ? (
+              <div
+                className={
+                  viewMode === "grid"
+                    ? "grid sm:grid-cols-2 lg:grid-cols-3 gap-6"
+                    : "flex flex-col gap-6"
+                }
+              >
+                {filteredCourses.map((course) => (
+                  <CourseCard
+                    key={course._id}
+                    course={course}
+                    viewMode={viewMode}
+                  />
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-20">
+                <h2 className="text-xl font-semibold">No courses found</h2>
+                <p className="text-muted-foreground mt-2">
+                  Try adjusting your search or filters.
+                </p>
+              </div>
+            )}
+
+            {/* Pagination / Load More (future-ready) */}
+            {filteredCourses.length > 0 && (
+              <div className="flex justify-center mt-6">
+                <Button variant="outline" className="hover:bg-primary-dark">
+                  Load More
+                </Button>
+              </div>
+            )}
+          </>
+        )}
       </div>
     </DashboardShell>
   );

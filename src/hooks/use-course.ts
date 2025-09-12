@@ -5,6 +5,7 @@ import {
   submitCourseApi,
   publishCourseApi,
   deleteCourseApi,
+  getCoursesForStudentsApi,
 } from "@/api/courses";
 
 // 🔹 Fetch all courses
@@ -54,5 +55,19 @@ export function useDeleteCourse() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["courses"] });
     },
+  });
+}
+
+export function useStudentsCourses(filters?: {
+  category?: string;
+  search?: string;
+  page?: number;
+  limit?: number;
+}) {
+  return useQuery({
+    queryKey: ["courses"],
+    queryFn: () => getCoursesForStudentsApi(filters),
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
   });
 }

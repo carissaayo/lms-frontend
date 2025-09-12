@@ -21,6 +21,8 @@ export enum CourseCategory {
   TEACHING_ACADEMICS = "Teaching & Academics",
 }
 
+export const CourseCategories = Object.values(CourseCategory);
+
 export type Course = {
   _id: string;
   title: string;
@@ -28,7 +30,7 @@ export type Course = {
   instructor: string;
   instructorName: string;
   coverImage?: string;
-  category?: CourseCategory;
+  category: CourseCategory;
   price: number;
   status: CourseStatus; // you can replace with CourseStatus enum
   enrollments: number; // total students enrolled
@@ -38,4 +40,5 @@ export type Course = {
   }[];
   createdAt?: string;
   updatedAt?: string;
+  tags?: string[];
 };

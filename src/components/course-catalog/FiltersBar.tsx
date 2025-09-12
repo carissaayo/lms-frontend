@@ -9,7 +9,7 @@ import {
 
 export function FiltersBar() {
   return (
-    <div className="flex gap-4 flex-wrap items-center mb-4">
+    <div className="flex gap-4 flex-wrap items-center mb-12">
       <Select>
         <SelectTrigger className="w-48">
           <SelectValue placeholder="Sort By" />

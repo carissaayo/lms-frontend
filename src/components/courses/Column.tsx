@@ -1,7 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
-import { Route } from "@/routes/instructor/courses/$id";
 import { CourseStatus } from "@/types/course.types";
 export type Course = {
   _id: string;

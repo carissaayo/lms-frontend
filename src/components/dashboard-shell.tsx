@@ -7,7 +7,6 @@ import {
   BookOpen,
   CircleUser,
   FileText,
-  Home,
   LogOut,
   NotebookPen,
   Settings,
@@ -39,18 +38,6 @@ export function DashboardShell({ children }: DashboardShellProps) {
               </h1>
             </div>
             <nav className="flex-1 space-y-4 text-base lg:text-xl font-medium pt-12 font-heading">
-              {/* Dashboard */}
-              <Link
-                to={userRole === "student" ? "/instructor" : "/student"}
-                className="flex items-center gap-3 rounded-full px-4 py-2 transition-colors hover:bg-muted text-white/80"
-                activeProps={{
-                  className: "bg-primary-dark text-white",
-                }}
-              >
-                <Home className="h-4 w-4" />
-                Dashboard
-              </Link>
-
               {/* Instructor Navs */}
               {userRole === "instructor" && (
                 <>
@@ -119,7 +106,7 @@ export function DashboardShell({ children }: DashboardShellProps) {
               )}
 
               {/* Student Navs */}
-              {userRole == "students" && (
+              {userRole == "student" && (
                 <>
                   <Link
                     to="/student/my-courses"
@@ -129,7 +116,7 @@ export function DashboardShell({ children }: DashboardShellProps) {
                     }}
                   >
                     <BookOpen className="h-4 w-4" />
-                    My Courses
+                    Enrollments
                   </Link>
                   <Link
                     to="/student/courses"
@@ -240,7 +227,7 @@ export function DashboardShell({ children }: DashboardShellProps) {
                 </Link>
 
                 <Link
-                  to="/"
+                  to="/auth/login"
                   className="h-10 w-10 flex items-center justify-center rounded-full bg-gray-100"
                 >
                   <LogOut className="h-6 w-6 cursor-pointer text-primary-dark" />
