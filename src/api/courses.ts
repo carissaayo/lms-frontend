@@ -33,24 +33,27 @@ export async function deleteCourseApi(courseId: string) {
 
 // Student
 
-export async function getCoursesForStudentsApi(filters?: {
-  category?: string;
-  search?: string;
-  page?: number;
-  limit?: number;
-}) {
-  const params = new URLSearchParams();
+export async function getCoursesForStudentsApi({
+  category,
+  search,
+  sort,
+  minPrice,
+  maxPrice,
+  page,
+  limit,
+}: any) {
+  const res = await api.get(`/courses`, {
+    params: {
+      category: category !== "all" ? category : undefined,
+      title: search || undefined, // backend can match this with regex if you want
+      sort: sort || undefined,
+      minPrice: minPrice || undefined,
+      maxPrice: maxPrice || undefined,
+      page: page || 1,
+      limit: limit || 10,
+    },
+  });
 
-  if (filters?.category && filters.category !== "all")
-    params.append("category", filters.category);
-
-  if (filters?.search) params.append("title", filters.search);
-
-  if (filters?.page) params.append("page", filters.page.toString());
-  if (filters?.limit) params.append("limit", filters.limit.toString());
-
-  const res = await api.get(`/api/courses?${params.toString()}`);
   console.log("API response:", res.data);
-
   return res.data;
 }

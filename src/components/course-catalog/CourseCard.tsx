@@ -9,12 +9,14 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "../ui/badge";
 import { Course } from "@/types/course.types";
+import { Link } from "@tanstack/react-router";
+import { memo } from "react";
 
 interface CourseCardProps {
   course: Course;
   viewMode: string;
 }
-export function CourseCard({ course, viewMode }: CourseCardProps) {
+export function CourseCardComponent({ course, viewMode }: CourseCardProps) {
   if (viewMode === "list") {
     return (
       <Card className="flex flex-col sm:flex-row overflow-hidden hover:shadow-lg transition px-6 cursor-pointer hover:scale-105">
@@ -102,3 +104,5 @@ export function CourseCard({ course, viewMode }: CourseCardProps) {
     </Card>
   );
 }
+
+export const CourseCard = memo(CourseCardComponent);

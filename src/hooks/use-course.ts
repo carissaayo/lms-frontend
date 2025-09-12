@@ -58,14 +58,18 @@ export function useDeleteCourse() {
   });
 }
 
-export function useStudentsCourses(filters?: {
-  category?: string;
-  search?: string;
-  page?: number;
-  limit?: number;
-}) {
+export function useStudentsCourses(filters: any) {
   return useQuery({
-    queryKey: ["courses"],
+    queryKey: [
+      "courses",
+      filters.category,
+      filters.search,
+      filters.sort,
+      filters.minPrice,
+      filters.maxPrice,
+      filters.page,
+      filters.limit,
+    ],
     queryFn: () => getCoursesForStudentsApi(filters),
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,

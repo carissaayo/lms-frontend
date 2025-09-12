@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
@@ -15,33 +15,45 @@ import { FiltersBar } from "@/components/course-catalog/FiltersBar";
 import { CourseCard } from "@/components/course-catalog/CourseCard";
 import { useStudentsCourses } from "@/hooks/use-course";
 import { Course, CourseCategories } from "@/types/course.types";
-
+import { useDebounce } from "@/hooks/use-debounce";
 export const Route = createFileRoute("/student/courses/")({
   component: RouteComponent,
 });
 
 function RouteComponent() {
+  const [viewMode, setViewMode] = useState("grid");
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("all");
-  const [page, setPage] = useState(1);
-  const [viewMode, setViewMode] = useState("grid");
 
-  const { data, isLoading, error } = useStudentsCourses({
-    category,
-    search,
-    page,
-    limit: 9, // adjust grid size
-  });
+  const [sort, setSort] = useState("");
+  const [minPrice, setMinPrice] = useState("");
+  const [maxPrice, setMaxPrice] = useState("");
+  const debouncedSearch = useDebounce(search, 500);
+
+  const filters = useMemo(
+    () => ({
+      category,
+      search: debouncedSearch,
+      sort,
+      minPrice,
+      maxPrice,
+      page: 1,
+      limit: 9,
+    }),
+    [category, debouncedSearch, sort, minPrice, maxPrice]
+  );
+
+  const { data, isLoading, error } = useStudentsCourses(filters);
 
   const courses: Course[] = data?.courses ?? [];
 
-  // 🟢 Filter by category + search
-  const filteredCourses = courses.filter(
-    (course) =>
-      (category === "all" || course.category === category) &&
-      course.title.toLowerCase().includes(search.toLowerCase())
-  );
-
+  function handleResetFilters() {
+    setSearch("");
+    setCategory("all");
+    setSort("");
+    setMinPrice("");
+    setMaxPrice("");
+  }
   return (
     <DashboardShell>
       <div className="pb-12">
@@ -101,8 +113,15 @@ function RouteComponent() {
           </div>
         </div>
 
-        {/* Filters Bar (Optional, can be wired to backend later) */}
-        <FiltersBar />
+        <FiltersBar
+          sort={sort}
+          minPrice={minPrice}
+          maxPrice={maxPrice}
+          onSortChange={setSort}
+          onMinPriceChange={setMinPrice}
+          onMaxPriceChange={setMaxPrice}
+          onReset={handleResetFilters}
+        />
 
         {/* Loading State */}
         {isLoading && (
@@ -126,7 +145,7 @@ function RouteComponent() {
         {/* Course List */}
         {!isLoading && !error && (
           <>
-            {filteredCourses.length > 0 ? (
+            {courses.length > 0 ? (
               <div
                 className={
                   viewMode === "grid"
@@ -134,7 +153,7 @@ function RouteComponent() {
                     : "flex flex-col gap-6"
                 }
               >
-                {filteredCourses.map((course) => (
+                {courses.map((course) => (
                   <CourseCard
                     key={course._id}
                     course={course}
@@ -152,7 +171,7 @@ function RouteComponent() {
             )}
 
             {/* Pagination / Load More (future-ready) */}
-            {filteredCourses.length > 0 && (
+            {courses.length > 0 && (
               <div className="flex justify-center mt-6">
                 <Button variant="outline" className="hover:bg-primary-dark">
                   Load More
