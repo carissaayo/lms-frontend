@@ -4,6 +4,7 @@ import {
   deleteLessonApi,
   getLessonsApi,
   getLessonsInACourseApi,
+  getLessonsStudentApi,
   updateLessonApi,
 } from "@/api/lessons";
 
@@ -45,5 +46,18 @@ export function useDeleteLesson() {
   return useMutation({
     mutationFn: deleteLessonApi,
     onError: (error: any) => console.log("Mutation failed:", error),
+  });
+}
+
+// ======================STUDENT=============
+
+export function useLessonsStudentApi(courseId: string) {
+  return useQuery({
+    queryKey: ["lessons/course", courseId, "all"],
+    queryFn: () => getLessonsStudentApi(courseId),
+    enabled: !!courseId,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+    staleTime: 1000 * 60 * 10,
   });
 }

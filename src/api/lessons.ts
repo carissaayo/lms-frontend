@@ -30,3 +30,12 @@ export async function deleteLessonApi(id: string) {
   const res = await api.delete(`/lessons/${id}`);
   return res.data;
 }
+
+// =================STUDENT========================
+
+export async function getLessonsStudentApi(id: string) {
+  const res = await api.get(`/lessons/course/${id}/all`);
+  console.log("API response:", res.data);
+
+  return res.data;
+}

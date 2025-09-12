@@ -6,8 +6,7 @@ import { toast, Toaster } from "sonner";
 import { ArrowLeft } from "lucide-react";
 import { useSingleCourse, useEnrollCourse } from "@/hooks/use-course";
 import { Lesson } from "@/types/lesson.types";
-import { useLessonsInACourse } from "@/hooks/use-lesson";
-import { CourseStatus } from "@/types/course.types";
+import { useLessonsStudentApi } from "@/hooks/use-lesson";
 
 export const Route = createFileRoute("/student/courses/$id")({
   component: StudentCourseDetailPage,
@@ -18,11 +17,10 @@ function StudentCourseDetailPage() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-  // 🔥 Fetch the single course
   const { data, isLoading, error } = useSingleCourse(id);
   const course = data?.course;
 
-  const { data: lessonsData } = useLessonsInACourse(course?._id);
+  const { data: lessonsData } = useLessonsStudentApi(course?._id);
   const lessons: Lesson[] = lessonsData?.lessons ?? [];
 
   const enrollMutation = useEnrollCourse();
@@ -88,7 +86,7 @@ function StudentCourseDetailPage() {
         {/* Header */}
         <div className="flex sm:items-center justify-between flex-col sm:flex-row gap-4">
           <div>
-            <h1 className="text-3xl font-bold font-primary tracking-tight">
+            <h1 className="text-3xl font-bold font-primary tracking-tight mb-4">
               {course.title}
             </h1>
             <p className="text-muted-foreground text-lg">
@@ -108,7 +106,7 @@ function StudentCourseDetailPage() {
 
         {/* Cover Image */}
         {course.coverImage && (
-          <div className="w-full h-64 rounded-2xl overflow-hidden shadow">
+          <div className="w-full h-80 rounded-2xl overflow-hidden shadow">
             <img
               src={course.coverImage}
               alt={course.title}
@@ -167,20 +165,6 @@ function StudentCourseDetailPage() {
             <div className="flex justify-between">
               <span className="text-muted-foreground">Enrolled Students:</span>
               <span className="font-medium">{course.enrollments ?? 0}</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-muted-foreground">Status:</span>
-              <span
-                className={`font-medium ${
-                  course.status === CourseStatus.APPROVED
-                    ? "text-green-600"
-                    : course.status === CourseStatus.PENDING
-                      ? "text-yellow-600"
-                      : "text-red-600"
-                }`}
-              >
-                {course.status}
-              </span>
             </div>
           </aside>
         </div>
