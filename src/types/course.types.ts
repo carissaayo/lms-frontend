@@ -32,8 +32,8 @@ export type Course = {
   coverImage?: string;
   category: CourseCategory;
   price: number;
-  status: CourseStatus; // you can replace with CourseStatus enum
-  enrollments: number; // total students enrolled
+  status: CourseStatus;
+  enrollments: number;
   lessons?: {
     number: number;
     name: string;

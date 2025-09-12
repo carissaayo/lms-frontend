@@ -6,9 +6,15 @@ import {
   publishCourseApi,
   deleteCourseApi,
   getCoursesForStudentsApi,
+  getSingleCourseApi,
+  enrollInCourseApi,
 } from "@/api/courses";
 
-// 🔹 Fetch all courses
+// ==============================
+// Instructor Hooks
+// ==============================
+
+// 🔹 Fetch all courses (Instructor)
 export function useCourses() {
   return useQuery({
     queryKey: ["courses"],
@@ -58,6 +64,11 @@ export function useDeleteCourse() {
   });
 }
 
+// ==============================
+// Student Hooks
+// ==============================
+
+// 🔹 Fetch all courses (with filters)
 export function useStudentsCourses(filters: any) {
   return useQuery({
     queryKey: [
@@ -73,5 +84,28 @@ export function useStudentsCourses(filters: any) {
     queryFn: () => getCoursesForStudentsApi(filters),
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
+  });
+}
+
+// 🔹 Fetch single course
+export function useSingleCourse(id: string) {
+  return useQuery({
+    queryKey: ["singleCourse", id],
+    queryFn: () => getSingleCourseApi(id),
+    enabled: !!id,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+  });
+}
+
+// 🔹 Enroll in course
+export function useEnrollCourse() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (courseId: string) => enrollInCourseApi(courseId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["courses"] });
+      queryClient.invalidateQueries({ queryKey: ["singleCourse"] });
+    },
   });
 }

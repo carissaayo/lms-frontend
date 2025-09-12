@@ -1,9 +1,12 @@
 import { api } from "./client";
 
+// ==============================
+// Instructor APIs
+// ==============================
+
 export async function getCoursesApi() {
   const res = await api.get("/courses");
   console.log("API response:", res.data);
-
   return res.data;
 }
 
@@ -31,8 +34,11 @@ export async function deleteCourseApi(courseId: string) {
   return res.data;
 }
 
-// Student
+// ==============================
+// Student APIs
+// ==============================
 
+// Get all courses (with filters)
 export async function getCoursesForStudentsApi({
   category,
   search,
@@ -45,7 +51,7 @@ export async function getCoursesForStudentsApi({
   const res = await api.get(`/courses`, {
     params: {
       category: category !== "all" ? category : undefined,
-      title: search || undefined, // backend can match this with regex if you want
+      title: search || undefined,
       sort: sort || undefined,
       minPrice: minPrice || undefined,
       maxPrice: maxPrice || undefined,
@@ -55,5 +61,17 @@ export async function getCoursesForStudentsApi({
   });
 
   console.log("API response:", res.data);
+  return res.data;
+}
+
+// Get a single course (for student detail page)
+export async function getSingleCourseApi(courseId: string) {
+  const res = await api.get(`/courses/${courseId}`);
+  return res.data;
+}
+
+// Enroll a student in a course
+export async function enrollInCourseApi(courseId: string) {
+  const res = await api.post(`/courses/${courseId}/enroll`);
   return res.data;
 }
