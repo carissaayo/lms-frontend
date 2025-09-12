@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button";
 import { toast, Toaster } from "sonner";
 import { Course } from "@/types/course.types";
 import { Lesson } from "@/types/lesson.types";
-import { ArrowLeft } from "lucide-react";
 
 export const Route = createFileRoute("/instructor/lessons/$id")({
   component: RouteComponent,

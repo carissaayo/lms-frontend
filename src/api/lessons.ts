@@ -8,7 +8,7 @@ export async function getLessonsApi() {
 }
 
 export async function getLessonsInACourseApi(id: string) {
-  const res = await api.get(`/lessons/${id}`);
+  const res = await api.get(`/lessons/course/${id}`);
   console.log("API response:", res.data);
 
   return res.data;

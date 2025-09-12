@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { DashboardShell } from "@/components/dashboard-shell";
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { useCourses } from "@/hooks/use-course";
 import { CourseStatus } from "@/types/course.types";
@@ -36,32 +36,16 @@ function CourseDetailPage() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-  // Find the course from the courses list (until you add single-course endpoint)
   const course = data?.courses?.find((c: any) => c._id === id);
 
-  const { data: lessonsData } = useLessonsInACourse(course._id);
+  const { data: lessonsData } = useLessonsInACourse(course?._id);
   const lessons: Lesson[] = lessonsData?.lessons as Lesson[];
-  console.log(lessonsData);
 
   const [newLesson, setNewLesson] = useState("");
-
-  // useEffect(() => {
-  //   // when course loads/refetch happens, update local lessons
-  //   setLessons((course?.lessons as any) ?? []);
-  // }, [course]);
 
   const submitMutation = useSubmitCourse();
   const publishMutation = usePublishCourse();
   const deleteMutation = useDeleteCourse();
-
-  // const handleAddLesson = () => {
-  //   if (!newLesson.trim()) return;
-  //   setLessons((prev) => [
-  //     ...prev,
-  //     { number: prev.length + 1, name: newLesson },
-  //   ]);
-  //   setNewLesson("");
-  // };
 
   const handleSubmitCourse = () => {
     if (!course) return;
@@ -277,16 +261,18 @@ function CourseDetailPage() {
                     placeholder="Lesson name..."
                     className="border rounded-lg px-3 py-1 text-sm"
                   />
-                  {/* <Button onClick={handleAddLesson}>+ Add</Button> */}
+                  <Button>
+                    <Link to="/instructor/lessons/new">Create New Lesson</Link>
+                  </Button>
                 </div>
               </div>
 
-              {lessons.length > 0 ? (
-                <ul className="space-y-2">
+              {lessons?.length > 0 ? (
+                <ul className="space-y-2 mb-10">
                   {lessons.map((lesson) => (
                     <li
                       key={lesson.position}
-                      className="flex gap-3 items-center border-b pb-2"
+                      className="flex gap-3 items-center border-b border-gray-200 pb-2"
                     >
                       <span className="font-semibold">{lesson.position}.</span>
                       <span>{lesson.title}</span>

@@ -18,7 +18,7 @@ export function useLessons() {
 
 export function useLessonsInACourse(courseId: string) {
   return useQuery({
-    queryKey: ["lessons/", courseId],
+    queryKey: ["lessons/course", courseId],
     queryFn: () => getLessonsInACourseApi(courseId),
     enabled: !!courseId,
     refetchOnWindowFocus: false,

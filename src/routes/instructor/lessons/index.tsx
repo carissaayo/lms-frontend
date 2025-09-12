@@ -12,7 +12,7 @@ export const Route = createFileRoute("/instructor/lessons/")({
 });
 
 function RouteComponent() {
-  const { data, isLoading, error } = useLessons();
+  const { data, isLoading } = useLessons();
   const lessons: Lesson[] = data?.lessons ?? [];
 
   return (
