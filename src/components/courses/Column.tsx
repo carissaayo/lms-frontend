@@ -1,14 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
-import { CourseStatus } from "@/types/course.types";
-export type Course = {
-  _id: string;
-  price: number;
-  status: CourseStatus;
-  title: string;
-  students: number;
-};
+import { Course } from "@/types/course.types";
 
 export const columns: ColumnDef<Course>[] = [
   {
@@ -18,7 +11,7 @@ export const columns: ColumnDef<Course>[] = [
       console.log("id", row.original._id);
       return (
         <div className="font-medium text-base">
-          <Link to={`/instructor/courses/${row.original._id}`}>
+          <Link to="/instructor/courses/$id" params={{ id: row.original._id }}>
             {row.getValue("title")}
           </Link>
         </div>

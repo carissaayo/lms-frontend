@@ -28,7 +28,9 @@ const RecentCourseTableRow = ({
   return (
     <TableRow>
       <TableCell className="font-medium text-base">
-        <Link to={`/instructor/courses/${id}`}>{title}</Link>
+        <Link to="/instructor/courses/$id" params={{ id }}>
+          {title}
+        </Link>
       </TableCell>
       <TableCell className="font-medium">{formattedPrice(price)}</TableCell>
       <TableCell className={`text-right capitalize ${color}`}>

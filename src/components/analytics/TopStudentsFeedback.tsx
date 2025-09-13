@@ -60,6 +60,8 @@ export function TopStudentFeedback() {
   const [sortAsc, setSortAsc] = React.useState(true);
   const [selectedFeedback, setSelectedFeedback] = React.useState<any>(null);
 
+  console.log();
+
   const filtered = feedbacks
     .filter((f) => selectedCourse === "all" || f.course === selectedCourse)
     .sort((a, b) => {

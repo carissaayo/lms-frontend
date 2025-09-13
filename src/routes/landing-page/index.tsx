@@ -11,25 +11,12 @@ import {
 } from "@/components/ui/card";
 
 import heroImg from "../assets/wes-hicks-4-EeTnaC1S4-unsplash.jpg";
-import useAuthStore from "@/store/useAuthStore";
-import { useEffect } from "react";
-import { useRouter } from "@tanstack/react-router";
+
 export const Route = createFileRoute("/landing-page/")({
   component: LandingPage,
 });
 
 function LandingPage() {
-  const router = useRouter();
-  const { user } = useAuthStore((state) => state);
-  useEffect(() => {
-    if (user) {
-      if (user.role === "instructor") {
-        router.navigate({ to: "/dashboard/instructor" });
-      } else {
-        router.navigate({ to: "/dashboard/student" });
-      }
-    }
-  }, [user, router]);
   return (
     <main className="min-h-screen flex-col winky-sans-custom ">
       {/* Header Starts */}
@@ -58,18 +45,17 @@ function LandingPage() {
               Contact
             </Link>
           </nav>
-          {!user && (
-            <div className="flex gap-4">
-              <Link to="/auth/login">
-                <Button variant="outline" className="cursor-pointer">
-                  Log In
-                </Button>
-              </Link>
-              <Link to="/auth/register">
-                <Button className="cursor-pointer">Sign Up</Button>
-              </Link>
-            </div>
-          )}
+
+          <div className="flex gap-4">
+            <Link to="/auth/login">
+              <Button variant="outline" className="cursor-pointer">
+                Log In
+              </Button>
+            </Link>
+            <Link to="/auth/register">
+              <Button className="cursor-pointer">Sign Up</Button>
+            </Link>
+          </div>
         </div>
       </header>
       {/* Header Ends */}

@@ -63,11 +63,10 @@ const progressData = [
 ];
 function RouteComponent() {
   const [assignments, setAssignments] = useState<Assignment[]>(assignmentsData);
-  const submissionRate = (
+  const submissionRate =
     (assignments.filter((a) => a.status !== "pending").length /
       assignments.length) *
-    100
-  ).toFixed(2);
+    100;
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedAssignment, setSelectedAssignment] =

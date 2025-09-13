@@ -19,7 +19,7 @@ interface CourseCardProps {
 export function CourseCardComponent({ course, viewMode }: CourseCardProps) {
   if (viewMode === "list") {
     return (
-      <Link to={`/student/courses/${course._id}`}>
+      <Link to="/student/courses/$id" params={{ id: course._id }}>
         <Card className="flex flex-col sm:flex-row overflow-hidden hover:shadow-lg transition px-6 cursor-pointer hover:scale-105">
           <img
             src={course.coverImage}
@@ -65,7 +65,7 @@ export function CourseCardComponent({ course, viewMode }: CourseCardProps) {
 
   // Grid View
   return (
-    <Link to={`/student/courses/${course._id}`}>
+    <Link to="/student/courses/$id" params={{ id: course._id }}>
       <Card className="hover:shadow-lg transition overflow-hidden cursor-pointer hover:scale-105">
         <div className="px-3">
           <img
