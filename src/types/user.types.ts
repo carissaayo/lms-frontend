@@ -14,3 +14,19 @@ export interface RegisterData {
   confirmPassword: string;
   role: Role;
 }
+
+export type UserProfile = {
+  userId: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  emailVerified: boolean;
+  walletBalance: number;
+  phoneNumber: string;
+  role: "student" | "instructor" | "admin";
+  state?: string;
+  city?: string;
+  country?: string;
+  picture?: string;
+  street?: string;
+};

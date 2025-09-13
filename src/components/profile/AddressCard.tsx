@@ -1,41 +1,75 @@
 import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "../ui/button";
-import { Pencil } from "lucide-react";
+import { UserProfile } from "@/types/user.types";
 
-export default function AddressCard() {
+type Props = {
+  user: UserProfile;
+  editMode?: boolean;
+  onFieldChange?: (field: keyof UserProfile, value: string) => void;
+};
+
+export default function AddressCard({ user, editMode, onFieldChange }: Props) {
   return (
-    <Card className="my-12 bg-white  border-gray-200">
+    <Card className="my-12 bg-white border-gray-200">
       <CardContent className="px-12 py-2 space-y-4">
-        <div className="flex justify-between items-center">
-          <h2 className="text-xl font-semibold font-secondary">Address</h2>
-          <Button
-            variant="outline"
-            className="cursor-pointer bg-white hover:bg-primary-light border border-gray-300 rounded-full flex gap-2 px-6"
-          >
-            Edit
-            <Pencil className="w-4 h-4" />
-          </Button>
-        </div>
+        <h2 className="text-xl font-semibold font-secondary">Address</h2>
 
+        {/* Country & State */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           <div>
             <p className="text-sm text-muted-foreground">Country</p>
-            <p className="text-base font-medium">Nigeria</p>
+            {editMode ? (
+              <input
+                type="text"
+                value={user.country ?? ""}
+                onChange={(e) => onFieldChange?.("country", e.target.value)}
+                className="border px-2 py-1 rounded w-full"
+              />
+            ) : (
+              <p className="text-base font-medium">{user?.country || "N/A"}</p>
+            )}
           </div>
           <div>
             <p className="text-sm text-muted-foreground">State</p>
-            <p className="text-base font-medium">Lagos</p>
+            {editMode ? (
+              <input
+                type="text"
+                value={user.state ?? ""}
+                onChange={(e) => onFieldChange?.("state", e.target.value)}
+                className="border px-2 py-1 rounded w-full"
+              />
+            ) : (
+              <p className="text-base font-medium">{user?.state || "N/A"}</p>
+            )}
           </div>
         </div>
 
+        {/* City & Street */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           <div>
             <p className="text-sm text-muted-foreground">City</p>
-            <p className="text-base font-medium">Lekki</p>
+            {editMode ? (
+              <input
+                type="text"
+                value={user.city ?? ""}
+                onChange={(e) => onFieldChange?.("city", e.target.value)}
+                className="border px-2 py-1 rounded w-full"
+              />
+            ) : (
+              <p className="text-base font-medium">{user?.city || "N/A"}</p>
+            )}
           </div>
           <div>
             <p className="text-sm text-muted-foreground">Street</p>
-            <p className="text-base font-medium">123 Banana Island Road</p>
+            {editMode ? (
+              <input
+                type="text"
+                value={user.street ?? ""}
+                onChange={(e) => onFieldChange?.("street", e.target.value)}
+                className="border px-2 py-1 rounded w-full"
+              />
+            ) : (
+              <p className="text-base font-medium">{user?.street || "N/A"}</p>
+            )}
           </div>
         </div>
       </CardContent>
