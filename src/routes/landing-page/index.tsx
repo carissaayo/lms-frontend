@@ -10,7 +10,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
-import heroImg from "../assets/wes-hicks-4-EeTnaC1S4-unsplash.jpg";
+// import heroImg from "../assets/wes-hicks-4-EeTnaC1S4-unsplash.jpg";
 
 export const Route = createFileRoute("/landing-page/")({
   component: LandingPage,
@@ -91,11 +91,11 @@ function LandingPage() {
             </div>
           </div>
           <div className="mx-auto lg:mx-0 relative">
-            <img
+            {/* <img
               src={heroImg}
               alt="Learning platform dashboard"
               className="rounded-lg object-cover shadow-lg lg:max-w-[450px] xl:max-w-[600px] h-[400px]  xl:h-[500px]"
-            />
+            /> */}
           </div>
         </div>
       </section>
