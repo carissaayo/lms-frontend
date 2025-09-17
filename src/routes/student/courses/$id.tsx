@@ -1,12 +1,17 @@
+import { useState } from "react";
 import { DashboardShell } from "@/components/dashboard-shell";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast, Toaster } from "sonner";
 import { ArrowLeft } from "lucide-react";
-import { useSingleCourse, useEnrollCourse } from "@/hooks/use-course";
+import { useSingleCourse } from "@/hooks/use-course";
 import { Lesson } from "@/types/lesson.types";
 import { useLessonsStudentApi } from "@/hooks/use-lesson";
+import CourseModals from "@/components/modals/CourseModals";
+import { useUserEnrollments } from "@/hooks/use-enrollment";
+import useAuthStore from "@/store/useAuthStore";
+import { Course } from "@/types/course.types";
 
 export const Route = createFileRoute("/student/courses/$id")({
   component: StudentCourseDetailPage,
@@ -17,33 +22,18 @@ function StudentCourseDetailPage() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
+  const [showModal, setShowModal] = useState(false);
+
   const { data, isLoading, error } = useSingleCourse(id);
   const course = data?.course;
 
   const { data: lessonsData } = useLessonsStudentApi(course?._id);
   const lessons: Lesson[] = lessonsData?.lessons ?? [];
 
-  const enrollMutation = useEnrollCourse();
+  const { data: coursesData } = useUserEnrollments();
+  const courses: Course[] = coursesData?.courses ?? [];
 
-  const handleEnroll = () => {
-    if (!course) return;
-    enrollMutation.mutate(course._id, {
-      onSuccess: () => {
-        toast.success("Enrolled successfully!", {
-          description: "You are now enrolled in this course.",
-          position: "top-center",
-        });
-        queryClient.invalidateQueries({ queryKey: ["courses"] });
-      },
-      onError: (error: any) => {
-        toast.error("Enrollment failed", {
-          description:
-            error?.response?.data?.message || "Something went wrong.",
-          position: "top-center",
-        });
-      },
-    });
-  };
+  const isEnrolled = courses.some((e) => e._id === course?._id);
 
   if (isLoading) {
     return (
@@ -83,6 +73,11 @@ function StudentCourseDetailPage() {
           <ArrowLeft className="!w-12 !h-8" />
         </Button>
 
+        {/* Render Modal */}
+        {showModal && (
+          <CourseModals course={course} onClose={() => setShowModal(false)} />
+        )}
+
         {/* Header */}
         <div className="flex sm:items-center justify-between flex-col sm:flex-row gap-4">
           <div>
@@ -93,15 +88,12 @@ function StudentCourseDetailPage() {
               Learn from {course.instructorName}
             </p>
           </div>
-
           {/* Enroll Button */}
-          <Button
-            size="lg"
-            disabled={enrollMutation.isPending}
-            onClick={handleEnroll}
-          >
-            {enrollMutation.isPending ? "Enrolling..." : "Enroll Now"}
-          </Button>
+          {!isEnrolled && (
+            <Button size="lg" onClick={() => setShowModal(true)}>
+              Enroll Now
+            </Button>
+          )}
         </div>
 
         {/* Cover Image */}

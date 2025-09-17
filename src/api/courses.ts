@@ -72,6 +72,6 @@ export async function getSingleCourseApi(courseId: string) {
 
 // Enroll a student in a course
 export async function enrollInCourseApi(courseId: string) {
-  const res = await api.post(`/courses/${courseId}/enroll`);
+  const res = await api.post(`students/enroll/${courseId}`);
   return res.data;
 }
