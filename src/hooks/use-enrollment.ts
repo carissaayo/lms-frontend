@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import {
+  getEnrolledCourseApi,
   getStudentEnrollmentsApi,
   getUserEnrollmentsApi,
 } from "@/api/enrollments";
@@ -26,5 +27,13 @@ export function useStudentEnrollments(filters: any) {
     queryFn: () => getStudentEnrollmentsApi(filters),
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
+  });
+}
+
+export function useSingleEnrollment(courseId: string) {
+  return useQuery({
+    queryKey: [courseId],
+    queryFn: () => getEnrolledCourseApi(courseId),
+    refetchOnWindowFocus: false,
   });
 }

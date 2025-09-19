@@ -9,23 +9,18 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+
 import { DashboardShell } from "@/components/dashboard-shell";
 import { FiltersBar } from "@/components/course-catalog/FiltersBar";
-import { CourseCard } from "@/components/course-catalog/CourseCard";
-import { useStudentsCourses } from "@/hooks/use-course";
+import { CourseCard } from "@/components/course-catalog/StudentCourseCard";
 import { Course, CourseCategories } from "@/types/course.types";
 import { useDebounce } from "@/hooks/use-debounce";
-import {
-  useStudentEnrollments,
-  useUserEnrollments,
-} from "@/hooks/use-enrollment";
+import { useStudentEnrollments } from "@/hooks/use-enrollment";
 export const Route = createFileRoute("/student/enrollments/")({
   component: RouteComponent,
 });
 
 function RouteComponent() {
-  const [viewMode, setViewMode] = useState("grid");
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("all");
 
@@ -80,28 +75,6 @@ function RouteComponent() {
                 onChange={(e) => setSearch(e.target.value)}
               />
 
-              {/* View Mode Switch */}
-              <ToggleGroup
-                type="single"
-                value={viewMode}
-                onValueChange={(val) => val && setViewMode(val)}
-              >
-                <ToggleGroupItem
-                  value="grid"
-                  aria-label="Grid View"
-                  className={`${viewMode === "grid" && "bg-primary-dark"}`}
-                >
-                  Grid
-                </ToggleGroupItem>
-                <ToggleGroupItem
-                  value="list"
-                  aria-label="List View"
-                  className={`${viewMode === "list" && "bg-primary-dark"}`}
-                >
-                  List
-                </ToggleGroupItem>
-              </ToggleGroup>
-
               {/* Dynamic Category Filter */}
               <Select value={category} onValueChange={setCategory}>
                 <SelectTrigger className="w-40">
@@ -153,19 +126,9 @@ function RouteComponent() {
         {!isLoading && !error && (
           <>
             {courses.length > 0 ? (
-              <div
-                className={
-                  viewMode === "grid"
-                    ? "grid sm:grid-cols-2 lg:grid-cols-3 gap-6"
-                    : "flex flex-col gap-6"
-                }
-              >
+              <div className={"grid sm:grid-cols-2 lg:grid-cols-3 gap-6"}>
                 {courses.map((course) => (
-                  <CourseCard
-                    key={course._id}
-                    course={course}
-                    viewMode={viewMode}
-                  />
+                  <CourseCard key={course._id} course={course} />
                 ))}
               </div>
             ) : (

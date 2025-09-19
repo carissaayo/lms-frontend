@@ -39,3 +39,12 @@ export async function getStudentEnrollmentsApi({
   console.log("API response:", res.data);
   return res.data;
 }
+
+export async function getEnrolledCourseApi(courseId: string) {
+  console.log("Enrolled Single Course API response hwee");
+
+  const res = await api.get(`students/courses/${courseId}`);
+
+  console.log("Enrolled Single Course API response:", res.data);
+  return res.data;
+}
