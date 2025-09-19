@@ -39,3 +39,26 @@ export async function getLessonsStudentApi(id: string) {
 
   return res.data;
 }
+
+export async function updateLessonProgressApi(
+  lessonId: string,
+  payload: { videoDuration: number; watchedDuration: number }
+) {
+  const res = await api.patch(`/students/lessons/${lessonId}`, payload);
+  return res.data;
+}
+
+export async function startLessonApi(lessonId: string) {
+  const res = await api.post(`students/lessons/${lessonId}/start`);
+  return res.data;
+}
+
+export async function getSingleLessonApi(lessonId: string) {
+  const res = await api.get(`students/lessons/${lessonId}`);
+  return res.data;
+}
+
+export async function updateLessonProgress(lessonId: string, payload: any) {
+  const res = await api.patch(`/lessons/${lessonId}/`, payload);
+  return res.data;
+}
