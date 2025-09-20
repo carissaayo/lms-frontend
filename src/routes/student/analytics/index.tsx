@@ -1,7 +1,5 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import {
-  LineChart,
-  Line,
   AreaChart,
   Area,
   BarChart,
@@ -13,7 +11,6 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
-  Legend,
   ResponsiveContainer,
 } from "recharts";
 import {
@@ -21,14 +18,8 @@ import {
   Award,
   Clock,
   BookOpen,
-  Target,
-  Calendar,
-  BarChart3,
   Activity,
   Star,
-  Trophy,
-  ChevronDown,
-  Filter,
 } from "lucide-react";
 import { DashboardShell } from "@/components/dashboard-shell";
 import { Button } from "@/components/ui/button";
@@ -40,8 +31,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { createFileRoute } from "@tanstack/react-router";
+import { useStudentAnalytics } from "@/hooks/use-analytics";
 
-// Mock data
+// Mock data for charts that aren't from API yet
 const learningProgressData = [
   { month: "Jan", hours: 12, courses: 2, completionRate: 65 },
   { month: "Feb", hours: 18, courses: 3, completionRate: 72 },
@@ -50,14 +42,6 @@ const learningProgressData = [
   { month: "May", hours: 28, courses: 6, completionRate: 82 },
   { month: "Jun", hours: 35, courses: 7, completionRate: 88 },
   { month: "Jul", hours: 42, courses: 8, completionRate: 92 },
-];
-
-const categoryDistribution = [
-  { name: "Web Development", value: 35, color: "#3B82F6" },
-  { name: "Data Science", value: 25, color: "#EF4444" },
-  { name: "Design", value: 20, color: "#10B981" },
-  { name: "Marketing", value: 15, color: "#F59E0B" },
-  { name: "Business", value: 5, color: "#8B5CF6" },
 ];
 
 const weeklyActivityData = [
@@ -70,21 +54,6 @@ const weeklyActivityData = [
   { day: "Sun", hours: 4.8, lessons: 11 },
 ];
 
-const skillProgressData = [
-  { skill: "JavaScript", progress: 85, target: 90 },
-  { skill: "React", progress: 78, target: 85 },
-  { skill: "Python", progress: 92, target: 95 },
-  { skill: "UI/UX Design", progress: 65, target: 80 },
-  { skill: "Data Analysis", progress: 73, target: 85 },
-];
-
-export type Achievement = {
-  id: number;
-  title: string;
-  icon: string;
-  date: string;
-  type: string;
-};
 const achievements = [
   {
     id: 1,
@@ -124,7 +93,7 @@ const StatsCard = ({
   trend,
 }: {
   title: string;
-  value: string;
+  value: string | number;
   change: string;
   icon: any;
   trend: string;
@@ -150,36 +119,63 @@ const StatsCard = ({
   </div>
 );
 
-const SkillProgressBar = ({
-  skill,
+type Progress = {
+  courseName: string;
+  progress: string;
+  totalDurationHours: string;
+  status: string;
+  instructor: string;
+};
+const CourseProgressBar = ({
+  courseName,
   progress,
-  target,
-}: {
-  skill: string;
-  progress: number;
-  target: number;
-}) => (
-  <div className="mb-4">
-    <div className="flex justify-between items-center mb-2">
-      <span className="text-sm font-medium text-gray-700">{skill}</span>
-      <span className="text-sm text-gray-500">
-        {progress}% / {target}%
-      </span>
-    </div>
-    <div className="w-full bg-gray-200 rounded-full h-2 relative">
-      <div
-        className="bg-blue-600 h-2 rounded-full transition-all duration-500"
-        style={{ width: `${progress}%` }}
-      />
-      <div
-        className="absolute top-0 h-2 w-1 bg-red-400 rounded-full"
-        style={{ left: `${target}%` }}
-        title={`Target: ${target}%`}
-      />
-    </div>
-  </div>
-);
+  totalDurationHours,
+  status,
+  instructor,
+}: Progress) => {
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case "completed":
+        return "text-green-600";
+      case "active":
+        return "text-blue-600";
+      default:
+        return "text-gray-600";
+    }
+  };
 
+  return (
+    <div className="mb-4 p-3 bg-gray-50 rounded-lg">
+      <div className="flex justify-between items-start mb-2">
+        <div className="flex-1">
+          <span className="text-sm font-medium text-gray-900 line-clamp-1">
+            {courseName}
+          </span>
+          <span className="text-xs text-gray-500">
+            by {instructor} • {totalDurationHours}h
+          </span>
+        </div>
+        <span className={`text-sm font-medium ${getStatusColor(status)}`}>
+          {Math.round(parseInt(progress))}%
+        </span>
+      </div>
+      <div className="w-full bg-gray-200 rounded-full h-2">
+        <div
+          className="bg-blue-600 h-2 rounded-full transition-all duration-500"
+          style={{ width: `${progress}%` }}
+        />
+      </div>
+    </div>
+  );
+};
+
+type Achievement = {
+  id: number;
+  title: string;
+  icon: string;
+  date: string;
+  type: string;
+};
 const AchievementBadge = ({ achievement }: { achievement: Achievement }) => {
   const getTypeColor = (type: string) => {
     switch (type) {
@@ -238,6 +234,42 @@ function StudentAnalyticsPage() {
   const [timeRange, setTimeRange] = useState("6months");
   const [selectedMetric, setSelectedMetric] = useState("hours");
 
+  // Fetch analytics data
+  const { data, isLoading, error } = useStudentAnalytics();
+  console.log(data);
+
+  if (error) {
+    return (
+      <DashboardShell>
+        <div className="flex items-center justify-center h-64">
+          <p className="text-red-600">Failed to load analytics data.</p>
+        </div>
+      </DashboardShell>
+    );
+  }
+
+  if (isLoading) {
+    return (
+      <DashboardShell>
+        <div className="flex items-center justify-center h-64">
+          <div className="h-8 w-8 border-4 border-gray-300 border-t-blue-600 rounded-full animate-spin"></div>
+        </div>
+      </DashboardShell>
+    );
+  }
+
+  const analytics = data?.analytics;
+  const categoryColors = [
+    "#3B82F6",
+    "#EF4444",
+    "#10B981",
+    "#F59E0B",
+    "#8B5CF6",
+    "#EC4899",
+    "#14B8A6",
+    "#F97316",
+  ];
+
   return (
     <DashboardShell>
       <main className="space-y-8">
@@ -271,28 +303,28 @@ function StudentAnalyticsPage() {
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
           <StatsCard
             title="Total Learning Hours"
-            value="186"
+            value={`${analytics?.totalLearningHours || 0}h`}
             change="+23% from last month"
             icon={Clock}
             trend="up"
           />
           <StatsCard
             title="Courses Completed"
-            value="8"
+            value={analytics?.completedCourses || 0}
             change="+2 this month"
             icon={Award}
             trend="up"
           />
           <StatsCard
-            title="Current Streak"
-            value="12 days"
-            change="Best: 21 days"
-            icon={Target}
+            title="Total Courses"
+            value={analytics?.totalCourses || 0}
+            change="Current enrollments"
+            icon={BookOpen}
             trend="up"
           />
           <StatsCard
-            title="Average Score"
-            value="87%"
+            title="Completion Rate"
+            value={`${analytics?.courseCompletionRate || 0}%`}
             change="+5% improvement"
             icon={Star}
             trend="up"
@@ -379,39 +411,84 @@ function StudentAnalyticsPage() {
               Learning by Category
             </h2>
             <ResponsiveContainer width="100%" height={250}>
-              <PieChart>
-                <Pie
-                  data={categoryDistribution}
-                  cx="50%"
-                  cy="50%"
-                  labelLine={false}
-                  label={({ name, percent }) =>
-                    `${name} ${(percent * 100).toFixed(0)}%`
-                  }
-                  outerRadius={80}
-                  fill="#8884d8"
-                  dataKey="value"
-                >
-                  {categoryDistribution.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.color} />
-                  ))}
-                </Pie>
-                <Tooltip />
-              </PieChart>
+              {analytics?.learningByCategory?.length > 0 &&
+              analytics.learningByCategory.some(
+                (category: any) => category.value > 0
+              ) ? (
+                <PieChart>
+                  <Pie
+                    data={analytics.learningByCategory}
+                    cx="50%"
+                    cy="50%"
+                    labelLine={false}
+                    label={({ name, percentage }) => `${name} ${percentage}%`}
+                    outerRadius={80}
+                    fill="#8884d8"
+                    dataKey="value"
+                  >
+                    {analytics.learningByCategory.map((index: any) => (
+                      <Cell
+                        key={`cell-${index}`}
+                        fill={categoryColors[index % categoryColors.length]}
+                      />
+                    ))}
+                  </Pie>
+                  <Tooltip
+                    formatter={(value: any) => [`${value}h`, "Learning Hours"]}
+                    labelFormatter={(name: any) => name}
+                  />
+                </PieChart>
+              ) : (
+                <div className="flex flex-col items-center justify-center h-full">
+                  <BookOpen className="w-16 h-16 text-gray-300 mb-4" />
+                  <h3 className="text-lg font-medium text-gray-600 mb-2">
+                    No Learning Data Yet
+                  </h3>
+                  <p className="text-sm text-gray-500 text-center max-w-xs">
+                    Start learning to see your progress across different
+                    categories
+                  </p>
+                  <div className="mt-4 flex flex-wrap gap-2 justify-center">
+                    {["Development", "Design", "Business", "Marketing"].map(
+                      (category) => (
+                        <span
+                          key={category}
+                          className="px-3 py-1 text-xs rounded-full border border-gray-200 text-gray-600"
+                        >
+                          {category}
+                        </span>
+                      )
+                    )}
+                  </div>
+                </div>
+              )}
             </ResponsiveContainer>
           </div>
         </div>
 
         <div className="grid gap-8 lg:grid-cols-2">
-          {/* Skills Progress */}
+          {/* Recent Course Progress */}
           <div className="bg-white rounded-xl p-6 border border-gray-200">
             <h2 className="text-xl font-semibold text-gray-900 mb-6">
-              Skills Progress
+              Recent Course Progress
             </h2>
             <div className="space-y-4">
-              {skillProgressData.map((item, index) => (
-                <SkillProgressBar key={index} {...item} />
-              ))}
+              {analytics?.recentCourseProgress?.length > 0 ? (
+                analytics.recentCourseProgress.map((course: any) => (
+                  <CourseProgressBar
+                    key={course.courseId}
+                    courseName={course.courseName}
+                    progress={course.progress}
+                    totalDurationHours={course.totalDurationHours}
+                    status={course.status}
+                    instructor={course.instructor}
+                  />
+                ))
+              ) : (
+                <p className="text-gray-500 text-center py-8">
+                  No recent course progress available
+                </p>
+              )}
             </div>
           </div>
 
