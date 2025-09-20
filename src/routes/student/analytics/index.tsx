@@ -234,9 +234,26 @@ function StudentAnalyticsPage() {
   const [timeRange, setTimeRange] = useState("6months");
   const [selectedMetric, setSelectedMetric] = useState("hours");
 
-  // Fetch analytics data
-  const { data, isLoading, error } = useStudentAnalytics();
-  console.log(data);
+  // Fetch analytics data with time range filter
+  const { data, isLoading, error } = useStudentAnalytics(timeRange);
+
+  // Helper function to get display name for time range
+  const getTimeRangeLabel = (range: string) => {
+    switch (range) {
+      case "7days":
+        return "Last 7 Days";
+      case "1month":
+        return "Last Month";
+      case "3months":
+        return "Last 3 Months";
+      case "6months":
+        return "Last 6 Months";
+      case "1year":
+        return "Last Year";
+      default:
+        return "All Time";
+    }
+  };
 
   if (error) {
     return (
@@ -272,7 +289,7 @@ function StudentAnalyticsPage() {
 
   return (
     <DashboardShell>
-      <main className="space-y-8">
+      <main className="space-y-8 mb-8">
         {/* Header */}
         <div className="flex justify-between items-start">
           <div>
@@ -282,6 +299,11 @@ function StudentAnalyticsPage() {
             <p className="text-lg text-gray-600 mt-2">
               Track your progress and discover insights about your learning
               journey
+              {timeRange && (
+                <span className="text-blue-600 font-medium ml-2">
+                  • {getTimeRangeLabel(timeRange)}
+                </span>
+              )}
             </p>
           </div>
           <div className="flex gap-3">
@@ -290,6 +312,8 @@ function StudentAnalyticsPage() {
                 <SelectValue placeholder="Select period" />
               </SelectTrigger>
               <SelectContent>
+                <SelectItem value="All time">All Time</SelectItem>
+                <SelectItem value="7days">Last 7 Days</SelectItem>
                 <SelectItem value="1month">Last Month</SelectItem>
                 <SelectItem value="3months">Last 3 Months</SelectItem>
                 <SelectItem value="6months">Last 6 Months</SelectItem>
@@ -365,7 +389,7 @@ function StudentAnalyticsPage() {
           </div>
 
           <ResponsiveContainer width="100%" height={300}>
-            <AreaChart data={learningProgressData}>
+            <AreaChart data={analytics?.learningProgressData || []}>
               <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
               <XAxis dataKey="month" stroke="#666" />
               <YAxis stroke="#666" />
