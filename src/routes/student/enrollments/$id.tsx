@@ -8,6 +8,7 @@ import { Course } from "@/types/course.types";
 import { toast } from "sonner";
 import { Toaster } from "@/components/ui/sonner";
 import { useStartLesson } from "@/hooks/use-lessons";
+import { ArrowLeft } from "lucide-react";
 
 export const Route = createFileRoute("/student/enrollments/$id")({
   component: RouteComponent,
@@ -83,6 +84,14 @@ function RouteComponent() {
   return (
     <DashboardShell>
       <Toaster />
+      {/* Back Button */}
+      <Button
+        variant="ghost"
+        className="rounded-full w-12 h-12 p-0 flex items-center justify-center"
+        onClick={() => navigate({ to: "/student/enrollments" })}
+      >
+        <ArrowLeft className="!w-12 !h-8" />
+      </Button>
 
       <div className="max-w-4xl mx-auto py-8">
         {/* Course Cover */}

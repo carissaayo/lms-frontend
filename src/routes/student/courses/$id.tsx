@@ -2,15 +2,15 @@ import { useState } from "react";
 import { DashboardShell } from "@/components/dashboard-shell";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
-import { useQueryClient } from "@tanstack/react-query";
-import { toast, Toaster } from "sonner";
+
+import { Toaster } from "sonner";
 import { ArrowLeft } from "lucide-react";
 import { useSingleCourse } from "@/hooks/use-course";
 import { Lesson } from "@/types/lesson.types";
 import { useLessonsStudentApi } from "@/hooks/use-lesson";
 import CourseModals from "@/components/modals/CourseModals";
 import { useUserEnrollments } from "@/hooks/use-enrollment";
-import useAuthStore from "@/store/useAuthStore";
+
 import { Course } from "@/types/course.types";
 
 export const Route = createFileRoute("/student/courses/$id")({
@@ -20,7 +20,6 @@ export const Route = createFileRoute("/student/courses/$id")({
 function StudentCourseDetailPage() {
   const { id } = Route.useParams();
   const navigate = useNavigate();
-  const queryClient = useQueryClient();
 
   const [showModal, setShowModal] = useState(false);
 

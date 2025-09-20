@@ -23,10 +23,10 @@ export default function ProfileOverview({
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file && onPictureChange) {
-      onPictureChange(file); // notify parent
+      onPictureChange(file);
       const reader = new FileReader();
       reader.onloadend = () => setPreview(reader.result as string);
-      reader.readAsDataURL(file); // show preview immediately
+      reader.readAsDataURL(file);
     }
   };
   return (

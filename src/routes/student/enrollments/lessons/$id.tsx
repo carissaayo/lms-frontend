@@ -5,6 +5,7 @@ import { DashboardShell } from "@/components/dashboard-shell";
 import { Button } from "@/components/ui/button";
 import { useState, useRef, useEffect } from "react";
 import { getSingleLessonApi, updateLessonProgress } from "@/api/lessons";
+import { ArrowLeft } from "lucide-react";
 
 export const Route = createFileRoute("/student/enrollments/lessons/$id")({
   component: LessonPage,
@@ -92,6 +93,14 @@ function LessonPage() {
 
   return (
     <DashboardShell>
+      {/* Back Button */}
+      <Button
+        variant="ghost"
+        className="rounded-full w-12 h-12 p-0 flex items-center justify-center"
+        onClick={() => navigate({ to: "/student/enrollments" })}
+      >
+        <ArrowLeft className="!w-12 !h-8" />
+      </Button>
       <div className="max-w-4xl mx-auto py-6">
         <h1 className="text-2xl font-bold mb-4">{lesson.title}</h1>
         <p className="text-gray-600 mb-6">{lesson.description}</p>

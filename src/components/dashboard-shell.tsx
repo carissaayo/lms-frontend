@@ -7,9 +7,11 @@ import {
   BookOpen,
   CircleUser,
   FileText,
+  Gauge,
   LogOut,
   NotebookPen,
   Settings,
+  Store,
   User,
   Users,
   UsersRound,
@@ -109,6 +111,16 @@ export function DashboardShell({ children }: DashboardShellProps) {
               {userRole == "student" && (
                 <>
                   <Link
+                    to="/student/analytics"
+                    className="flex items-center gap-3 rounded-full px-4 py-2 transition-colors hover:bg-muted text-white/80"
+                    activeProps={{
+                      className: "bg-primary-dark text-white",
+                    }}
+                  >
+                    <Gauge className="h-4 w-4" />
+                    Analytics
+                  </Link>
+                  <Link
                     to="/student/enrollments"
                     className="flex items-center gap-3 rounded-full px-4 py-2 transition-colors hover:bg-muted text-white/80"
                     activeProps={{
@@ -125,7 +137,7 @@ export function DashboardShell({ children }: DashboardShellProps) {
                       className: "bg-primary-dark text-white",
                     }}
                   >
-                    <BookOpen className="h-4 w-4" />
+                    <Store className="h-4 w-4" />
                     Courses
                   </Link>
                   <Link

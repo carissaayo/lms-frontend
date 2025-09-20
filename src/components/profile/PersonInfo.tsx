@@ -45,6 +45,27 @@ export default function PersonalInfoCard({
             )}
           </div>
         </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <div>
+            <p className="text-sm text-muted-foreground">Phone Number </p>
+            {editMode ? (
+              <input
+                type="text"
+                value={user.phoneNumber}
+                onChange={(e) => onFieldChange?.("phoneNumber", e.target.value)}
+                className="border px-2 py-1 rounded w-full"
+              />
+            ) : (
+              <p className="text-base font-medium">{user.phoneNumber}</p>
+            )}
+          </div>
+          <div>
+            <p className="text-sm text-muted-foreground">Email</p>
+
+            <p className="text-base font-medium">{user.email}</p>
+          </div>
+        </div>
       </CardContent>
     </Card>
   );

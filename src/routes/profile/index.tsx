@@ -32,7 +32,9 @@ function RouteComponent() {
   if (isLoading) {
     return (
       <DashboardShell>
-        <p className="text-center py-8">Loading profile...</p>
+        <div className="flex justify-center items-center h-96">
+          <div className="h-10 w-10 border-4 border-gray-300 border-t-primary rounded-full animate-spin"></div>
+        </div>
       </DashboardShell>
     );
   }
