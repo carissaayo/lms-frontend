@@ -1,4 +1,7 @@
-import { getStudentAnalyticsApi } from "@/api/analytics";
+import {
+  getInstructorAnalyticsApi,
+  getStudentAnalyticsApi,
+} from "@/api/analytics";
 import { useQuery } from "@tanstack/react-query";
 
 export function useStudentAnalytics(timeRange: any) {
@@ -9,5 +12,15 @@ export function useStudentAnalytics(timeRange: any) {
     staleTime: 5 * 60 * 1000, // 5 minutes
     gcTime: 10 * 60 * 1000, // 10 minutes
     retry: 3,
+  });
+}
+
+export function useInstructorAnalytics(timeRange: any) {
+  return useQuery({
+    queryKey: ["instructor-analytics", timeRange],
+    queryFn: () => getInstructorAnalyticsApi({ timeRange }),
+    refetchOnWindowFocus: false,
+    staleTime: 5 * 60 * 1000,
+    gcTime: 10 * 60 * 1000,
   });
 }

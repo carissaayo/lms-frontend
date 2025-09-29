@@ -61,7 +61,7 @@ function RouteComponent() {
             if (data.profile.role === Role.INSTRUCTOR) {
               navigate({ to: "/instructor/courses" });
             } else if (data.profile.role === Role.STUDENT) {
-              navigate({ to: "/student/my-courses" });
+              navigate({ to: "/student/analytics" });
             } else {
               navigate({ to: "/" }); // fallback
             }
