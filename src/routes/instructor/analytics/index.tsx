@@ -20,6 +20,8 @@ import {
   Trophy,
   Activity,
 } from "lucide-react";
+import { motion } from "framer-motion";
+
 import { DashboardShell } from "@/components/dashboard-shell";
 
 import {
@@ -46,8 +48,6 @@ function InstructorAnalyticsPage() {
   const [timeRange, setTimeRange] = useState("6months");
 
   const { data, isLoading, error } = useInstructorAnalytics(timeRange);
-
-  console.log("data", data);
 
   if (error) {
     return (
@@ -90,7 +90,7 @@ function InstructorAnalyticsPage() {
 
   return (
     <DashboardShell>
-      <main className="space-y-8 mb-10">
+      <main className="space-y-8 mb-10 overflow-x-hidden">
         {/* Header */}
         <div className="flex justify-between items-start">
           <div>
@@ -124,42 +124,49 @@ function InstructorAnalyticsPage() {
         </div>
 
         {/* Key Metrics */}
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-          <StatsCard
-            title="Total Revenue"
-            value={`₦${analytics?.revenueStats?.totalRevenue?.toLocaleString() || 0}`}
-            change="+12% from last month"
-            icon={Target}
-            trend="up"
-            color="green"
-          />
-          <StatsCard
-            title="Total Students"
-            value={analytics?.studentStats?.totalStudents || 0}
-            change="+8% from last month"
-            icon={Users}
-            trend="up"
-            color="blue"
-          />
-          <StatsCard
-            title="Published Courses"
-            value={analytics?.courseStats?.published || 0}
-            change={`${analytics?.courseStats?.total || 0} total courses`}
-            icon={BookOpen}
-            trend="up"
-            color="purple"
-          />
-          <StatsCard
-            title="Active Students"
-            value={analytics?.studentStats?.activeStudents || 0}
-            change={`${analytics?.studentStats?.retentionRate || 0}% retention rate`}
-            icon={Activity}
-            trend="up"
-            color="orange"
-          />
-        </div>
-
+        <motion.div
+          initial={{ opacity: 0, x: -40 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+          viewport={{ once: false, amount: 0.2 }}
+        >
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+            <StatsCard
+              title="Total Revenue"
+              value={`₦${analytics?.revenueStats?.totalRevenue?.toLocaleString() || 0}`}
+              change="+12% from last month"
+              icon={Target}
+              trend="up"
+              color="green"
+            />
+            <StatsCard
+              title="Total Students"
+              value={analytics?.studentStats?.totalStudents || 0}
+              change="+8% from last month"
+              icon={Users}
+              trend="up"
+              color="blue"
+            />
+            <StatsCard
+              title="Published Courses"
+              value={analytics?.courseStats?.published || 0}
+              change={`${analytics?.courseStats?.total || 0} total courses`}
+              icon={BookOpen}
+              trend="up"
+              color="purple"
+            />
+            <StatsCard
+              title="Active Students"
+              value={analytics?.studentStats?.activeStudents || 0}
+              change={`${analytics?.studentStats?.retentionRate || 0}% retention rate`}
+              icon={Activity}
+              trend="up"
+              color="orange"
+            />
+          </div>
+        </motion.div>
         {/* Course Stats and Revenue Chart */}
+
         <div className="grid gap-8 lg:grid-cols-3">
           <CourseStatusCard courses={analytics?.courseStats || {}} />
 
@@ -196,202 +203,232 @@ function InstructorAnalyticsPage() {
         </div>
 
         {/* Top Performing Courses and Recent Courses */}
-        <div className="grid gap-8 lg:grid-cols-2">
-          <div className="bg-white rounded-xl p-6 border border-gray-200">
-            <h2 className="text-xl font-semibold text-gray-900 mb-6">
-              Top Selling Courses
-            </h2>
-            <div className="space-y-3">
-              {analytics?.topSellingCourses?.length > 0 ? (
-                analytics.topSellingCourses.map(
-                  (course: any, index: number) => (
-                    <TopSellingCourseCard
-                      key={course.courseId}
-                      course={course}
-                      rank={index + 1}
-                    />
+        <motion.div
+          initial={{ opacity: 0, x: 50 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+          viewport={{ once: false, amount: 0.2 }}
+        >
+          <div className="grid gap-8 lg:grid-cols-2">
+            <div className="bg-white rounded-xl p-6 border border-gray-200">
+              <h2 className="text-xl font-semibold text-gray-900 mb-6">
+                Top Selling Courses
+              </h2>
+              <div className="space-y-3">
+                {analytics?.topSellingCourses?.length > 0 ? (
+                  analytics.topSellingCourses.map(
+                    (course: any, index: number) => (
+                      <TopSellingCourseCard
+                        key={course.courseId}
+                        course={course}
+                        rank={index + 1}
+                      />
+                    )
                   )
-                )
-              ) : (
-                <p className="text-gray-500 text-center py-8">
-                  No recent courses available
-                </p>
-              )}
+                ) : (
+                  <p className="text-gray-500 text-center py-8">
+                    No recent courses available
+                  </p>
+                )}
+              </div>
             </div>
-          </div>
 
-          <div className="bg-white rounded-xl p-6 border border-gray-200">
-            <h2 className="text-xl font-semibold text-gray-900 mb-6">
-              Recent Courses
-            </h2>
-            <div className="space-y-3">
-              {analytics?.recentCourses?.length > 0 ? (
-                analytics.recentCourses.map((course: any) => (
-                  <RecentCourseCard key={course.courseId} course={course} />
-                ))
-              ) : (
-                <p className="text-gray-500 text-center py-8">
-                  No recent courses available
-                </p>
-              )}
+            <div className="bg-white rounded-xl p-6 border border-gray-200">
+              <h2 className="text-xl font-semibold text-gray-900 mb-6">
+                Recent Courses
+              </h2>
+              <div className="space-y-3">
+                {analytics?.recentCourses?.length > 0 ? (
+                  analytics.recentCourses.map((course: any) => (
+                    <RecentCourseCard key={course.courseId} course={course} />
+                  ))
+                ) : (
+                  <p className="text-gray-500 text-center py-8">
+                    No recent courses available
+                  </p>
+                )}
+              </div>
             </div>
           </div>
-        </div>
+        </motion.div>
 
         {/* Course Performance and Engagement */}
-        <div className="grid gap-8 lg:grid-cols-2">
-          <div className="bg-white rounded-xl p-6 border border-gray-200">
-            <h2 className="text-xl font-semibold text-gray-900 mb-6">
-              Course Performance
-            </h2>
-            <div className="space-y-4">
-              {analytics?.coursePerformance?.length > 0 ? (
-                analytics.coursePerformance
-                  .slice(0, 5)
-                  .map((course: any, index: number) => (
-                    <PerformanceBar key={index} course={course} />
-                  ))
-              ) : (
-                <p className="text-gray-500 text-center py-8">
-                  No performance data available
-                </p>
-              )}
+        <motion.div
+          initial={{ opacity: 0, x: -40 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+          viewport={{ once: false, amount: 0.2 }}
+        >
+          <div className="grid gap-8 lg:grid-cols-2">
+            <div className="bg-white rounded-xl p-6 border border-gray-200">
+              <h2 className="text-xl font-semibold text-gray-900 mb-6">
+                Course Performance
+              </h2>
+              <div className="space-y-4">
+                {analytics?.coursePerformance?.length > 0 ? (
+                  analytics.coursePerformance
+                    .slice(0, 5)
+                    .map((course: any, index: number) => (
+                      <PerformanceBar key={index} course={course} />
+                    ))
+                ) : (
+                  <p className="text-gray-500 text-center py-8">
+                    No performance data available
+                  </p>
+                )}
+              </div>
             </div>
-          </div>
 
-          <div className="bg-white rounded-xl p-6 border border-gray-200 flex flex-col">
-            <h2 className="text-xl font-semibold text-gray-900 mb-6">
-              Student Engagement
-            </h2>
-            <div className="flex-1 min-h-0">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={analytics?.engagementData?.slice(0, 5) || []}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                  <XAxis
-                    dataKey="courseName"
-                    stroke="#666"
-                    tick={{ fontSize: 10 }}
-                    angle={-45}
-                    textAnchor="end"
-                    height={80}
-                  />
-                  <YAxis stroke="#666" />
-                  <Tooltip
-                    formatter={(value: any, name: any) => {
-                      if (name === "engagementScore")
-                        return [`${value}%`, "Engagement Score"];
-                      if (name === "averageWatchTime")
-                        return [
-                          `${Math.round(value / 60)}h ${value % 60}m`,
-                          "Avg Watch Time",
-                        ];
-                      return [value, name];
-                    }}
-                  />
-                  <Bar
-                    dataKey="engagementScore"
-                    fill="#3B82F6"
-                    radius={[4, 4, 0, 0]}
-                  />
-                </BarChart>
-              </ResponsiveContainer>
+            <div className="bg-white rounded-xl p-6 border border-gray-200 flex flex-col">
+              <h2 className="text-xl font-semibold text-gray-900 mb-6">
+                Student Engagement
+              </h2>
+              <div className="flex-1 min-h-0">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={analytics?.engagementData?.slice(0, 5) || []}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                    <XAxis
+                      dataKey="courseName"
+                      stroke="#666"
+                      tick={{ fontSize: 10 }}
+                      angle={-45}
+                      textAnchor="end"
+                      height={80}
+                    />
+                    <YAxis stroke="#666" />
+                    <Tooltip
+                      formatter={(value: any, name: any) => {
+                        if (name === "engagementScore")
+                          return [`${value}%`, "Engagement Score"];
+                        if (name === "averageWatchTime")
+                          return [
+                            `${Math.round(value / 60)}h ${value % 60}m`,
+                            "Avg Watch Time",
+                          ];
+                        return [value, name];
+                      }}
+                    />
+                    <Bar
+                      dataKey="engagementScore"
+                      fill="#3B82F6"
+                      radius={[4, 4, 0, 0]}
+                    />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
             </div>
           </div>
-        </div>
+        </motion.div>
 
         {/* Additional Stats Grid */}
-        <div className="grid gap-6 md:grid-cols-3">
-          <StatsCard
-            title="Average Revenue/Student"
-            value={`₦${
-              (
-                analytics?.revenueStats?.averageRevenuePerStudent as
-                  | number
-                  | undefined
-              )?.toFixed?.(2) || 0
-            }`}
-            change="Industry avg: $45"
-            icon={Target}
-            trend="up"
-            color="green"
-          />
-          <StatsCard
-            title="Course Completion Rate"
-            value={`${
-              analytics?.coursePerformance?.length > 0
-                ? Math.round(
-                    analytics.coursePerformance.reduce(
-                      (sum: number, course: { completionRate: number }) =>
-                        sum + course.completionRate,
-                      0
-                    ) / analytics.coursePerformance.length
-                  )
-                : 0
-            }%`}
-            change="Across all courses"
-            icon={CheckCircle}
-            trend="up"
-            color="blue"
-          />
-          <StatsCard
-            title="Student Satisfaction"
-            value="4.7/5"
-            change="Based on reviews"
-            icon={Star}
-            trend="up"
-            color="yellow"
-          />
-        </div>
-
+        <motion.div
+          initial={{ opacity: 0, x: 40 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+          viewport={{ once: false, amount: 0.2 }}
+        >
+          <div className="grid gap-6 md:grid-cols-3">
+            <StatsCard
+              title="Average Revenue/Student"
+              value={`₦${
+                (
+                  analytics?.revenueStats?.averageRevenuePerStudent as
+                    | number
+                    | undefined
+                )?.toFixed?.(2) || 0
+              }`}
+              change="Industry avg: $45"
+              icon={Target}
+              trend="up"
+              color="green"
+            />
+            <StatsCard
+              title="Course Completion Rate"
+              value={`${
+                analytics?.coursePerformance?.length > 0
+                  ? Math.round(
+                      analytics.coursePerformance.reduce(
+                        (sum: number, course: { completionRate: number }) =>
+                          sum + course.completionRate,
+                        0
+                      ) / analytics.coursePerformance.length
+                    )
+                  : 0
+              }%`}
+              change="Across all courses"
+              icon={CheckCircle}
+              trend="up"
+              color="blue"
+            />
+            <StatsCard
+              title="Student Satisfaction"
+              value="4.7/5"
+              change="Based on reviews"
+              icon={Star}
+              trend="up"
+              color="yellow"
+            />
+          </div>
+        </motion.div>
         {/* Insights Panel */}
-        <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-6 border border-blue-200">
-          <div className="flex items-start">
-            <div className="h-12 w-12 bg-blue-100 rounded-lg flex items-center justify-center mr-4">
-              <Trophy className="h-6 w-6 text-blue-600" />
-            </div>
-            <div className="flex-1">
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                Performance Insights
-              </h3>
-              <div className="grid gap-4 md:grid-cols-3">
-                <div>
-                  <p className="text-sm font-medium text-gray-600">
-                    Best Performing Course
-                  </p>
-                  <p className="text-lg font-bold text-blue-600">
-                    {analytics?.topSellingCourses?.[0]?.courseName || "N/A"}
-                  </p>
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-600">
-                    Highest Engagement
-                  </p>
-                  <p className="text-lg font-bold text-blue-600">
-                    {analytics?.engagementData?.reduce(
-                      (
-                        max: { engagementScore: number; courseName: string },
-                        course: { engagementScore: number; courseName: string }
-                      ) =>
-                        course.engagementScore > max.engagementScore
-                          ? course
-                          : max,
-                      (analytics.engagementData[0] as {
-                        engagementScore: number;
-                        courseName: string;
-                      }) || { engagementScore: 0, courseName: "" }
-                    )?.courseName || "N/A"}
-                  </p>
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-600">
-                    Monthly Growth
-                  </p>
-                  <p className="text-lg font-bold text-blue-600">+12.5%</p>
+        <motion.div
+          initial={{ opacity: 0, x: -40 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+          viewport={{ once: false, amount: 0.2 }}
+        >
+          <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-6 border border-blue-200">
+            <div className="flex items-start">
+              <div className="h-12 w-12 bg-blue-100 rounded-lg flex items-center justify-center mr-4">
+                <Trophy className="h-6 w-6 text-blue-600" />
+              </div>
+              <div className="flex-1">
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                  Performance Insights
+                </h3>
+                <div className="grid gap-4 md:grid-cols-3">
+                  <div>
+                    <p className="text-sm font-medium text-gray-600">
+                      Best Performing Course
+                    </p>
+                    <p className="text-lg font-bold text-blue-600">
+                      {analytics?.topSellingCourses?.[0]?.courseName || "N/A"}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-600">
+                      Highest Engagement
+                    </p>
+                    <p className="text-lg font-bold text-blue-600">
+                      {analytics?.engagementData?.reduce(
+                        (
+                          max: { engagementScore: number; courseName: string },
+                          course: {
+                            engagementScore: number;
+                            courseName: string;
+                          }
+                        ) =>
+                          course.engagementScore > max.engagementScore
+                            ? course
+                            : max,
+                        (analytics.engagementData[0] as {
+                          engagementScore: number;
+                          courseName: string;
+                        }) || { engagementScore: 0, courseName: "" }
+                      )?.courseName || "N/A"}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-600">
+                      Monthly Growth
+                    </p>
+                    <p className="text-lg font-bold text-blue-600">+12.5%</p>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
+        </motion.div>
       </main>
     </DashboardShell>
   );
