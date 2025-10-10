@@ -21,7 +21,7 @@ export const CourseStatusCard = ({
 
   return (
     <div className="bg-white rounded-xl p-6 border border-gray-200">
-      <h3 className="text-lg font-semibold text-gray-900 mb-4">
+      <h3 className="text-lg font-semibold text-gray-900  mb-12">
         Course Status Distribution
       </h3>
       <ResponsiveContainer width="100%" height={200}>

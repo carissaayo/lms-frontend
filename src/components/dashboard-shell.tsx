@@ -44,6 +44,16 @@ export function DashboardShell({ children }: DashboardShellProps) {
               {userRole === "instructor" && (
                 <>
                   <Link
+                    to="/instructor/analytics"
+                    className="flex items-center gap-3 rounded-full px-4 py-2 transition-colors hover:bg-muted text-white/80"
+                    activeProps={{
+                      className: "bg-primary-dark text-white",
+                    }}
+                  >
+                    <FileText className="h-4 w-4" />
+                    Analytics
+                  </Link>
+                  <Link
                     to="/instructor/courses"
                     className="flex items-center gap-3 rounded-full px-4 py-2 transition-colors hover:bg-muted text-white/80"
                     activeProps={{
@@ -93,16 +103,6 @@ export function DashboardShell({ children }: DashboardShellProps) {
                   >
                     <Wallet className="h-4 w-4" />
                     Earnings
-                  </Link>
-                  <Link
-                    to="/instructor/analytics"
-                    className="flex items-center gap-3 rounded-full px-4 py-2 transition-colors hover:bg-muted text-white/80"
-                    activeProps={{
-                      className: "bg-primary-dark text-white",
-                    }}
-                  >
-                    <FileText className="h-4 w-4" />
-                    Analytics
                   </Link>
                 </>
               )}

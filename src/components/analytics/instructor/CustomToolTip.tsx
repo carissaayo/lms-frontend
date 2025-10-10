@@ -1,5 +1,3 @@
-import React from "react";
-
 type CustomTooltipProps = {
   active?: boolean;
   payload?: any[];
@@ -7,25 +5,22 @@ type CustomTooltipProps = {
   formatter?: (value: number, name?: string) => string;
 };
 
-export const CustomTooltip: React.FC<CustomTooltipProps> = ({
+export const CustomTooltip = ({
   active,
   payload,
   label,
-  formatter,
-}) => {
-  if (!active || !payload || payload.length === 0) return null;
-
-  return (
-    <div className="bg-white border border-gray-200 rounded-lg shadow-md p-3 text-sm">
-      <p className="font-semibold text-gray-900 mb-2">{label}</p>
-      {payload.map((item, index) => (
-        <div key={index} className="flex justify-between items-center">
-          <span className="text-gray-600">{item.name}</span>
-          <span className="font-medium text-gray-900">
-            {formatter ? formatter(item.value, item.name) : item.value}
-          </span>
-        </div>
-      ))}
-    </div>
-  );
+}: CustomTooltipProps) => {
+  if (active && payload && payload.length) {
+    return (
+      <div className="bg-white p-3 border border-gray-200 rounded-lg shadow-lg">
+        <p className="font-medium">{`${label}`}</p>
+        {payload.map((entry: any, index: number) => (
+          <p key={index} style={{ color: entry.color }}>
+            {`${entry.dataKey}: ${entry.name === "revenue" ? "₦" : ""}${entry.value}${entry.name === "revenue" ? "" : ""}`}
+          </p>
+        ))}
+      </div>
+    );
+  }
+  return null;
 };

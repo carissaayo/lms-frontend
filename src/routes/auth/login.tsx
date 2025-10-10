@@ -43,7 +43,6 @@ function RouteComponent() {
       {
         onSuccess: (data) => {
           toast.success("Welcome back", {
-            // description: "Your account has been created successfully.",
             position: "top-center",
           });
 
@@ -59,7 +58,7 @@ function RouteComponent() {
 
           setTimeout(() => {
             if (data.profile.role === Role.INSTRUCTOR) {
-              navigate({ to: "/instructor/courses" });
+              navigate({ to: "/instructor/analytics" });
             } else if (data.profile.role === Role.STUDENT) {
               navigate({ to: "/student/analytics" });
             } else {

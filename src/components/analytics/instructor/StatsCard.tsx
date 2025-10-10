@@ -35,13 +35,7 @@ export const StatsCard: React.FC<StatsCardProps> = ({
           <p className="text-2xl font-bold text-gray-900 mt-2">{value}</p>
           {change && (
             <div
-              className={`flex items-center mt-2 text-sm ${
-                trend === "up"
-                  ? "text-green-600"
-                  : trend === "down"
-                    ? "text-red-600"
-                    : "text-gray-600"
-              }`}
+              className={`flex items-center mt-2 text-sm ${trend === "up" ? "text-green-600" : trend === "down" ? "text-red-600" : "text-gray-600"}`}
             >
               {trend === "up" && <TrendingUp className="w-4 h-4 mr-1" />}
               {trend === "down" && <TrendingDown className="w-4 h-4 mr-1" />}

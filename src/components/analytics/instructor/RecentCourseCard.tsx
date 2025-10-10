@@ -32,19 +32,17 @@ export const RecentCourseCard = ({
           {course.title}
         </h4>
         <span
-          className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(
-            course.status
-          )}`}
+          className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(course.status)}`}
         >
           {course.status}
         </span>
       </div>
       <p className="text-sm text-gray-500 mb-2">{course.category}</p>
       <div className="flex justify-between items-center text-sm">
-        <span className="text-gray-600">${course.price}</span>
+        <span className="text-gray-600">₦{course.price}</span>
         <div className="text-right">
           <p className="font-medium">{course.enrollments} students</p>
-          <p className="text-gray-500">${course.revenue.toLocaleString()}</p>
+          <p className="text-gray-500">₦{course.revenue.toLocaleString()}</p>
         </div>
       </div>
     </div>

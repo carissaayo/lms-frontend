@@ -19,12 +19,12 @@ export const TopSellingCourseCard = ({
         {course.courseName}
       </h4>
       <p className="text-sm text-gray-500">
-        {course.enrollments} students • ${course.price}
+        {course.enrollments} students • ₦{course.price}
       </p>
     </div>
     <div className="text-right">
       <p className="font-semibold text-gray-900">
-        ${course.revenue.toLocaleString()}
+        ₦{course.revenue.toLocaleString()}
       </p>
     </div>
   </div>
