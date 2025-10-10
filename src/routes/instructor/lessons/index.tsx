@@ -1,5 +1,7 @@
-import { DashboardShell } from "@/components/dashboard-shell";
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { motion } from "framer-motion";
+
+import { DashboardShell } from "@/components/dashboard-shell";
 import { Route as NewLessonRoute } from "./new";
 import { Route as LessonRoute } from "./$id";
 
@@ -51,37 +53,44 @@ function RouteComponent() {
         )}
 
         {!isLoading && lessons.length > 0 && (
-          <div className="grid gap-6 md:grid-cols-2 ">
-            {lessons.map((lesson) => (
-              <Link
-                to={LessonRoute.to}
-                params={{ id: lesson._id }}
-                search={{ lesson: lesson }}
-                key={lesson._id}
-                className="bg-background-light rounded-2xl shadow p-6 flex flex-col gap-3 hover:shadow-lg transition  cursor-pointer"
-              >
-                <h2 className="text-xl font-semibold">{lesson.title}</h2>
-                <p className="text-sm text-muted-foreground line-clamp-2">
-                  {lesson.description || "No description provided."}
-                </p>
-
-                <div className="mt-auto text-sm text-gray-500 space-y-1">
-                  {lesson.course && (
-                    <p>
-                      <span className="font-medium text-text">Course:</span>{" "}
-                      {typeof lesson.course === "object"
-                        ? (lesson.course as any).title
-                        : "Linked to a course"}
-                    </p>
-                  )}
-                  <p>
-                    <span className="font-medium text-text">Updated:</span>{" "}
-                    {new Date(lesson.updatedAt).toLocaleDateString()}
+          <motion.div
+            initial={{ opacity: 0, x: -40 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            viewport={{ once: false, amount: 0.2 }}
+          >
+            <div className="grid gap-6 md:grid-cols-2 ">
+              {lessons.map((lesson) => (
+                <Link
+                  to={LessonRoute.to}
+                  params={{ id: lesson._id }}
+                  search={{ lesson: lesson }}
+                  key={lesson._id}
+                  className="bg-background-light rounded-2xl shadow p-6 flex flex-col gap-3 hover:shadow-lg transition  cursor-pointer"
+                >
+                  <h2 className="text-xl font-semibold">{lesson.title}</h2>
+                  <p className="text-sm text-muted-foreground line-clamp-2">
+                    {lesson.description || "No description provided."}
                   </p>
-                </div>
-              </Link>
-            ))}
-          </div>
+
+                  <div className="mt-auto text-sm text-gray-500 space-y-1">
+                    {lesson.course && (
+                      <p>
+                        <span className="font-medium text-text">Course:</span>{" "}
+                        {typeof lesson.course === "object"
+                          ? (lesson.course as any).title
+                          : "Linked to a course"}
+                      </p>
+                    )}
+                    <p>
+                      <span className="font-medium text-text">Updated:</span>{" "}
+                      {new Date(lesson.updatedAt).toLocaleDateString()}
+                    </p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </motion.div>
         )}
       </main>
     </DashboardShell>
