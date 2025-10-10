@@ -79,6 +79,9 @@ function RouteComponent() {
     if (editedUser?.phoneNumber)
       formData.append("phoneNumber", editedUser.phoneNumber);
     if (editedUser?.street) formData.append("street", editedUser.street);
+    if (editedUser?.city) formData.append("city", editedUser.city);
+    if (editedUser?.country) formData.append("country", editedUser.country);
+    if (editedUser?.state) formData.append("state", editedUser.state);
     if (newPictureFile) formData.append("picture", newPictureFile);
 
     updateProfile.mutate(formData, {

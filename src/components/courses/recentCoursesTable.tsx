@@ -23,7 +23,7 @@ const RecentCoursesTable = ({ courses = [] }: RecentCoursesTableProps) => {
     .slice(0, 5);
 
   return (
-    <section className="w-1/2">
+    <section className="">
       <h1 className="font-primary text-2xl font-semibold pb-6">
         Recent Courses
       </h1>
@@ -33,7 +33,7 @@ const RecentCoursesTable = ({ courses = [] }: RecentCoursesTableProps) => {
           <TableRow className="font-secondary text-lg">
             <TableHead className="w-[250px] font-secondary">Title</TableHead>
             <TableHead>Price (₦)</TableHead>
-            <TableHead className="text-right">Status</TableHead>
+            <TableHead className="">Status</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody className="text-base">

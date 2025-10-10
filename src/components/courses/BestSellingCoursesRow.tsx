@@ -13,16 +13,18 @@ const BestCourseTableRow = ({
   students: number;
   id: string;
 }) => {
+  const truncate = (text: string, maxLength: number) =>
+    text.length > maxLength ? text.slice(0, maxLength) + "..." : text;
   return (
     <TableRow>
       <TableCell className="font-medium text-base ">
         <Link to="/instructor/courses/$id" params={{ id }}>
-          {title}
+          {truncate(title, 25)}
         </Link>
       </TableCell>
       <TableCell className="font-medium">{formattedPrice(price)}</TableCell>
 
-      <TableCell className={`text-right pr-8`}>{students}</TableCell>
+      <TableCell className={` pl-10`}>{students}</TableCell>
     </TableRow>
   );
 };

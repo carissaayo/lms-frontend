@@ -25,17 +25,17 @@ const RecentCourseTableRow = ({
             ? "text-gray-500"
             : "text-text";
 
+  const truncate = (text: string, maxLength: number) =>
+    text.length > maxLength ? text.slice(0, maxLength) + "..." : text;
   return (
     <TableRow>
       <TableCell className="font-medium text-base">
         <Link to="/instructor/courses/$id" params={{ id }}>
-          {title}
+          {truncate(title, 25)}
         </Link>
       </TableCell>
       <TableCell className="font-medium">{formattedPrice(price)}</TableCell>
-      <TableCell className={`text-right capitalize ${color}`}>
-        {status}
-      </TableCell>
+      <TableCell className={` capitalize ${color}`}>{status}</TableCell>
     </TableRow>
   );
 };

@@ -19,7 +19,7 @@ const BestSellingCourse = ({ courses = [] }: BestSellingCourseProps) => {
     .slice(0, 5);
 
   return (
-    <section className="w-1/2">
+    <section className="">
       <h1 className="font-primary text-2xl font-semibold pb-6">
         Best Selling Courses
       </h1>
@@ -29,7 +29,7 @@ const BestSellingCourse = ({ courses = [] }: BestSellingCourseProps) => {
           <TableRow className="font-secondary text-lg">
             <TableHead className="w-[250px] font-secondary">Title</TableHead>
             <TableHead>Price (₦)</TableHead>
-            <TableHead className="text-right">Students</TableHead>
+            <TableHead className="">Students</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody className="text-base">
