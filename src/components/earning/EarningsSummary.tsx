@@ -6,6 +6,7 @@ type SummaryProps = {
     totalEarnings: number;
     totalWithdrawals: number;
     availableBalance: number;
+    coursesSold: number;
   };
   stats?: {
     lastPayout?: number;
@@ -22,13 +23,15 @@ const StatCard = ({
   trend,
   trendValue,
   color,
+  notMoney,
 }: {
   title?: string;
-  amount?: string | number;
+  amount: number;
   icon?: any;
   trend?: "up" | "down";
   trendValue?: string;
   color: string;
+  notMoney?: boolean;
 }) => {
   const [isHovered, setIsHovered] = useState(false);
 
@@ -62,7 +65,7 @@ const StatCard = ({
       <div className="space-y-1">
         <p className="text-sm text-gray-600 font-medium">{title}</p>
         <p className="text-3xl font-bold text-gray-900">
-          {typeof amount === "number" ? `₦${amount.toLocaleString()}` : amount}
+          {!notMoney ? `₦${amount.toLocaleString()}` : amount}
         </p>
       </div>
       <div
@@ -81,10 +84,9 @@ const EarningsSummary = ({ summary, stats }: SummaryProps) => {
     totalEarnings = 0,
     totalWithdrawals = 0,
     availableBalance = 0,
+    coursesSold = 0,
   } = summary || {};
 
-  const lastPayout = stats?.lastPayout || totalWithdrawals;
-  const coursesSold = stats?.coursesSold || 0;
   const earningsGrowth = stats?.earningsGrowth || "+0%";
   const courseGrowth = stats?.courseGrowth || "+0%";
 
@@ -105,8 +107,8 @@ const EarningsSummary = ({ summary, stats }: SummaryProps) => {
         color="bg-yellow-500"
       />
       <StatCard
-        title="Last Payout"
-        amount={lastPayout}
+        title="Total Withdrawals"
+        amount={totalWithdrawals}
         icon={CheckCircle}
         color="bg-green-600"
       />
@@ -117,6 +119,7 @@ const EarningsSummary = ({ summary, stats }: SummaryProps) => {
         trend="up"
         trendValue={courseGrowth}
         color="bg-purple-600"
+        notMoney={true}
       />
     </div>
   );
