@@ -8,29 +8,36 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-const data = [
-  { month: "Jan", earnings: 120000 },
-  { month: "Feb", earnings: 95000 },
-  { month: "Mar", earnings: 140000 },
-  { month: "Apr", earnings: 80000 },
-  { month: "May", earnings: 160000 },
-];
-
-export function EarningsChart() {
+export function EarningsChart({
+  data = [],
+}: {
+  data: { month: string; earnings: number }[];
+}) {
   return (
-    <div className="w-full h-80  bg-white rounded-xl border p-4 mb-12">
-      <h2 className="text-lg font-semibold mb-4">Monthly Earnings</h2>
-      <ResponsiveContainer width="100%" height="90%">
+    <div className="w-full h-80 bg-white rounded-2xl border border-gray-200 p-6 mb-12 shadow-sm">
+      <h2 className="text-2xl font-bold text-gray-900 mb-6">
+        Monthly Earnings
+      </h2>
+
+      <ResponsiveContainer width="100%" height="85%">
         <LineChart data={data}>
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="month" />
-          <YAxis tickFormatter={(v) => `₦${v / 1000}k`} />
-          <Tooltip formatter={(v: any) => `₦${v.toLocaleString()}`} />
+          <CartesianGrid strokeDasharray="3 3" className="stroke-gray-200" />
+          <XAxis dataKey="month" tick={{ fill: "#6B7280", fontSize: 12 }} />
+          <YAxis
+            tickFormatter={(v) => `₦${v / 1000}k`}
+            tick={{ fill: "#6B7280", fontSize: 12 }}
+          />
+          <Tooltip
+            formatter={(v: number) => `₦${v.toLocaleString()}`}
+            contentStyle={{ borderRadius: "12px" }}
+          />
           <Line
             type="monotone"
             dataKey="earnings"
             stroke="#4f46e5"
-            strokeWidth={2}
+            strokeWidth={3}
+            dot={{ r: 5, stroke: "#4f46e5", strokeWidth: 2, fill: "#fff" }}
+            activeDot={{ r: 7, fill: "#4f46e5" }}
           />
         </LineChart>
       </ResponsiveContainer>
