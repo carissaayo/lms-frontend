@@ -1,56 +1,116 @@
-import { ColumnDef } from "@tanstack/react-table";
-import { DataTable } from "../courses/CoursesTable";
+import { useState } from "react";
+import { CheckCircle, Clock } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-type Payout = {
+interface Payout {
   id: string;
   date: string;
   amount: number;
   method: string;
-  status: "Pending" | "Completed";
+  status: "Completed" | "Pending";
+}
+
+const PayoutTable = ({ payouts = [] }: { payouts: Payout[] }) => {
+  const [filter, setFilter] = useState<"all" | "completed" | "pending">("all");
+
+  const filteredPayouts = payouts.filter((p) =>
+    filter === "all" ? true : p.status.toLowerCase() === filter
+  );
+
+  return (
+    <Card className="rounded-2xl border border-gray-200 shadow-sm mb-8">
+      {/* Header */}
+      <CardHeader className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <CardTitle className="text-2xl font-bold text-gray-900">
+          Payout History
+        </CardTitle>
+
+        {/* Filter Buttons */}
+        <div className="flex gap-2">
+          {["all", "completed", "pending"].map((status) => (
+            <Button
+              key={status}
+              variant={filter === status ? "default" : "outline"}
+              className={`capitalize rounded-lg ${
+                filter === status
+                  ? "bg-indigo-600 hover:bg-indigo-700 text-white"
+                  : "text-gray-700 border-gray-300"
+              }`}
+              onClick={() => setFilter(status as any)}
+            >
+              {status}
+            </Button>
+          ))}
+        </div>
+      </CardHeader>
+
+      {/* Table */}
+      <CardContent className="overflow-x-auto">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Date</TableHead>
+              <TableHead>Amount</TableHead>
+              <TableHead>Method</TableHead>
+              <TableHead>Status</TableHead>
+            </TableRow>
+          </TableHeader>
+
+          <TableBody>
+            {filteredPayouts.map((payout) => (
+              <TableRow
+                key={payout.id}
+                className="hover:bg-gray-50 transition-colors"
+              >
+                <TableCell>{payout.date}</TableCell>
+                <TableCell className="font-semibold text-gray-900">
+                  {new Intl.NumberFormat("en-NG", {
+                    style: "currency",
+                    currency: "NGN",
+                  }).format(payout.amount)}
+                </TableCell>
+                <TableCell>{payout.method}</TableCell>
+                <TableCell>
+                  <span
+                    className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${
+                      payout.status === "Pending"
+                        ? "bg-yellow-100 text-yellow-800"
+                        : "bg-green-100 text-green-800"
+                    }`}
+                  >
+                    {payout.status === "Completed" && (
+                      <CheckCircle className="w-4 h-4 mr-1" />
+                    )}
+                    {payout.status === "Pending" && (
+                      <Clock className="w-4 h-4 mr-1" />
+                    )}
+                    {payout.status}
+                  </span>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+
+        {/* Empty State */}
+        {filteredPayouts.length === 0 && (
+          <TableCaption className="py-6 text-gray-500">
+            No payouts found for this filter.
+          </TableCaption>
+        )}
+      </CardContent>
+    </Card>
+  );
 };
 
-const data: Payout[] = Array.from({ length: 10 }).map((_, i) => ({
-  id: `${i + 1}`,
-  date: `2025-07-${10 - i}`,
-  amount: 100000 + i * 5000,
-  method: i % 2 === 0 ? "Bank Transfer" : "Flutterwave",
-  status: i % 3 === 0 ? "Pending" : "Completed",
-}));
-
-const columns: ColumnDef<Payout>[] = [
-  { accessorKey: "date", header: "Date" },
-  {
-    accessorKey: "amount",
-    header: "Amount",
-    cell: ({ row }) =>
-      new Intl.NumberFormat("en-NG", {
-        style: "currency",
-        currency: "NGN",
-      }).format(row.getValue("amount")),
-  },
-  { accessorKey: "method", header: "Method" },
-  {
-    accessorKey: "status",
-    header: "Status",
-    cell: ({ row }) => (
-      <span
-        className={`px-2 py-1 rounded-full text-xs font-medium ${
-          row.getValue("status") === "Pending"
-            ? "bg-yellow-100 text-yellow-800"
-            : "bg-green-100 text-green-800"
-        }`}
-      >
-        {row.getValue("status")}
-      </span>
-    ),
-  },
-];
-
-export function PayoutTable() {
-  return (
-    <div className="bg-white p-4 rounded-xl border mb-6">
-      <h2 className="text-lg font-semibold mb-4">Payout History</h2>
-      <DataTable columns={columns} data={data} />
-    </div>
-  );
-}
+export default PayoutTable;

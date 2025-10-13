@@ -49,7 +49,6 @@ function RouteComponent() {
     );
   }
 
-  // ✅ If data loaded successfully, show dashboard
   const columns = studentsColumns();
 
   return (
