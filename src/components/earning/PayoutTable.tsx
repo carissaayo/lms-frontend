@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
@@ -67,47 +66,51 @@ const PayoutTable = ({ payouts = [] }: { payouts: Payout[] }) => {
           </TableHeader>
 
           <TableBody>
-            {filteredPayouts.map((payout) => (
-              <TableRow
-                key={payout.id}
-                className="hover:bg-gray-50 transition-colors"
-              >
-                <TableCell>{payout.date}</TableCell>
-                <TableCell className="font-semibold text-gray-900">
-                  {new Intl.NumberFormat("en-NG", {
-                    style: "currency",
-                    currency: "NGN",
-                  }).format(payout.amount)}
-                </TableCell>
-                <TableCell>{payout.method}</TableCell>
-                <TableCell>
-                  <span
-                    className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${
-                      payout.status === "Pending"
-                        ? "bg-yellow-100 text-yellow-800"
-                        : "bg-green-100 text-green-800"
-                    }`}
-                  >
-                    {payout.status === "Completed" && (
-                      <CheckCircle className="w-4 h-4 mr-1" />
-                    )}
-                    {payout.status === "Pending" && (
-                      <Clock className="w-4 h-4 mr-1" />
-                    )}
-                    {payout.status}
-                  </span>
+            {filteredPayouts.length > 0 ? (
+              filteredPayouts.map((payout) => (
+                <TableRow
+                  key={payout.id}
+                  className="hover:bg-gray-50 transition-colors"
+                >
+                  <TableCell>{payout.date}</TableCell>
+                  <TableCell className="font-semibold text-gray-900">
+                    {new Intl.NumberFormat("en-NG", {
+                      style: "currency",
+                      currency: "NGN",
+                    }).format(payout.amount)}
+                  </TableCell>
+                  <TableCell>{payout.method}</TableCell>
+                  <TableCell>
+                    <span
+                      className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${
+                        payout.status === "Pending"
+                          ? "bg-yellow-100 text-yellow-800"
+                          : "bg-green-100 text-green-800"
+                      }`}
+                    >
+                      {payout.status === "Completed" && (
+                        <CheckCircle className="w-4 h-4 mr-1" />
+                      )}
+                      {payout.status === "Pending" && (
+                        <Clock className="w-4 h-4 mr-1" />
+                      )}
+                      {payout.status}
+                    </span>
+                  </TableCell>
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell
+                  colSpan={4}
+                  className="text-center py-6 text-gray-500"
+                >
+                  No payouts found for this filter.
                 </TableCell>
               </TableRow>
-            ))}
+            )}
           </TableBody>
         </Table>
-
-        {/* Empty State */}
-        {filteredPayouts.length === 0 && (
-          <TableCaption className="py-6 text-gray-500">
-            No payouts found for this filter.
-          </TableCaption>
-        )}
       </CardContent>
     </Card>
   );

@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "concurrently \"vite\" \"tanstack-router generate --watch\"",
+    "dev": "tanstack-router generate --watch & vite",
     "generate": "tanstack-router generate",
     "build": "tsc --noEmit && vite build",
     "lint": "eslint .",
