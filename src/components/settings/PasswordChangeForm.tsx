@@ -1,11 +1,9 @@
-"use client";
-
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 
-export default function PasswordChangeForm() {
+const  PasswordChangeForm =()=> {
   const [form, setForm] = useState({ current: "", new: "" });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -39,3 +37,5 @@ export default function PasswordChangeForm() {
     </div>
   );
 }
+
+export default PasswordChangeForm
