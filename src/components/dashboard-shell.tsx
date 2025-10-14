@@ -150,6 +150,17 @@ export function DashboardShell({ children }: DashboardShellProps) {
                     <FileText className="h-4 w-4" />
                     Assignments
                   </Link>
+
+                    <Link
+                    to="/student/payments"
+                    className="flex items-center gap-3 rounded-full px-4 py-2 transition-colors hover:bg-muted text-white/80"
+                    activeProps={{
+                      className: "bg-primary-dark text-white",
+                    }}
+                  >
+                    <FileText className="h-4 w-4" />
+                    Payments
+                  </Link>
                 </>
               )}
 

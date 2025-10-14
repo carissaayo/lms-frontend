@@ -186,7 +186,7 @@ function RouteComponent() {
                   <button
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id)}
-                    className={`flex items-center gap-2 pb-4 px-1 border-b-2 transition-all duration-200 ${
+                    className={`flex items-center gap-2 pb-4 px-1 border-b-2 transition-all duration-200 cursor-pointer ${
                       isActive
                         ? "border-blue-600 text-blue-600"
                         : "border-transparent text-gray-600 hover:text-gray-900 hover:border-gray-300"
