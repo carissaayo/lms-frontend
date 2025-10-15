@@ -36,33 +36,29 @@ export default function RouteComponent() {
 
   return (
     <DashboardShell>
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 via-indigo-50/30 to-purple-50/30">
-        <div className="max-w-7xl mx-auto p-8">
-          <main className="mb-20">
-            <div className="mb-10">
-              <div className="flex items-center gap-4 mb-3">
-                <div className="relative group">
-                  <div className="absolute inset-0 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl blur-lg opacity-70 group-hover:opacity-100 transition-opacity"></div>
-                  <div className="relative p-4 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl shadow-xl">
-                    <BookOpen className="w-8 h-8 text-white" />
-                  </div>
-                </div>
-                <div>
-                  <h1 className="text-4xl font-bold bg-gradient-to-r from-gray-900 via-indigo-900 to-purple-900 bg-clip-text text-transparent">
-                    Payment Dashboard
-                  </h1>
-                  <p className="text-gray-600 mt-1">
-                    Track and manage your course investments
-                  </p>
-                </div>
+      <main className="mb-20">
+        <div className="mb-10">
+          <div className="flex items-center gap-4 mb-3">
+            <div className="relative group">
+              <div className="absolute inset-0 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl blur-lg opacity-70 group-hover:opacity-100 transition-opacity"></div>
+              <div className="relative p-4 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl shadow-xl">
+                <BookOpen className="w-8 h-8 text-white" />
               </div>
             </div>
-
-            <PaymentSummary summary={summary} />
-            <PaymentHistoryTable payments={paymentHistory} />
-          </main>
+            <div>
+              <h1 className="text-4xl font-bold bg-gradient-to-r from-gray-900 via-indigo-900 to-purple-900 bg-clip-text text-transparent">
+                Payment Dashboard
+              </h1>
+              <p className="text-gray-600 mt-1">
+                Track and manage your course investments
+              </p>
+            </div>
+          </div>
         </div>
-      </div>
+
+        <PaymentSummary summary={summary} />
+        <PaymentHistoryTable payments={paymentHistory} />
+      </main>
     </DashboardShell>
   );
 }
