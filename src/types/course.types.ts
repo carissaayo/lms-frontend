@@ -42,4 +42,5 @@ export type Course = {
   createdAt?: string;
   updatedAt?: string;
   tags?: string[];
+  duration: number;
 };
