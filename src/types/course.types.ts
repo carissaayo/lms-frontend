@@ -34,6 +34,7 @@ export type Course = {
   price: number;
   status: CourseStatus;
   enrollments: number;
+  rating: number;
   lessons?: {
     number: number;
     name: string;
