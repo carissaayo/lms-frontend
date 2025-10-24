@@ -1,6 +1,11 @@
 // src/hooks/useAuth.ts
 import { useMutation } from "@tanstack/react-query";
-import { loginApi, registerApi } from "@/api/auth";
+import {
+  adminLoginApi,
+  adminRegisterApi,
+  loginApi,
+  registerApi,
+} from "@/api/auth";
 
 export function useLogin() {
   return useMutation({
@@ -19,6 +24,28 @@ export function useRegister() {
     mutationFn: registerApi,
     onSuccess: (data) => {
       console.log("data", data);
+    },
+  });
+}
+
+export function useAdminLogin() {
+  return useMutation({
+    mutationFn: adminLoginApi,
+    onSuccess: (data) => {
+      console.log("Admin login data", data);
+      // Save tokens (if not cookie-based)
+      localStorage.setItem("accessToken", data.accessToken);
+      localStorage.setItem("refreshToken", data.refreshToken);
+      localStorage.setItem("user", JSON.stringify(data.profile));
+    },
+  });
+}
+
+export function useAdminRegister() {
+  return useMutation({
+    mutationFn: adminRegisterApi,
+    onSuccess: (data) => {
+      console.log("Admin registration data", data);
     },
   });
 }
