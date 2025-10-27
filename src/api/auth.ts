@@ -26,6 +26,8 @@ export interface AdminRegisterData {
   password: string;
 }
 export const adminRegisterApi = async (data: AdminRegisterData) => {
+  console.log("logoogogoog");
+
   const res = await api.post("/admin-auth/register", data);
   return res.data;
 };
