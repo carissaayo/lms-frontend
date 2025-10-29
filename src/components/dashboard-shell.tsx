@@ -177,6 +177,18 @@ export function DashboardShell({ children }: DashboardShellProps) {
                     <BookOpen className="h-4 w-4" />
                     Analytics
                   </Link>
+
+                  <Link
+                    to="/admin/courses"
+                    className="flex items-center gap-3 rounded-full px-4 py-2 transition-colors hover:bg-muted text-white/80"
+                    activeProps={{
+                      className: "bg-primary-dark text-white",
+                    }}
+                  >
+                    <BookOpen className="h-4 w-4" />
+                    Courses
+                  </Link>
+
                   <Link
                     to="/"
                     className="flex items-center gap-3 rounded-full px-4 py-2 transition-colors hover:bg-muted text-white/80"
@@ -185,7 +197,7 @@ export function DashboardShell({ children }: DashboardShellProps) {
                     }}
                   >
                     <Users className="h-4 w-4" />
-                    User Management
+                    Courses
                   </Link>
                 </>
               )}

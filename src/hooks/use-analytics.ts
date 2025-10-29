@@ -3,10 +3,14 @@ import {
   getStudentAnalyticsApi,
   getAdminAnalyticsApi,
 } from "@/api/analytics";
-import { useQuery } from "@tanstack/react-query";
+import { ApiErrorResponse } from "@/types/main.types";
+import { useQuery, UseQueryResult } from "@tanstack/react-query";
+import { AxiosError } from "axios";
 
 // --- Student Analytics ---
-export function useStudentAnalytics(timeRange: string) {
+export function useStudentAnalytics(
+  timeRange: string
+): UseQueryResult<any, AxiosError<ApiErrorResponse>> {
   return useQuery({
     queryKey: ["student-analytics", timeRange],
     queryFn: () => getStudentAnalyticsApi({ timeRange }),
@@ -18,7 +22,9 @@ export function useStudentAnalytics(timeRange: string) {
 }
 
 // --- Instructor Analytics ---
-export function useInstructorAnalytics(timeRange: string) {
+export function useInstructorAnalytics(
+  timeRange: string
+): UseQueryResult<any, AxiosError<ApiErrorResponse>> {
   return useQuery({
     queryKey: ["instructor-analytics", timeRange],
     queryFn: () => getInstructorAnalyticsApi({ timeRange }),
@@ -29,7 +35,9 @@ export function useInstructorAnalytics(timeRange: string) {
 }
 
 // --- Admin Analytics ---
-export function useAdminAnalytics(timeRange: string) {
+export function useAdminAnalytics(
+  timeRange: string
+): UseQueryResult<any, AxiosError<ApiErrorResponse>> {
   return useQuery({
     queryKey: ["admin-analytics", timeRange],
     queryFn: () => getAdminAnalyticsApi({ timeRange }),
