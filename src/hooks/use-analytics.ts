@@ -1,10 +1,12 @@
 import {
   getInstructorAnalyticsApi,
   getStudentAnalyticsApi,
+  getAdminAnalyticsApi,
 } from "@/api/analytics";
 import { useQuery } from "@tanstack/react-query";
 
-export function useStudentAnalytics(timeRange: any) {
+// --- Student Analytics ---
+export function useStudentAnalytics(timeRange: string) {
   return useQuery({
     queryKey: ["student-analytics", timeRange],
     queryFn: () => getStudentAnalyticsApi({ timeRange }),
@@ -15,10 +17,22 @@ export function useStudentAnalytics(timeRange: any) {
   });
 }
 
-export function useInstructorAnalytics(timeRange: any) {
+// --- Instructor Analytics ---
+export function useInstructorAnalytics(timeRange: string) {
   return useQuery({
     queryKey: ["instructor-analytics", timeRange],
     queryFn: () => getInstructorAnalyticsApi({ timeRange }),
+    refetchOnWindowFocus: false,
+    staleTime: 5 * 60 * 1000,
+    gcTime: 10 * 60 * 1000,
+  });
+}
+
+// --- Admin Analytics ---
+export function useAdminAnalytics(timeRange: string) {
+  return useQuery({
+    queryKey: ["admin-analytics", timeRange],
+    queryFn: () => getAdminAnalyticsApi({ timeRange }),
     refetchOnWindowFocus: false,
     staleTime: 5 * 60 * 1000,
     gcTime: 10 * 60 * 1000,
