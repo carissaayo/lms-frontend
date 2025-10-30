@@ -36,6 +36,7 @@ import { Route as StudentEnrollmentsIdRouteImport } from './routes/student/enrol
 import { Route as StudentCoursesIdRouteImport } from './routes/student/courses/$id'
 import { Route as InstructorLessonsIdRouteImport } from './routes/instructor/lessons/$id'
 import { Route as InstructorCoursesIdRouteImport } from './routes/instructor/courses/$id'
+import { Route as AdminCoursesIdRouteImport } from './routes/admin/courses/$id'
 import { Route as AdminAuthRegisterRouteImport } from './routes/admin/auth/register'
 import { Route as AdminAuthLoginRouteImport } from './routes/admin/auth/login'
 import { Route as InstructorLessonsNewIndexRouteImport } from './routes/instructor/lessons/new/index'
@@ -179,6 +180,11 @@ const InstructorCoursesIdRoute = InstructorCoursesIdRouteImport.update({
   path: '/instructor/courses/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminCoursesIdRoute = AdminCoursesIdRouteImport.update({
+  id: '/admin/courses/$id',
+  path: '/admin/courses/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminAuthRegisterRoute = AdminAuthRegisterRouteImport.update({
   id: '/admin/auth/register',
   path: '/admin/auth/register',
@@ -220,6 +226,7 @@ export interface FileRoutesByFullPath {
   '/student': typeof StudentIndexRoute
   '/admin/auth/login': typeof AdminAuthLoginRoute
   '/admin/auth/register': typeof AdminAuthRegisterRoute
+  '/admin/courses/$id': typeof AdminCoursesIdRoute
   '/instructor/courses/$id': typeof InstructorCoursesIdRoute
   '/instructor/lessons/$id': typeof InstructorLessonsIdRoute
   '/student/courses/$id': typeof StudentCoursesIdRoute
@@ -254,6 +261,7 @@ export interface FileRoutesByTo {
   '/student': typeof StudentIndexRoute
   '/admin/auth/login': typeof AdminAuthLoginRoute
   '/admin/auth/register': typeof AdminAuthRegisterRoute
+  '/admin/courses/$id': typeof AdminCoursesIdRoute
   '/instructor/courses/$id': typeof InstructorCoursesIdRoute
   '/instructor/lessons/$id': typeof InstructorLessonsIdRoute
   '/student/courses/$id': typeof StudentCoursesIdRoute
@@ -289,6 +297,7 @@ export interface FileRoutesById {
   '/student/': typeof StudentIndexRoute
   '/admin/auth/login': typeof AdminAuthLoginRoute
   '/admin/auth/register': typeof AdminAuthRegisterRoute
+  '/admin/courses/$id': typeof AdminCoursesIdRoute
   '/instructor/courses/$id': typeof InstructorCoursesIdRoute
   '/instructor/lessons/$id': typeof InstructorLessonsIdRoute
   '/student/courses/$id': typeof StudentCoursesIdRoute
@@ -325,6 +334,7 @@ export interface FileRouteTypes {
     | '/student'
     | '/admin/auth/login'
     | '/admin/auth/register'
+    | '/admin/courses/$id'
     | '/instructor/courses/$id'
     | '/instructor/lessons/$id'
     | '/student/courses/$id'
@@ -359,6 +369,7 @@ export interface FileRouteTypes {
     | '/student'
     | '/admin/auth/login'
     | '/admin/auth/register'
+    | '/admin/courses/$id'
     | '/instructor/courses/$id'
     | '/instructor/lessons/$id'
     | '/student/courses/$id'
@@ -393,6 +404,7 @@ export interface FileRouteTypes {
     | '/student/'
     | '/admin/auth/login'
     | '/admin/auth/register'
+    | '/admin/courses/$id'
     | '/instructor/courses/$id'
     | '/instructor/lessons/$id'
     | '/student/courses/$id'
@@ -428,6 +440,7 @@ export interface RootRouteChildren {
   StudentIndexRoute: typeof StudentIndexRoute
   AdminAuthLoginRoute: typeof AdminAuthLoginRoute
   AdminAuthRegisterRoute: typeof AdminAuthRegisterRoute
+  AdminCoursesIdRoute: typeof AdminCoursesIdRoute
   InstructorCoursesIdRoute: typeof InstructorCoursesIdRoute
   InstructorLessonsIdRoute: typeof InstructorLessonsIdRoute
   StudentCoursesIdRoute: typeof StudentCoursesIdRoute
@@ -642,6 +655,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof InstructorCoursesIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/courses/$id': {
+      id: '/admin/courses/$id'
+      path: '/admin/courses/$id'
+      fullPath: '/admin/courses/$id'
+      preLoaderRoute: typeof AdminCoursesIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/auth/register': {
       id: '/admin/auth/register'
       path: '/admin/auth/register'
@@ -692,6 +712,7 @@ const rootRouteChildren: RootRouteChildren = {
   StudentIndexRoute: StudentIndexRoute,
   AdminAuthLoginRoute: AdminAuthLoginRoute,
   AdminAuthRegisterRoute: AdminAuthRegisterRoute,
+  AdminCoursesIdRoute: AdminCoursesIdRoute,
   InstructorCoursesIdRoute: InstructorCoursesIdRoute,
   InstructorLessonsIdRoute: InstructorLessonsIdRoute,
   StudentCoursesIdRoute: StudentCoursesIdRoute,
