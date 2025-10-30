@@ -1,5 +1,4 @@
-// File: /admin/courses/index.tsx
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { DashboardShell } from "@/components/dashboard-shell";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
@@ -30,23 +29,11 @@ import {
   Users,
   DollarSign,
 } from "lucide-react";
-import { useQuery } from "@tanstack/react-query";
-import { Course, CourseStatus } from "@/types/course.types";
+import { Course, CourseCategories, CourseStatus } from "@/types/course.types";
+import { useAdminCourses } from "@/hooks/use-course";
+import { useDebounce } from "@/hooks/use-debounce";
 
-// Define types
 
-// API hook - replace with your actual implementation
-const useAdminCourses = () => {
-  return useQuery({
-    queryKey: ["admin-courses"],
-    queryFn: async () => {
-      // Replace with your actual API call
-      const response = await fetch("/api/admin/courses");
-      if (!response.ok) throw new Error("Failed to fetch courses");
-      return response.json();
-    },
-  });
-};
 
 export const Route = createFileRoute("/admin/courses/")({
   component: AdminCoursesPage,
@@ -89,37 +76,63 @@ const CourseStatCard = ({
 
 const getStatusBadge = (status: string) => {
   const statusConfig: Record<string, { label: string; className: string }> = {
-    APPROVED: {
+    approved: {
       label: "Approved",
       className: "bg-green-100 text-green-700 hover:bg-green-100",
     },
-    PENDING: {
+    pending: {
       label: "Pending",
       className: "bg-yellow-100 text-yellow-700 hover:bg-yellow-100",
     },
-    REJECTED: {
+    rejected: {
       label: "Rejected",
       className: "bg-red-100 text-red-700 hover:bg-red-100",
     },
-    SUSPENDED: {
+    suspended: {
       label: "Suspended",
       className: "bg-gray-100 text-gray-700 hover:bg-gray-100",
     },
   };
 
-  const config = statusConfig[status] || statusConfig.PENDING;
+  const key = status?.toLowerCase() as keyof typeof statusConfig;
+  const config = statusConfig[key] || statusConfig.pending;
+
   return <Badge className={config.className}>{config.label}</Badge>;
 };
+
 
 function AdminCoursesPage() {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [categoryFilter, setCategoryFilter] = useState("all");
+  const [search, setSearch] = useState("");
+  const [category, setCategory] = useState("all");
+  const [status, setStatus] = useState("all");
 
-  const { data, isLoading, error } = useAdminCourses();
+
+const [debouncedSearch] = useDebounce(search, 500);
+
+  // memoize filters
+  const filters = useMemo(
+    () => ({
+      search: debouncedSearch,
+      category,
+      status,
+    }),
+    [debouncedSearch, category, status]
+  );
+  function handleResetFilters() {
+    setSearch("");
+    setCategory("all");
+    setStatus("all");
+  }
+
+  const { data, isLoading, error } = useAdminCourses(filters);
   const courses: Course[] = data?.courses ?? [];
   const results = data?.results ?? 0;
+console.log(data,"data");
+
 
   // Filter courses
   const filteredCourses = courses.filter((course) => {
@@ -245,36 +258,39 @@ function AdminCoursesPage() {
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
                   <Input
                     placeholder="Search by course title or instructor..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
+                    value={search}
+        onChange={(e) => setSearch(e.target.value)}
                     className="pl-10"
                   />
                 </div>
-                <Select value={statusFilter} onValueChange={setStatusFilter}>
+                <Select value={status} onValueChange={setStatus}>
                   <SelectTrigger className="w-full lg:w-48">
                     <SelectValue placeholder="Filter by status" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="all">All Status</SelectItem>
-                    <SelectItem value="APPROVED">Approved</SelectItem>
-                    <SelectItem value="PENDING">Pending</SelectItem>
-                    <SelectItem value="REJECTED">Rejected</SelectItem>
-                    <SelectItem value="SUSPENDED">Suspended</SelectItem>
+                    <SelectItem value={CourseStatus.APPROVED}>Approved</SelectItem>
+                    <SelectItem value={CourseStatus.PENDING}>Pending</SelectItem>
+                    <SelectItem value={CourseStatus.REJECTED}>Rejected</SelectItem>
+                    <SelectItem value={CourseStatus.SUSPENDED}>Suspended</SelectItem>
                   </SelectContent>
                 </Select>
                 <Select
-                  value={categoryFilter}
-                  onValueChange={setCategoryFilter}
+                  value={category}
+                  onValueChange={setCategory}
                 >
                   <SelectTrigger className="w-full lg:w-48">
                     <SelectValue placeholder="Filter by category" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="all">All Categories</SelectItem>
-                    <SelectItem value="Technology">Technology</SelectItem>
-                    <SelectItem value="Business">Business</SelectItem>
-                    <SelectItem value="Design">Design</SelectItem>
-                    <SelectItem value="Marketing">Marketing</SelectItem>
+                    {CourseCategories.map((cat) => (
+                      <SelectItem key={cat} value={cat}>
+                        {cat}
+                      </SelectItem>
+                    ))}
+                    
+                    
                   </SelectContent>
                 </Select>
               </div>

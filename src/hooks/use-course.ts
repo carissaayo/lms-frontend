@@ -8,6 +8,7 @@ import {
   getCoursesForStudentsApi,
   getSingleCourseApi,
   enrollInCourseApi,
+  getAdminCoursesApi,
 } from "@/api/courses";
 
 // ==============================
@@ -107,5 +108,20 @@ export function useEnrollCourse() {
       queryClient.invalidateQueries({ queryKey: ["courses"] });
       queryClient.invalidateQueries({ queryKey: ["singleCourse"] });
     },
+  });
+}
+
+
+
+// ADMIN
+export function useAdminCourses(filters: any) {
+  return useQuery({
+    queryKey: ["admin-courses",   filters.search,
+      filters.category,
+      filters.status,],
+    queryFn: () => getAdminCoursesApi(filters),
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+    
   });
 }

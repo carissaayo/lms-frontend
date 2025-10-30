@@ -75,3 +75,11 @@ export async function enrollInCourseApi(courseId: string) {
   const res = await api.post(`students/enroll/${courseId}`);
   return res.data;
 }
+
+
+// ADMIN
+export async function getAdminCoursesApi(filters:any) {
+  const res = await api.get("/admin-courses", { params:filters });
+  console.log("API response:", res.data);
+  return res.data;
+}
