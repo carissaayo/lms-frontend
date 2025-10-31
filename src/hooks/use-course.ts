@@ -9,6 +9,7 @@ import {
   getSingleCourseApi,
   enrollInCourseApi,
   getAdminCoursesApi,
+  getSingleCourseAdminApi,
 } from "@/api/courses";
 
 // ==============================
@@ -111,17 +112,27 @@ export function useEnrollCourse() {
   });
 }
 
-
-
 // ADMIN
 export function useAdminCourses(filters: any) {
   return useQuery({
-    queryKey: ["admin-courses",   filters.search,
+    queryKey: [
+      "admin-courses",
+      filters.search,
       filters.category,
-      filters.status,],
+      filters.status,
+    ],
     queryFn: () => getAdminCoursesApi(filters),
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
-    
   });
 }
+
+export function useSingleCourseAdmin(courseId: string) {
+  return useQuery({
+    queryKey: ["singleCourse", courseId],
+    queryFn: () => getSingleCourseAdminApi(courseId),
+    enabled: !!courseId, 
+    refetchOnWindowFocus: false,
+  });
+}
+

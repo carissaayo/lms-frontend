@@ -1,3 +1,4 @@
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { api } from "./client";
 
 // ==============================
@@ -76,10 +77,43 @@ export async function enrollInCourseApi(courseId: string) {
   return res.data;
 }
 
-
 // ADMIN
-export async function getAdminCoursesApi(filters:any) {
-  const res = await api.get("/admin-courses", { params:filters });
+export async function getAdminCoursesApi(filters: any) {
+  const res = await api.get("/admin-courses", { params: filters });
   console.log("API response:", res.data);
   return res.data;
+}
+
+export async function getSingleCourseAdminApi(courseId: string) {
+  const res = await api.get(`/admin-courses/${courseId}`);
+  return res.data;
+}
+
+export async function updateCourseStatusAdminApi(
+  courseId: string,
+  status: string
+) {
+  const res = await api.patch(`/admin/courses/${courseId}/status`, {
+    status,
+  });
+  return res.data;
+}
+
+export function useUpdateCourseStatusAdmin() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ courseId, status }: { courseId: string; status: string }) =>
+      updateCourseStatusAdminApi(courseId, status),
+    onSuccess: (_, { courseId }) => {
+      queryClient.invalidateQueries({ queryKey: ["singleCourse", courseId] });
+    },
+
+    onError: (error: any) => {
+      console.error(
+        "Failed to update course status:",
+        error?.response?.data || error
+      );
+    },
+  });
 }

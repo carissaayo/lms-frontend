@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { DashboardShell } from "@/components/dashboard-shell";
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -445,15 +445,15 @@ console.log(data,"data");
 
                       {/* Quick Actions */}
                       <div className="mt-4 flex gap-2">
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          className="flex-1"
-                          onClick={() => handleViewCourse(course._id)}
+                        <Link
+                          
+                          className="flex-1 flex items-center gap-2 text-primary"
+                                                to={`/admin/courses/${course._id}`}
+
                         >
                           <Eye className="h-4 w-4 mr-1" />
                           View
-                        </Button>
+                        </Link>
                         {course.status === CourseStatus.PENDING && (
                           <Button
                             size="sm"
