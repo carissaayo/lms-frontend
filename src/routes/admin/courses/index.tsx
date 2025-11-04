@@ -32,6 +32,7 @@ import {
 import { Course, CourseCategories, CourseStatus } from "@/types/course.types";
 import { useAdminCourses } from "@/hooks/use-course";
 import { useDebounce } from "@/hooks/use-debounce";
+import { CoursePagination } from "@/components/courses/Pagination";
 
 export const Route = createFileRoute("/admin/courses/")({
   component: AdminCoursesPage,
@@ -106,23 +107,16 @@ function AdminCoursesPage() {
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("all");
   const [status, setStatus] = useState("all");
-
+const [page, setPage] = useState(1);
+const [limit, setLimit] = useState(20);
   const [debouncedSearch] = useDebounce(search, 500);
 
   // memoize filters
-  const filters = useMemo(
-    () => ({
-      search: debouncedSearch,
-      category,
-      status,
-    }),
-    [debouncedSearch, category, status]
-  );
-  function handleResetFilters() {
-    setSearch("");
-    setCategory("all");
-    setStatus("all");
-  }
+const filters = useMemo(
+  () => ({ search: debouncedSearch, category, status, page, limit }),
+  [debouncedSearch, category, status, page, limit]
+);
+
 
   const { data, isLoading, error } = useAdminCourses(filters);
   const courses: Course[] = data?.courses ?? [];
@@ -502,6 +496,20 @@ function AdminCoursesPage() {
                 </p>
               </div>
             )}
+            <CoursePagination
+              currentPage={page}
+              totalPages={data?.totalPages ?? 1}
+              totalItems={results ?? 0}
+              itemsPerPage={limit}
+              onPageChange={(newPage) => {
+                setPage(newPage);
+                window.scrollTo({ top: 0, behavior: "smooth" });
+              }}
+              onItemsPerPageChange={(newLimit) => {
+                setLimit(newLimit);
+                setPage(1);
+              }}
+            />
           </>
         )}
       </main>
