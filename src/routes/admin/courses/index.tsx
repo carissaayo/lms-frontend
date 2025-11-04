@@ -120,7 +120,8 @@ const filters = useMemo(
 
   const { data, isLoading, error } = useAdminCourses(filters);
   const courses: Course[] = data?.courses ?? [];
-  const results = data?.results ?? 0;
+  const total = data?.total ?? 0;
+  const pages = data?.pages ?? 0;
   console.log(data, "data");
 
   // Filter courses
@@ -498,8 +499,8 @@ const filters = useMemo(
             )}
             <CoursePagination
               currentPage={page}
-              totalPages={data?.totalPages ?? 1}
-              totalItems={results ?? 0}
+              totalPages={pages ?? 1}
+              totalItems={total ?? 0}
               itemsPerPage={limit}
               onPageChange={(newPage) => {
                 setPage(newPage);
