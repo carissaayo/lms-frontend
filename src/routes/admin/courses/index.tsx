@@ -33,8 +33,6 @@ import { Course, CourseCategories, CourseStatus } from "@/types/course.types";
 import { useAdminCourses } from "@/hooks/use-course";
 import { useDebounce } from "@/hooks/use-debounce";
 
-
-
 export const Route = createFileRoute("/admin/courses/")({
   component: AdminCoursesPage,
 });
@@ -100,7 +98,6 @@ const getStatusBadge = (status: string) => {
   return <Badge className={config.className}>{config.label}</Badge>;
 };
 
-
 function AdminCoursesPage() {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
@@ -110,8 +107,7 @@ function AdminCoursesPage() {
   const [category, setCategory] = useState("all");
   const [status, setStatus] = useState("all");
 
-
-const [debouncedSearch] = useDebounce(search, 500);
+  const [debouncedSearch] = useDebounce(search, 500);
 
   // memoize filters
   const filters = useMemo(
@@ -131,8 +127,7 @@ const [debouncedSearch] = useDebounce(search, 500);
   const { data, isLoading, error } = useAdminCourses(filters);
   const courses: Course[] = data?.courses ?? [];
   const results = data?.results ?? 0;
-console.log(data,"data");
-
+  console.log(data, "data");
 
   // Filter courses
   const filteredCourses = courses.filter((course) => {
@@ -259,7 +254,7 @@ console.log(data,"data");
                   <Input
                     placeholder="Search by course title or instructor..."
                     value={search}
-        onChange={(e) => setSearch(e.target.value)}
+                    onChange={(e) => setSearch(e.target.value)}
                     className="pl-10"
                   />
                 </div>
@@ -269,16 +264,21 @@ console.log(data,"data");
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="all">All Status</SelectItem>
-                    <SelectItem value={CourseStatus.APPROVED}>Approved</SelectItem>
-                    <SelectItem value={CourseStatus.PENDING}>Pending</SelectItem>
-                    <SelectItem value={CourseStatus.REJECTED}>Rejected</SelectItem>
-                    <SelectItem value={CourseStatus.SUSPENDED}>Suspended</SelectItem>
+                    <SelectItem value={CourseStatus.APPROVED}>
+                      Approved
+                    </SelectItem>
+                    <SelectItem value={CourseStatus.PENDING}>
+                      Pending
+                    </SelectItem>
+                    <SelectItem value={CourseStatus.REJECTED}>
+                      Rejected
+                    </SelectItem>
+                    <SelectItem value={CourseStatus.SUSPENDED}>
+                      Suspended
+                    </SelectItem>
                   </SelectContent>
                 </Select>
-                <Select
-                  value={category}
-                  onValueChange={setCategory}
-                >
+                <Select value={category} onValueChange={setCategory}>
                   <SelectTrigger className="w-full lg:w-48">
                     <SelectValue placeholder="Filter by category" />
                   </SelectTrigger>
@@ -289,8 +289,6 @@ console.log(data,"data");
                         {cat}
                       </SelectItem>
                     ))}
-                    
-                    
                   </SelectContent>
                 </Select>
               </div>
@@ -446,10 +444,9 @@ console.log(data,"data");
                       {/* Quick Actions */}
                       <div className="mt-4 flex gap-2">
                         <Link
-                          
                           className="flex-1 flex items-center gap-2 text-primary"
-                                                to={`/admin/courses/${course._id}`}
-
+                          to="/admin/courses/$id"
+                          params={{ id: course._id }}
                         >
                           <Eye className="h-4 w-4 mr-1" />
                           View
