@@ -87,7 +87,8 @@ interface InstructorDetail {
   };
   joinedDate: string;
   lastActive?: string;
-  suspensionReason?: string;
+  suspendReason?: string;
+  rejecctReason?:string;
   education?: Array<{
     degree: string;
     institution: string;
@@ -113,7 +114,7 @@ const getStatusBadge = (status: string) => {
     string,
     { label: string; className: string; icon: any }
   > = {
-    [InstructorStatus.ACTIVE]: {
+    [InstructorStatus.APPROVED]: {
       label: "Active",
       className: "bg-green-100 text-green-700",
       icon: CheckCircle,
@@ -157,10 +158,10 @@ function RouteComponent() {
 
   const handleAction = (type: InstructorStatus) => {
     setActionType(type);
-    if (type === InstructorStatus.ACTIVE) {
+    if (type === InstructorStatus.APPROVED) {
       updateInstructorMutation.mutate({
         instructorId: id,
-        status: InstructorStatus.ACTIVE,
+        status: InstructorStatus.APPROVED,
       });
     } else {
       setActionDialogOpen(true);
@@ -171,11 +172,15 @@ function RouteComponent() {
     if (!actionType) return;
 
     const status = actionType;
-    const reason =
-      status === InstructorStatus.SUSPENDED ? actionReason : undefined;
+      const rejectReason = InstructorStatus.REJECTED
+        ? actionReason
+        : undefined;
+        const suspendReason = InstructorStatus.SUSPENDED
+          ? actionReason
+          : undefined;
 
     updateInstructorMutation.mutate(
-      { instructorId: id, status, reason },
+      { instructorId: id, status, rejectReason,suspendReason },
       {
         onSuccess: () => {
           setActionDialogOpen(false);
@@ -254,7 +259,7 @@ function RouteComponent() {
                 </Button>
                 <Button
                   className="bg-green-600 hover:bg-green-700"
-                  onClick={() => handleAction(InstructorStatus.ACTIVE)}
+                  onClick={() => handleAction(InstructorStatus.APPROVED)}
                   disabled={updateInstructorMutation.isPending}
                 >
                   <CheckCircle className="h-4 w-4 mr-2" />
@@ -262,7 +267,7 @@ function RouteComponent() {
                 </Button>
               </>
             )}
-            {instructor.status === InstructorStatus.ACTIVE && (
+            {instructor.status === InstructorStatus.APPROVED && (
               <Button
                 variant="outline"
                 className="text-red-600 border-red-600 hover:bg-red-50"
@@ -276,7 +281,7 @@ function RouteComponent() {
             {instructor.status === InstructorStatus.SUSPENDED && (
               <Button
                 className="bg-green-600 hover:bg-green-700"
-                onClick={() => handleAction(InstructorStatus.ACTIVE)}
+                onClick={() => handleAction(InstructorStatus.APPROVED)}
                 disabled={updateInstructorMutation.isPending}
               >
                 <CheckCircle className="h-4 w-4 mr-2" />
@@ -369,7 +374,7 @@ function RouteComponent() {
         </div>
 
         {/* Suspension Reason */}
-        {instructor.suspensionReason && (
+        {instructor.suspendReason && (
           <Card className="border-red-200 bg-red-50">
             <CardHeader>
               <CardTitle className="text-red-900 flex items-center gap-2">
@@ -378,7 +383,7 @@ function RouteComponent() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-red-800">{instructor.suspensionReason}</p>
+              <p className="text-red-800">{instructor.suspendReason}</p>
             </CardContent>
           </Card>
         )}

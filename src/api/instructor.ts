@@ -23,18 +23,18 @@ export const getSingleInstructorAdmin = async (id: string) => {
 export const updateInstructorStatusAdmin = async ({
   instructorId,
   status,
-  reason,
+  rejectReason,
+  suspendReason,
 }: {
   instructorId: string;
   status: string;
-  reason?: string;
+  rejectReason?: string;
+  suspendReason?: string;
 }) => {
-  const res = await api.patch(
-    `/admin/instructors/${instructorId}/status`,
-    {
-      status,
-      reason,
-    }
-  );
+  const res = await api.patch(`/admin-instructors/${instructorId}/action`, {
+    status,
+    suspendReason,
+    rejectReason,
+  });
   return res.data;
 };

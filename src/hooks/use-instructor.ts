@@ -52,7 +52,6 @@ export const useUpdateInstructorStatusAdmin = () => {
   return useMutation({
     mutationFn: updateInstructorStatusAdmin,
     onSuccess: () => {
-      
       queryClient.invalidateQueries({ queryKey: ["admin-instructor"] });
     },
     onError: (error: any) => {

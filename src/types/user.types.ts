@@ -5,9 +5,10 @@ export enum Role {
 }
 
 export enum InstructorStatus {
-  ACTIVE = "active",
-  SUSPENDED = "suspended",
-  PENDING = "pending",
+  PENDING = 'pending',
+  APPROVED = 'approved',
+  REJECTED = 'rejected',
+  SUSPENDED= 'suspended',
 }
 
 export interface RegisterData {

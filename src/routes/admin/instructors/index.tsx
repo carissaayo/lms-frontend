@@ -11,19 +11,11 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+
 import {
   Users,
   Search,
-  MoreVertical,
   Eye,
-  CheckCircle,
-  XCircle,
   PauseCircle,
   BookOpen,
   UserCheck,
@@ -36,6 +28,7 @@ import { useDebounce } from "@/hooks/use-debounce";
 import { CoursePagination } from "@/components/courses/Pagination";
 import { InstructorStatus } from "@/types/user.types";
 import { useAdminInstructors } from "@/hooks/use-instructor";
+
 
 export const Route = createFileRoute("/admin/instructors/")({
   component: AdminInstructorsPage,
@@ -99,8 +92,8 @@ const InstructorStatCard = ({
 
 const getStatusBadge = (status: string) => {
   const statusConfig: Record<string, { label: string; className: string }> = {
-    active: {
-      label: "Active",
+    approved: {
+      label: "Approved",
       className: "bg-green-100 text-green-700 hover:bg-green-100",
     },
     suspended: {
@@ -128,6 +121,7 @@ function AdminInstructorsPage() {
 
   const [debouncedSearch] = useDebounce(search, 500);
 
+
   // Memoize filters
   const filters = useMemo(
     () => ({ search: debouncedSearch, status, page, limit }),
@@ -145,7 +139,7 @@ function AdminInstructorsPage() {
   // Calculate stats
   const totalInstructors = instructors.length;
   const activeInstructors = instructors.filter(
-    (i) => i.status === InstructorStatus.ACTIVE
+    (i) => i.status === InstructorStatus.APPROVED
   ).length;
   const suspendedInstructors = instructors.filter(
     (i) => i.status === InstructorStatus.SUSPENDED
@@ -155,25 +149,8 @@ function AdminInstructorsPage() {
   ).length;
   const totalCourses = instructors.reduce((acc, i) => acc + i.coursesCount, 0);
 
-  const handleInstructorAction = async (
-    instructorId: string,
-    action: string
-  ) => {
-    try {
-      const response = await fetch(
-        `/api/admin/instructors/${instructorId}/${action}`,
-        {
-          method: "PATCH",
-          headers: { "Content-Type": "application/json" },
-        }
-      );
-      if (!response.ok) throw new Error(`Failed to ${action} instructor`);
-      // Invalidate and refetch
-      // queryClient.invalidateQueries(["admin-instructors"]);
-    } catch (err) {
-      console.error(`Error ${action}ing instructor:`, err);
-    }
-  };
+
+  
 
   const handleViewInstructor = (instructorId: string) => {
     navigate({ to: `/admin/instructors/${instructorId}` });
@@ -255,7 +232,6 @@ function AdminInstructorsPage() {
                 icon={BookOpen}
               />
             </div>
-
             {/* Filters Section */}
             <div className="bg-white rounded-xl p-6 border border-gray-200">
               <div className="flex flex-col lg:flex-row gap-4">
@@ -274,7 +250,7 @@ function AdminInstructorsPage() {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="all">All Status</SelectItem>
-                    <SelectItem value={InstructorStatus.ACTIVE}>
+                    <SelectItem value={InstructorStatus.APPROVED}>
                       Active
                     </SelectItem>
                     <SelectItem value={InstructorStatus.SUSPENDED}>
@@ -305,7 +281,6 @@ function AdminInstructorsPage() {
                 )}
               </div>
             </div>
-
             {/* Instructors Grid */}
             {instructors.length > 0 ? (
               <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -336,54 +311,7 @@ function AdminInstructorsPage() {
                             </p>
                           </div>
                         </div>
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              className="h-8 w-8 p-0"
-                            >
-                              <MoreVertical className="h-4 w-4" />
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <DropdownMenuItem
-                              onClick={() =>
-                                handleViewInstructor(instructor._id)
-                              }
-                            >
-                              <Eye className="h-4 w-4 mr-2" />
-                              View Details
-                            </DropdownMenuItem>
-                            {instructor.status !== InstructorStatus.ACTIVE && (
-                              <DropdownMenuItem
-                                onClick={() =>
-                                  handleInstructorAction(
-                                    instructor._id,
-                                    "activate"
-                                  )
-                                }
-                              >
-                                <CheckCircle className="h-4 w-4 mr-2 text-green-600" />
-                                Activate
-                              </DropdownMenuItem>
-                            )}
-                            {instructor.status !==
-                              InstructorStatus.SUSPENDED && (
-                              <DropdownMenuItem
-                                onClick={() =>
-                                  handleInstructorAction(
-                                    instructor._id,
-                                    "suspend"
-                                  )
-                                }
-                              >
-                                <XCircle className="h-4 w-4 mr-2 text-red-600" />
-                                Suspend
-                              </DropdownMenuItem>
-                            )}
-                          </DropdownMenuContent>
-                        </DropdownMenu>
+                     
                       </div>
                       <div className="absolute top-3 right-3">
                         {getStatusBadge(instructor.status)}
@@ -451,43 +379,7 @@ function AdminInstructorsPage() {
                           <Eye className="h-4 w-4 mr-1" />
                           View
                         </Button>
-                        {instructor.status === InstructorStatus.ACTIVE && (
-                          <Button
-                            size="sm"
-                            variant="destructive"
-                            className="flex-1"
-                            onClick={() =>
-                              handleInstructorAction(instructor._id, "suspend")
-                            }
-                          >
-                            <PauseCircle className="h-4 w-4 mr-1" />
-                            Suspend
-                          </Button>
-                        )}
-                        {instructor.status === InstructorStatus.SUSPENDED && (
-                          <Button
-                            size="sm"
-                            className="flex-1 bg-green-600 hover:bg-green-700"
-                            onClick={() =>
-                              handleInstructorAction(instructor._id, "activate")
-                            }
-                          >
-                            <CheckCircle className="h-4 w-4 mr-1" />
-                            Activate
-                          </Button>
-                        )}
-                        {instructor.status === InstructorStatus.PENDING && (
-                          <Button
-                            size="sm"
-                            className="flex-1 bg-green-600 hover:bg-green-700"
-                            onClick={() =>
-                              handleInstructorAction(instructor._id, "approve")
-                            }
-                          >
-                            <CheckCircle className="h-4 w-4 mr-1" />
-                            Approve
-                          </Button>
-                        )}
+                      
                       </div>
                     </div>
                   </div>
@@ -505,8 +397,8 @@ function AdminInstructorsPage() {
                     : "No instructors have been registered yet"}
                 </p>
               </div>
-            )}
-
+            )}{" "}
+            
             <CoursePagination
               currentPage={page}
               totalPages={pages ?? 1}
