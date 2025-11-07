@@ -13,6 +13,7 @@ import {
   Settings,
   Store,
   User,
+  User2,
   Users,
   UsersRound,
   Wallet,
@@ -198,6 +199,16 @@ export function DashboardShell({ children }: DashboardShellProps) {
                   >
                     <Users className="h-4 w-4" />
                     Instructors
+                  </Link>
+                  <Link
+                    to="/admin/students"
+                    className="flex items-center gap-3 rounded-full px-4 py-2 transition-colors hover:bg-muted text-white/80"
+                    activeProps={{
+                      className: "bg-primary-dark text-white",
+                    }}
+                  >
+                    <User2 className="h-4 w-4" />
+                    Students
                   </Link>
                 </>
               )}

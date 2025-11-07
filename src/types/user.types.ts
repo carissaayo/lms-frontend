@@ -11,6 +11,11 @@ export enum InstructorStatus {
   SUSPENDED= 'suspended',
 }
 
+export enum StudentStatus {
+  ACTIVE = "active",
+  SUSPENDED = "suspended",
+  INACTIVE = "inactive",
+}
 export interface RegisterData {
   firstName: string;
   lastName: string;
