@@ -10,6 +10,7 @@ import {
   enrollInCourseApi,
   getAdminCoursesApi,
   getSingleCourseAdminApi,
+  updateCourseStatusAdminApi,
 } from "@/api/courses";
 
 // ==============================
@@ -131,8 +132,35 @@ export function useSingleCourseAdmin(courseId: string) {
   return useQuery({
     queryKey: ["singleCourse", courseId],
     queryFn: () => getSingleCourseAdminApi(courseId),
-    enabled: !!courseId, 
+    enabled: !!courseId,
     refetchOnWindowFocus: false,
   });
 }
 
+export function useUpdateCourseStatusAdmin() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({
+      courseId,
+      status,
+      reason,
+    }: {
+      courseId: string;
+      status: string;
+      reason?: string;
+    }) => updateCourseStatusAdminApi(courseId, status, reason),
+
+    onSuccess: (_, { courseId }) => {
+      queryClient.invalidateQueries({ queryKey: ["singleCourse", courseId] });
+      queryClient.invalidateQueries({ queryKey: ["admin-courses"] });
+    },
+
+    onError: (error: any) => {
+      console.error(
+        "Failed to update course status:",
+        error?.response?.data || error
+      );
+    },
+  });
+}

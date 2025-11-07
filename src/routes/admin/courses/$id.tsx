@@ -19,7 +19,6 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import {
   Tabs,
@@ -34,17 +33,15 @@ import {
   PauseCircle,
   Clock,
   Users,
-  DollarSign,
+  
   Star,
   Calendar,
   BookOpen,
   PlayCircle,
-  FileText,
-  Award,
   AlertCircle,
 } from "lucide-react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { useSingleCourseAdmin } from "@/hooks/use-course";
+import {  useQueryClient } from "@tanstack/react-query";
+import { useSingleCourseAdmin, useUpdateCourseStatusAdmin } from "@/hooks/use-course";
 import { NairaIcon } from "@/components/analytics/admin/NairaIcon";
 import { CourseStatus } from "@/types/course.types";
 
@@ -140,44 +137,37 @@ function RouteComponent() {
   
   const course: CourseDetail | undefined = data?.course;
 
-  const updateCourseMutation = useMutation({
-    mutationFn: async ({ action, reason }: { action: string; reason?: string }) => {
-      const response = await fetch(`/api/admin/courses/${id}/${action}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ reason }),
-      });
-      if (!response.ok) throw new Error(`Failed to ${action} course`);
-      return response.json();
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["admin-course", id] });
-      queryClient.invalidateQueries({ queryKey: ["admin-courses"] });
-      setActionDialogOpen(false);
-      setActionReason("");
-      setActionType(null);
-    },
-  });
+const updateCourseMutation = useUpdateCourseStatusAdmin();
 
-  const handleAction = (type: CourseStatus) => {
-    setActionType(type );
-    if (type === CourseStatus.APPROVED) {
-      // Approve directly without dialog
-      updateCourseMutation.mutate({ action: "approve" });
-    } else {
-      setActionDialogOpen(true);
-    }
-  };
+ const handleAction = (type: CourseStatus) => {
+   setActionType(type);
+   if (type === CourseStatus.APPROVED) {
+     updateCourseMutation.mutate({ courseId: id, status: "APPROVED" });
+   } else {
+     setActionDialogOpen(true);
+   }
+ };
 
-  const confirmAction = () => {
-    if (actionType) {
-      updateCourseMutation.mutate({
-        action: actionType,
-        reason: actionReason,
-      });
-    }
-  };
+ const confirmAction = () => {
+   if (!actionType) return;
 
+   const status = actionType;
+   const reason =
+     status === CourseStatus.REJECTED || status === CourseStatus.SUSPENDED
+       ? actionReason
+       : undefined;
+
+   updateCourseMutation.mutate(
+     { courseId: id, status, reason },
+     {
+       onSuccess: () => {
+         setActionDialogOpen(false);
+         setActionReason("");
+         setActionType(null);
+       },
+     }
+   );
+ };
   if (error) {
     return (
       <DashboardShell>

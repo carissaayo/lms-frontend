@@ -4,6 +4,12 @@ export enum Role {
   ADMIN = "admin",
 }
 
+export enum InstructorStatus {
+  ACTIVE = "active",
+  SUSPENDED = "suspended",
+  PENDING = "pending",
+}
+
 export interface RegisterData {
   firstName: string;
   lastName: string;

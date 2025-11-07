@@ -1,4 +1,3 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { api } from "./client";
 
 // ==============================
@@ -91,29 +90,21 @@ export async function getSingleCourseAdminApi(courseId: string) {
 
 export async function updateCourseStatusAdminApi(
   courseId: string,
-  status: string
+  status: string,
+  reason?: string
 ) {
-  const res = await api.patch(`/admin/courses/${courseId}/status`, {
-    status,
-  });
-  return res.data;
+
+  console.log(status,"status");
+  
+  const payload: any = { action: status.toLowerCase() };
+
+  if (status === "rejected") payload.rejectReason = reason;
+  if (status === "suspended") payload.suspendReason = reason;
+
+  const { data } = await api.patch(
+    `/admin-courses/${courseId}/action`,
+    payload
+  );
+  return data;
 }
 
-export function useUpdateCourseStatusAdmin() {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: ({ courseId, status }: { courseId: string; status: string }) =>
-      updateCourseStatusAdminApi(courseId, status),
-    onSuccess: (_, { courseId }) => {
-      queryClient.invalidateQueries({ queryKey: ["singleCourse", courseId] });
-    },
-
-    onError: (error: any) => {
-      console.error(
-        "Failed to update course status:",
-        error?.response?.data || error
-      );
-    },
-  });
-}

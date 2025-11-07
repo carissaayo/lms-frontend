@@ -190,14 +190,14 @@ export function DashboardShell({ children }: DashboardShellProps) {
                   </Link>
 
                   <Link
-                    to="/"
+                    to="/admin/instructors"
                     className="flex items-center gap-3 rounded-full px-4 py-2 transition-colors hover:bg-muted text-white/80"
                     activeProps={{
                       className: "bg-primary-dark text-white",
                     }}
                   >
                     <Users className="h-4 w-4" />
-                    Courses
+                    Instructors
                   </Link>
                 </>
               )}
