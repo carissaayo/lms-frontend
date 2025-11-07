@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { DashboardShell } from "@/components/dashboard-shell";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
@@ -25,16 +25,13 @@ import {
   TrendingUp,
 } from "lucide-react";
 import { useDebounce } from "@/hooks/use-debounce";
-import { CoursePagination } from "@/components/courses/Pagination";
+import { PaginationControls } from "@/components/courses/Pagination";
 import { InstructorStatus } from "@/types/user.types";
 import { useAdminInstructors } from "@/hooks/use-instructor";
-
 
 export const Route = createFileRoute("/admin/instructors/")({
   component: AdminInstructorsPage,
 });
-
-
 
 interface Instructor {
   _id: string;
@@ -50,8 +47,6 @@ interface Instructor {
   createdAt: string;
   specialization: string;
 }
-
-
 
 const InstructorStatCard = ({
   title,
@@ -117,24 +112,21 @@ function AdminInstructorsPage() {
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState("all");
   const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(20);
+  const [limit, setLimit] = useState(5);
 
   const [debouncedSearch] = useDebounce(search, 500);
 
+  const { data, isLoading, error } = useAdminInstructors({
+    search: debouncedSearch,
+    status,
+    page,
+    limit,
+  });
 
-  // Memoize filters
-  const filters = useMemo(
-    () => ({ search: debouncedSearch, status, page, limit }),
-    [debouncedSearch, status, page, limit]
-  );
+  console.log(data, "data");
 
-  const { data, isLoading, error } = useAdminInstructors(filters);
-
-  console.log(data,"data");
-  
   const instructors: Instructor[] = data?.instructors ?? [];
   const total = data?.total ?? 0;
-  const pages = data?.pages ?? 0;
 
   // Calculate stats
   const totalInstructors = instructors.length;
@@ -148,9 +140,6 @@ function AdminInstructorsPage() {
     (i) => i.status === InstructorStatus.PENDING
   ).length;
   const totalCourses = instructors.reduce((acc, i) => acc + i.coursesCount, 0);
-
-
-  
 
   const handleViewInstructor = (instructorId: string) => {
     navigate({ to: `/admin/instructors/${instructorId}` });
@@ -265,7 +254,9 @@ function AdminInstructorsPage() {
               <div className="mt-4 flex items-center justify-between">
                 <p className="text-sm text-gray-600">
                   Showing page <span className="font-semibold">{page}</span> of{" "}
-                  <span className="font-semibold">{pages || 1}</span>
+                  <span className="font-semibold">
+                    {Math.ceil(total / limit) || 1}
+                  </span>
                 </p>
                 {(search || status !== "all") && (
                   <Button
@@ -311,7 +302,6 @@ function AdminInstructorsPage() {
                             </p>
                           </div>
                         </div>
-                     
                       </div>
                       <div className="absolute top-3 right-3">
                         {getStatusBadge(instructor.status)}
@@ -379,7 +369,6 @@ function AdminInstructorsPage() {
                           <Eye className="h-4 w-4 mr-1" />
                           View
                         </Button>
-                      
                       </div>
                     </div>
                   </div>
@@ -398,20 +387,19 @@ function AdminInstructorsPage() {
                 </p>
               </div>
             )}{" "}
-            
-            <CoursePagination
+            <PaginationControls
               currentPage={page}
-              totalPages={pages ?? 1}
-              totalItems={total ?? 0}
-              itemsPerPage={limit}
+              totalPages={Math.ceil(total / limit)}
+              limit={limit}
               onPageChange={(newPage) => {
                 setPage(newPage);
                 window.scrollTo({ top: 0, behavior: "smooth" });
               }}
-              onItemsPerPageChange={(newLimit) => {
+              onLimitChange={(newLimit) => {
                 setLimit(newLimit);
                 setPage(1);
               }}
+              className="mt-8"
             />
           </>
         )}

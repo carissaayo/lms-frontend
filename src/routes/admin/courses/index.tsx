@@ -1,6 +1,6 @@
-import { useMemo, useState } from "react";
+import {useState } from "react";
 import { DashboardShell } from "@/components/dashboard-shell";
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute,  useNavigate } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -11,28 +11,19 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+
 import {
   BookOpen,
   Search,
-  MoreVertical,
-  Eye,
-  CheckCircle,
-  XCircle,
-  PauseCircle,
   Clock,
   Users,
-  DollarSign,
+  
 } from "lucide-react";
 import { Course, CourseCategories, CourseStatus } from "@/types/course.types";
 import { useAdminCourses } from "@/hooks/use-course";
 import { useDebounce } from "@/hooks/use-debounce";
-import { CoursePagination } from "@/components/courses/Pagination";
+import {  PaginationControls } from "@/components/courses/Pagination";
+import { NairaIcon } from "@/components/analytics/admin/NairaIcon";
 
 export const Route = createFileRoute("/admin/courses/")({
   component: AdminCoursesPage,
@@ -108,23 +99,23 @@ function AdminCoursesPage() {
   const [category, setCategory] = useState("all");
   const [status, setStatus] = useState("all");
 const [page, setPage] = useState(1);
-const [limit, setLimit] = useState(20);
+const [limit, setLimit] = useState(10);
   const [debouncedSearch] = useDebounce(search, 500);
 
-  // memoize filters
-const filters = useMemo(
-  () => ({ search: debouncedSearch, category, status, page, limit }),
-  [debouncedSearch, category, status, page, limit]
-);
-
-
-  const { data, isLoading, error } = useAdminCourses(filters);
+  
+const { data, isLoading, error } = useAdminCourses({
+  search: debouncedSearch,
+  category,
+  status,
+  page,
+  limit,
+});
   const courses: Course[] = data?.courses ?? [];
   const total = data?.total ?? 0;
-  const pages = data?.pages ?? 0;
+  
   console.log(data, "data");
 
-  // Filter courses
+  
   const filteredCourses = courses.filter((course) => {
     const matchesSearch =
       course.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -151,20 +142,7 @@ const filters = useMemo(
     (c) => c.status === CourseStatus.SUSPENDED
   ).length;
 
-  const handleCourseAction = async (courseId: string, action: string) => {
-    try {
-      // Replace with your actual API call
-      const response = await fetch(`/api/admin/courses/${courseId}/${action}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-      });
-      if (!response.ok) throw new Error(`Failed to ${action} course`);
-      // Invalidate and refetch
-      // queryClient.invalidateQueries(["admin-courses"]);
-    } catch (err) {
-      console.error(`Error ${action}ing course:`, err);
-    }
-  };
+
   const handleViewCourse = (courseId: string) => {
     navigate({ to: `/admin/courses/${courseId}` });
   };
@@ -339,69 +317,11 @@ const filters = useMemo(
                     <div className="p-5">
                       <div className="flex items-start justify-between mb-3">
                         <h3
-                          className="font-semibold text-lg text-gray-900 line-clamp-2 group-hover:text-primary transition-colors cursor-pointer flex-1"
+                          className="font-semibold text-lg text-gray-900 line-clamp-2  cursor-pointer flex-1 h-16"
                           onClick={() => handleViewCourse(course._id)}
                         >
                           {course.title}
                         </h3>
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              className="h-8 w-8 p-0"
-                            >
-                              <MoreVertical className="h-4 w-4" />
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <DropdownMenuItem
-                              onClick={() => handleViewCourse(course._id)}
-                            >
-                              <Eye className="h-4 w-4 mr-2" />
-                              View Details
-                            </DropdownMenuItem>
-                            {course.status !== CourseStatus.APPROVED && (
-                              <DropdownMenuItem
-                                onClick={() =>
-                                  handleCourseAction(
-                                    course._id,
-                                    CourseStatus.APPROVED
-                                  )
-                                }
-                              >
-                                <CheckCircle className="h-4 w-4 mr-2 text-green-600" />
-                                Approve
-                              </DropdownMenuItem>
-                            )}
-                            {course.status !== CourseStatus.REJECTED && (
-                              <DropdownMenuItem
-                                onClick={() =>
-                                  handleCourseAction(
-                                    course._id,
-                                    CourseStatus.REJECTED
-                                  )
-                                }
-                              >
-                                <XCircle className="h-4 w-4 mr-2 text-red-600" />
-                                Reject
-                              </DropdownMenuItem>
-                            )}
-                            {course.status !== CourseStatus.SUSPENDED && (
-                              <DropdownMenuItem
-                                onClick={() =>
-                                  handleCourseAction(
-                                    course._id,
-                                    CourseStatus.SUSPENDED
-                                  )
-                                }
-                              >
-                                <PauseCircle className="h-4 w-4 mr-2 text-gray-600" />
-                                Suspend
-                              </DropdownMenuItem>
-                            )}
-                          </DropdownMenuContent>
-                        </DropdownMenu>
                       </div>
 
                       <p className="text-sm text-gray-600 mb-3">
@@ -427,56 +347,15 @@ const filters = useMemo(
                       </div>
 
                       <div className="flex items-center justify-between pt-4 border-t border-gray-100">
-                        <div className="flex items-center gap-1 text-gray-900 font-semibold">
-                          <DollarSign className="h-4 w-4" />
-                          <span>₦{course.price.toLocaleString()}</span>
+                        <div className="flex items-center text-gray-900 font-semibold ">
+                          <NairaIcon className="h-4 w-4  " />
+                          <span className="pt-2">
+                            {course.price.toLocaleString()}
+                          </span>
                         </div>
                         <Badge variant="outline" className="text-xs">
                           {course.category}
                         </Badge>
-                      </div>
-
-                      {/* Quick Actions */}
-                      <div className="mt-4 flex gap-2">
-                        <Link
-                          className="flex-1 flex items-center gap-2 text-primary"
-                          to="/admin/courses/$id"
-                          params={{ id: course._id }}
-                        >
-                          <Eye className="h-4 w-4 mr-1" />
-                          View
-                        </Link>
-                        {course.status === CourseStatus.PENDING && (
-                          <Button
-                            size="sm"
-                            className="flex-1 bg-green-600 hover:bg-green-700"
-                            onClick={() =>
-                              handleCourseAction(
-                                course._id,
-                                CourseStatus.APPROVED
-                              )
-                            }
-                          >
-                            <CheckCircle className="h-4 w-4 mr-1" />
-                            Approve
-                          </Button>
-                        )}
-                        {course.status === CourseStatus.APPROVED && (
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            className="flex-1"
-                            onClick={() =>
-                              handleCourseAction(
-                                course._id,
-                                CourseStatus.SUSPENDED
-                              )
-                            }
-                          >
-                            <PauseCircle className="h-4 w-4 mr-1" />
-                            Suspend
-                          </Button>
-                        )}
                       </div>
                     </div>
                   </div>
@@ -497,19 +376,19 @@ const filters = useMemo(
                 </p>
               </div>
             )}
-            <CoursePagination
+            <PaginationControls
               currentPage={page}
-              totalPages={pages ?? 1}
-              totalItems={total ?? 0}
-              itemsPerPage={limit}
+              totalPages={Math.ceil(total / limit)}
+              limit={limit}
               onPageChange={(newPage) => {
                 setPage(newPage);
                 window.scrollTo({ top: 0, behavior: "smooth" });
               }}
-              onItemsPerPageChange={(newLimit) => {
+              onLimitChange={(newLimit) => {
                 setLimit(newLimit);
-                setPage(1);
+                setPage(1); 
               }}
+              className="mt-8"
             />
           </>
         )}

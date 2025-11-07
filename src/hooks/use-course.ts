@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { keepPreviousData, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   createCourseApi,
   getCoursesApi,
@@ -115,18 +115,18 @@ export function useEnrollCourse() {
 
 // ADMIN
 export function useAdminCourses(filters: any) {
+  const { search, category, status, page = 1, limit = 10 } = filters;
+
   return useQuery({
-    queryKey: [
-      "admin-courses",
-      filters.search,
-      filters.category,
-      filters.status,
-    ],
-    queryFn: () => getAdminCoursesApi(filters),
+    queryKey: ["admin-courses", search, category, status, page, limit],
+    queryFn: () =>
+      getAdminCoursesApi({ search, category, status, page, limit }),
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
+    placeholderData: keepPreviousData,
   });
 }
+
 
 export function useSingleCourseAdmin(courseId: string) {
   return useQuery({

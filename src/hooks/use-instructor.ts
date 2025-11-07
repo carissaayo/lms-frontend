@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { keepPreviousData, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   getAdminInstructors,
   getInstructorEarningsApi,
@@ -31,12 +31,21 @@ export function useInstructorEarnings(params: Record<string, any> = {}) {
   });
 }
 
-export const useAdminInstructors = (filters: any) => {
+export const useAdminInstructors = (filters: {
+  search?: string;
+  status?: string;
+  category?: string;
+  page?: number;
+  limit?: number;
+}) => {
+  const { search, status, category, page, limit } = filters;
+
   return useQuery({
-    queryKey: ["admin-users/instructors", filters],
+    queryKey: ["admin-instructors", search, status, category, page, limit],
     queryFn: () => getAdminInstructors(filters),
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
+    placeholderData: keepPreviousData, 
   });
 };
 
