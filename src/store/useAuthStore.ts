@@ -3,16 +3,18 @@ import { persist } from "zustand/middleware";
 
 interface AuthState {
   user: any;
-
-  loginUser: (user: any) => any;
+  token?: string;
   isAuthenticated: boolean;
+
+  loginUser: (user: any) => void;
+  logoutUser: () => void;
 }
 
 const useAuthStore = create<AuthState>()(
   persist(
     (set) => ({
       user: null,
-      token: null,
+      token: undefined,
       isAuthenticated: false,
 
       loginUser: (userData) => {
@@ -22,9 +24,13 @@ const useAuthStore = create<AuthState>()(
         });
       },
 
-      //   logout: () => {
-      //     set({ user: null, token: null, isAuthenticated: false });
-      //   },
+      logoutUser: () => {
+        set({ user: null, token: undefined, isAuthenticated: false });
+ 
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("refreshToken");
+        localStorage.removeItem("user");
+      },
     }),
     {
       name: "auth-storage",
