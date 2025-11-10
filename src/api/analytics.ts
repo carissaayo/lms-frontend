@@ -1,6 +1,8 @@
 import { api } from "./client";
 
+
 export async function getAdminAnalyticsApi(params = {}) {
+  console.log("here");
   const res = await api.get("/admin-analytics", { params });
   return res.data;
 }
@@ -12,5 +14,7 @@ export async function getInstructorAnalyticsApi(params = {}) {
 
 export async function getStudentAnalyticsApi(params = {}) {
   const res = await api.get("/student/analytics", { params });
+
+
   return res.data;
 }
