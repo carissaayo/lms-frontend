@@ -15,6 +15,7 @@ import { toast, Toaster } from "sonner";
 
 import useAuthStore from "@/store/useAuthStore";
 import { useAdminLogin } from "@/hooks/use-auth";
+import { BookOpen, Mail, Lock, ArrowLeft, Loader2 } from "lucide-react";
 
 export const Route = createFileRoute("/admin/auth/login")({
   component: RouteComponent,
@@ -41,11 +42,7 @@ function RouteComponent() {
       { ...formData },
       {
         onSuccess: (data) => {
-          toast.success("Welcome back, Admin", {
-            position: "top-center",
-          });
-
-          console.log("Admin login data", data);
+          toast.success("Welcome back, Admin", { position: "top-center" });
 
           // Save tokens
           localStorage.setItem("accessToken", data.accessToken);
@@ -79,19 +76,7 @@ function RouteComponent() {
           to="/"
           className="inline-flex items-center gap-2 font-bold text-4xl bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent hover:from-purple-300 hover:to-pink-300 transition-all"
         >
-          <svg
-            className="w-10 h-10 text-purple-400"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
-            />
-          </svg>
+          <BookOpen className="w-10 h-10 text-purple-400" />
           DevLearn
         </Link>
       </div>
@@ -119,21 +104,7 @@ function RouteComponent() {
                   Admin Email
                 </Label>
                 <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <svg
-                      className="h-5 w-5 text-gray-400"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"
-                      />
-                    </svg>
-                  </div>
+                  <Mail className="absolute left-3 top-3.5 h-5 w-5 text-gray-400" />
                   <Input
                     id="email"
                     name="email"
@@ -148,7 +119,7 @@ function RouteComponent() {
               </div>
 
               {/* Password */}
-              <div className="space-y-2">
+              <div className="space-y-3">
                 <div className="flex items-center justify-between">
                   <Label
                     htmlFor="password"
@@ -164,21 +135,7 @@ function RouteComponent() {
                   </Link>
                 </div>
                 <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <svg
-                      className="h-5 w-5 text-gray-400"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
-                      />
-                    </svg>
-                  </div>
+                  <Lock className="absolute left-3 top-3.5 h-5 w-5 text-gray-400" />
                   <Input
                     id="password"
                     name="password"
@@ -201,25 +158,7 @@ function RouteComponent() {
               >
                 {isPending ? (
                   <span className="flex items-center gap-2">
-                    <svg
-                      className="animate-spin h-5 w-5"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                    >
-                      <circle
-                        className="opacity-25"
-                        cx="12"
-                        cy="12"
-                        r="10"
-                        stroke="currentColor"
-                        strokeWidth="4"
-                      ></circle>
-                      <path
-                        className="opacity-75"
-                        fill="currentColor"
-                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                      ></path>
-                    </svg>
+                    <Loader2 className="animate-spin w-5 h-5" />
                     Signing in...
                   </span>
                 ) : (
@@ -245,19 +184,7 @@ function RouteComponent() {
                   to="/auth/login"
                   className="text-sm text-gray-400 hover:text-gray-300 flex items-center justify-center gap-1 transition-colors"
                 >
-                  <svg
-                    className="w-4 h-4"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M10 19l-7-7m0 0l7-7m-7 7h18"
-                    />
-                  </svg>
+                  <ArrowLeft className="w-4 h-4" />
                   Back to User Login
                 </Link>
               </div>

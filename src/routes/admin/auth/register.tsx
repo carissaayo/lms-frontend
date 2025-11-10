@@ -112,8 +112,8 @@ function RouteComponent() {
           <form onSubmit={handleSubmit}>
             <CardContent className="space-y-4 px-6">
               {/* Name Fields */}
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
+              <div className="grid grid-cols-2 gap-6">
+                <div className="space-y-3">
                   <Label htmlFor="firstName" className="text-sm text-gray-200">
                     First Name
                   </Label>
@@ -128,7 +128,7 @@ function RouteComponent() {
                     className="h-11 bg-slate-700/50 border-slate-600 text-white placeholder:text-gray-400 focus:border-purple-500"
                   />
                 </div>
-                <div className="space-y-2">
+                <div className="space-y-3">
                   <Label htmlFor="lastName" className="text-sm text-gray-200">
                     Last Name
                   </Label>
@@ -146,7 +146,7 @@ function RouteComponent() {
               </div>
 
               {/* Email */}
-              <div className="space-y-2">
+              <div className="space-y-3">
                 <Label htmlFor="email" className="text-sm text-gray-200">
                   Email Address
                 </Label>
@@ -166,7 +166,7 @@ function RouteComponent() {
               </div>
 
               {/* Phone */}
-              <div className="space-y-2">
+              <div className="space-y-3">
                 <Label htmlFor="phoneNumber" className="text-sm text-gray-200">
                   Phone Number
                 </Label>
@@ -186,8 +186,8 @@ function RouteComponent() {
               </div>
 
               {/* Passwords side by side */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-2">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                <div className="space-y-3">
                   <Label htmlFor="password" className="text-sm text-gray-200">
                     Password
                   </Label>
@@ -206,7 +206,7 @@ function RouteComponent() {
                   </div>
                 </div>
 
-                <div className="space-y-2">
+                <div className="space-y-3">
                   <Label
                     htmlFor="confirmPassword"
                     className="text-sm text-gray-200"
