@@ -1,113 +1,54 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
+import { createFileRoute, Link } from "@tanstack/react-router";
+
 import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
-  CardHeader,
-  CardTitle,
 } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
+
 import { Label } from "@/components/ui/label";
-import { toast, Toaster } from "sonner";
-import { useAdminRegister } from "@/hooks/use-auth";
+import {  Toaster } from "sonner";
+
 import {
-  BookOpen,
   Mail,
   Phone,
   Lock,
   CheckCircle2,
   ArrowLeft,
   Loader2,
+  User,
 } from "lucide-react";
+import { AuthPageHeader } from "@/components/auth/AuthPageHeader";
+import { AuthCardHeader } from "@/components/auth/AuthHeader";
+import { InputWithIcon } from "@/components/form/InputWithIcon";
+import { useAdminRegisterForm } from "@/hooks/auth/use-admin-register-form";
 
 export const Route = createFileRoute("/admin/auth/register")({
   component: RouteComponent,
 });
 
 function RouteComponent() {
-  const navigate = useNavigate();
-  const { mutate: register, isPending } = useAdminRegister();
-
-  const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-    phoneNumber: "",
-    role: "admin",
-  });
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (formData.password !== formData.confirmPassword) {
-      toast.error("Passwords don't match", {
-        description: "Please make sure your passwords match.",
-        position: "top-center",
-      });
-      return;
-    }
-
-    register(
-      { ...formData },
-      {
-        onSuccess: (data) => {
-          toast.success("Admin account created", {
-            description: "Your account is pending approval.",
-            position: "top-center",
-          });
-          console.log("Admin registration data", data);
-
-          setTimeout(() => {
-            navigate({ to: "/admin/auth/login" });
-          }, 1500);
-        },
-        onError: () => {
-          toast.error("Registration failed", {
-            description:
-              "There was an error creating your account. Please try again.",
-            position: "top-center",
-          });
-        },
-      }
-    );
-  };
-
+  
+  const { formData, handleChange, handleSubmit, isPending } =
+    useAdminRegisterForm();
   return (
     <main className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 overflow-y-auto w-full">
       <Toaster />
 
-      {/* Header */}
-      <div className="w-full pt-6  pb-4 text-center">
-        <Link
-          to="/"
-          className="inline-flex items-center gap-2 font-bold text-4xl bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent hover:from-purple-300 hover:to-pink-300 transition-all"
-        >
-          <BookOpen className="w-10 h-10 text-purple-400" />
-          DevLearn
-        </Link>
-      </div>
+      <AuthPageHeader fromColor="purple-400" toColor="pink-400 " />
 
       {/* Register Card */}
       <div className="flex items-center justify-center px-4 py-4  w-full">
         <Card className="w-3/5 shadow-2xl border border-purple-500/20 bg-slate-800/90 backdrop-blur-sm">
-          <CardHeader className="space-y-3 text-center pb-4 pt-2">
-            <CardTitle className="text-3xl font-bold text-white">
-              Admin Registration
-            </CardTitle>
-            <CardDescription className="text-base text-gray-300">
-              Complete your registration
-            </CardDescription>
-          </CardHeader>
+          <AuthCardHeader
+            icon={<User className="w-8 h-8 text-white" />}
+            title="Admin Login"
+            description=" Sign in to access the admin dashboard"
+            fromColor="purple-500"
+            toColor="pink-500"
+            dark
+          />
 
           <form onSubmit={handleSubmit}>
             <CardContent className="space-y-4 px-6">
@@ -117,30 +58,33 @@ function RouteComponent() {
                   <Label htmlFor="firstName" className="text-sm text-gray-200">
                     First Name
                   </Label>
-                  <Input
+                  <InputWithIcon
                     id="firstName"
                     name="firstName"
                     type="text"
                     placeholder="John"
                     required
+                    icon={<User className="w-5 h-5" />}
                     value={formData.firstName}
                     onChange={handleChange}
-                    className="h-11 bg-slate-700/50 border-slate-600 text-white placeholder:text-gray-400 focus:border-purple-500"
+                    className="h-11 bg-slate-700/70 border-slate-600 text-white placeholder:text-gray-400 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20"
                   />
                 </div>
+
                 <div className="space-y-3">
                   <Label htmlFor="lastName" className="text-sm text-gray-200">
                     Last Name
                   </Label>
-                  <Input
+                  <InputWithIcon
                     id="lastName"
                     name="lastName"
                     type="text"
                     placeholder="Doe"
                     required
+                    icon={<User className="w-5 h-5" />}
                     value={formData.lastName}
                     onChange={handleChange}
-                    className="h-11 bg-slate-700/50 border-slate-600 text-white placeholder:text-gray-400 focus:border-purple-500"
+                    className="h-11 bg-slate-700/70 border-slate-600 text-white placeholder:text-gray-400 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20"
                   />
                 </div>
               </div>
@@ -150,19 +94,17 @@ function RouteComponent() {
                 <Label htmlFor="email" className="text-sm text-gray-200">
                   Email Address
                 </Label>
-                <div className="relative">
-                  <Mail className="absolute left-3 top-3.5 h-5 w-5 text-gray-400" />
-                  <Input
-                    id="email"
-                    name="email"
-                    type="email"
-                    placeholder="admin@devlearn.com"
-                    required
-                    value={formData.email}
-                    onChange={handleChange}
-                    className="pl-10 h-11 bg-slate-700/50 border-slate-600 text-white placeholder:text-gray-400 focus:border-purple-500"
-                  />
-                </div>
+                <InputWithIcon
+                  id="email"
+                  name="email"
+                  type="email"
+                  placeholder="admin@devlearn.com"
+                  required
+                  icon={<Mail className="w-5 h-5" />}
+                  value={formData.email}
+                  onChange={handleChange}
+                  className="h-11 bg-slate-700/70 border-slate-600 text-white placeholder:text-gray-400 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20"
+                />
               </div>
 
               {/* Phone */}
@@ -170,19 +112,17 @@ function RouteComponent() {
                 <Label htmlFor="phoneNumber" className="text-sm text-gray-200">
                   Phone Number
                 </Label>
-                <div className="relative">
-                  <Phone className="absolute left-3 top-3.5 h-5 w-5 text-gray-400" />
-                  <Input
-                    id="phoneNumber"
-                    name="phoneNumber"
-                    type="text"
-                    placeholder="Your phone number"
-                    required
-                    value={formData.phoneNumber}
-                    onChange={handleChange}
-                    className="pl-10 h-11 bg-slate-700/50 border-slate-600 text-white placeholder:text-gray-400 focus:border-purple-500"
-                  />
-                </div>
+                <InputWithIcon
+                  id="phoneNumber"
+                  name="phoneNumber"
+                  type="text"
+                  placeholder="Your phone number"
+                  required
+                  icon={<Phone className="w-5 h-5" />}
+                  value={formData.phoneNumber}
+                  onChange={handleChange}
+                  className="h-11 bg-slate-700/70 border-slate-600 text-white placeholder:text-gray-400 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20"
+                />
               </div>
 
               {/* Passwords side by side */}
@@ -191,19 +131,17 @@ function RouteComponent() {
                   <Label htmlFor="password" className="text-sm text-gray-200">
                     Password
                   </Label>
-                  <div className="relative">
-                    <Lock className="absolute left-3 top-3.5 h-5 w-5 text-gray-400" />
-                    <Input
-                      id="password"
-                      name="password"
-                      type="password"
-                      placeholder="Create a strong password"
-                      required
-                      value={formData.password}
-                      onChange={handleChange}
-                      className="pl-10 h-11 bg-slate-700/50 border-slate-600 text-white placeholder:text-gray-400 focus:border-purple-500"
-                    />
-                  </div>
+                  <InputWithIcon
+                    id="password"
+                    name="password"
+                    type="password"
+                    placeholder="Create a strong password"
+                    required
+                    icon={<Lock className="w-5 h-5" />}
+                    value={formData.password}
+                    onChange={handleChange}
+                    className="h-11 bg-slate-700/70 border-slate-600 text-white placeholder:text-gray-400 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20"
+                  />
                 </div>
 
                 <div className="space-y-3">
@@ -213,19 +151,17 @@ function RouteComponent() {
                   >
                     Confirm Password
                   </Label>
-                  <div className="relative">
-                    <CheckCircle2 className="absolute left-3 top-3.5 h-5 w-5 text-gray-400" />
-                    <Input
-                      id="confirmPassword"
-                      name="confirmPassword"
-                      type="password"
-                      placeholder="Confirm your password"
-                      required
-                      value={formData.confirmPassword}
-                      onChange={handleChange}
-                      className="pl-10 h-11 bg-slate-700/50 border-slate-600 text-white placeholder:text-gray-400 focus:border-purple-500"
-                    />
-                  </div>
+                  <InputWithIcon
+                    id="confirmPassword"
+                    name="confirmPassword"
+                    type="password"
+                    placeholder="Confirm your password"
+                    required
+                    icon={<CheckCircle2 className="w-5 h-5" />}
+                    value={formData.confirmPassword}
+                    onChange={handleChange}
+                    className="h-11 bg-slate-700/70 border-slate-600 text-white placeholder:text-gray-400 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20"
+                  />
                 </div>
               </div>
             </CardContent>

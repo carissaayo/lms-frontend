@@ -1,97 +1,45 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { Mail, Lock, ArrowLeft, Loader2, User } from "lucide-react";
+
 import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
-  CardHeader,
-  CardTitle,
 } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { toast, Toaster } from "sonner";
+import {  Toaster } from "sonner";
+import { AuthPageHeader } from "@/components/auth/AuthPageHeader";
+import { AuthCardHeader } from "@/components/auth/AuthHeader";
+import { InputWithIcon } from "@/components/form/InputWithIcon";
 
-import useAuthStore from "@/store/useAuthStore";
-import { useAdminLogin } from "@/hooks/use-auth";
-import { BookOpen, Mail, Lock, ArrowLeft, Loader2 } from "lucide-react";
+import { useAdminLoginForm } from "@/hooks/auth/use-admin-login-form";
 
 export const Route = createFileRoute("/admin/auth/login")({
   component: RouteComponent,
 });
 
 function RouteComponent() {
-  const navigate = useNavigate();
-  const { mutate: login, isPending } = useAdminLogin();
-
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-  });
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-
-    login(
-      { ...formData },
-      {
-        onSuccess: (data) => {
-          toast.success("Welcome back, Admin", { position: "top-center" });
-
-          // Save tokens
-          localStorage.setItem("accessToken", data.accessToken);
-          localStorage.setItem("refreshToken", data.refreshToken);
-
-          // Save user profile
-          localStorage.setItem("user", JSON.stringify(data.profile));
-          useAuthStore.getState().loginUser(data.profile);
-
-          setTimeout(() => {
-            navigate({ to: "/admin/analytics" });
-          }, 1000);
-        },
-        onError: () => {
-          toast.error("Login failed", {
-            description: "Invalid admin credentials. Please try again.",
-            position: "top-center",
-          });
-        },
-      }
-    );
-  };
-
+ 
+const { formData, handleChange, handleSubmit, isPending } = useAdminLoginForm();
   return (
     <main className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
       <Toaster />
 
       {/* Header */}
-      <div className="w-full pt-8 pb-4 text-center">
-        <Link
-          to="/"
-          className="inline-flex items-center gap-2 font-bold text-4xl bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent hover:from-purple-300 hover:to-pink-300 transition-all"
-        >
-          <BookOpen className="w-10 h-10 text-purple-400" />
-          DevLearn
-        </Link>
-      </div>
+      <AuthPageHeader fromColor="purple-400" toColor="pink-400 " />
 
       {/* Login Card */}
       <div className="flex items-center justify-center px-4 py-8 w-full">
         <Card className="w-3/5 max-w-md shadow-2xl border border-purple-500/20 bg-slate-800/90 backdrop-blur-sm">
-          <CardHeader className="space-y-3 text-center pb-6">
-            <CardTitle className="text-3xl font-bold text-white">
-              Admin Login
-            </CardTitle>
-            <CardDescription className="text-base text-gray-300">
-              Sign in to access the admin dashboard
-            </CardDescription>
-          </CardHeader>
+          <AuthCardHeader
+            icon={<User className="w-8 h-8 text-white" />}
+            title="Admin Login"
+            description=" Sign in to access the admin dashboard"
+            fromColor="purple-500"
+            toColor="pink-500"
+            dark
+          />
 
           <form onSubmit={handleSubmit}>
             <CardContent className="space-y-5 px-6">
@@ -103,19 +51,19 @@ function RouteComponent() {
                 >
                   Admin Email
                 </Label>
-                <div className="relative">
-                  <Mail className="absolute left-3 top-3.5 h-5 w-5 text-gray-400" />
-                  <Input
-                    id="email"
-                    name="email"
-                    type="email"
-                    placeholder="admin@devlearn.com"
-                    required
-                    value={formData.email}
-                    onChange={handleChange}
-                    className="pl-10 h-12 bg-slate-700/50 border-slate-600 text-white placeholder:text-gray-400 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition-all"
-                  />
-                </div>
+                <InputWithIcon
+                dark
+                  id="email"
+                  name="email"
+                  type="email"
+                  placeholder="admin@devlearn.com"
+                  required
+                  value={formData.email}
+                  onChange={handleChange}
+                  icon={<Mail className="w-5 h-5 text-gray-400" />}
+                  className="h-12 pl-10 bg-slate-700/50 border-slate-600 text-white placeholder:text-gray-400 
+                   focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition-all"
+                />
               </div>
 
               {/* Password */}
@@ -134,19 +82,19 @@ function RouteComponent() {
                     Forgot password?
                   </Link>
                 </div>
-                <div className="relative">
-                  <Lock className="absolute left-3 top-3.5 h-5 w-5 text-gray-400" />
-                  <Input
-                    id="password"
-                    name="password"
-                    type="password"
-                    placeholder="Enter your password"
-                    required
-                    value={formData.password}
-                    onChange={handleChange}
-                    className="pl-10 h-12 bg-slate-700/50 border-slate-600 text-white placeholder:text-gray-400 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition-all"
-                  />
-                </div>
+                <InputWithIcon
+                dark 
+                  id="password"
+                  name="password"
+                  type="password"
+                  placeholder="Enter your password"
+                  required
+                  value={formData.password}
+                  onChange={handleChange}
+                  icon={<Lock className="w-5 h-5 text-gray-400" />}
+                  className="h-12 pl-10 bg-slate-700/50 border-slate-600 text-white placeholder:text-gray-400 
+                   focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition-all"
+                />
               </div>
             </CardContent>
 
