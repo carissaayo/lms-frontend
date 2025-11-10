@@ -87,7 +87,13 @@ function RouteComponent() {
   };
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
+    <main
+      className="min-h-screen "
+      style={{
+        background:
+          "linear-gradient(135deg, var(--color-primary-light), var(--color-primary), var(--color-secondary-light))",
+      }}
+    >
       <Toaster />
 
       {/* Header */}
@@ -131,7 +137,7 @@ function RouteComponent() {
                       required
                       value={formData.firstName}
                       onChange={handleChange}
-                      className="pl-10 h-12 border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+                      className="pl-10 h-12 border-[var(--color-text-muted)] focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--color-primary)]/20 text-[var(--color-text)] placeholder:text-gray-400 bg-white/90"
                     />
                   </div>
                 </div>
@@ -147,7 +153,7 @@ function RouteComponent() {
                       required
                       value={formData.lastName}
                       onChange={handleChange}
-                      className="pl-10 h-12 border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+                      className="pl-10 h-12 border-[var(--color-text-muted)] focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--color-primary)]/20 text-[var(--color-text)] placeholder:text-gray-400 bg-white/90"
                     />
                   </div>
                 </div>
@@ -167,7 +173,7 @@ function RouteComponent() {
                       required
                       value={formData.phoneNumber}
                       onChange={handleChange}
-                      className="pl-10 h-12 border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+                      className="pl-10 h-12 border-[var(--color-text-muted)] focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--color-primary)]/20 text-[var(--color-text)] placeholder:text-gray-400 bg-white/90"
                     />
                   </div>
                 </div>
@@ -184,7 +190,7 @@ function RouteComponent() {
                       required
                       value={formData.email}
                       onChange={handleChange}
-                      className="pl-10 h-12 border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+                      className="pl-10 h-12 border-[var(--color-text-muted)] focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--color-primary)]/20 text-[var(--color-text)] placeholder:text-gray-400 bg-white/90"
                     />
                   </div>
                 </div>
@@ -204,7 +210,7 @@ function RouteComponent() {
                       required
                       value={formData.password}
                       onChange={handleChange}
-                      className="pl-10 h-12 border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+                      className="pl-10 h-12 border-[var(--color-text-muted)] focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--color-primary)]/20 text-[var(--color-text)] placeholder:text-gray-400 bg-white/90"
                     />
                   </div>
                 </div>
@@ -221,7 +227,7 @@ function RouteComponent() {
                       required
                       value={formData.confirmPassword}
                       onChange={handleChange}
-                      className="pl-10 h-12 border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+                      className="pl-10 h-12 border-[var(--color-text-muted)] focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--color-primary)]/20 text-[var(--color-text)] placeholder:text-gray-400 bg-white/90"
                     />
                   </div>
                 </div>
