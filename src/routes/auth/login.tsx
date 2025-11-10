@@ -1,77 +1,26 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
+import { createFileRoute, Link, } from "@tanstack/react-router";
+import { Mail, Lock, Settings, Loader2, User } from "lucide-react";
+
 import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
-  CardHeader,
-  CardTitle,
 } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { toast, Toaster } from "sonner";
+import { Toaster } from "@/components/ui/sonner";
+import { InputWithIcon } from "@/components/form/InputWithIcon";
+import { AuthCardHeader } from "@/components/auth/AuthHeader";
+import { AuthPageHeader } from "@/components/auth/AuthPageHeader";
 
-import { useLogin } from "@/hooks/use-auth";
-import { Role } from "@/types/user.types";
-import useAuthStore from "@/store/useAuthStore";
-import { BookOpen, Mail, Lock, Settings, Loader2, User } from "lucide-react";
+import { useLoginForm } from "@/hooks/auth/use-login-form";
 
 export const Route = createFileRoute("/auth/login")({
   component: RouteComponent,
 });
 
 function RouteComponent() {
-  const navigate = useNavigate();
-  const { mutate: login, isPending } = useLogin();
-
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-  });
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-
-    login(
-      { ...formData },
-      {
-        onSuccess: (data) => {
-          toast.success("Welcome back", { position: "top-center" });
-
-          // Save tokens
-          localStorage.setItem("accessToken", data.accessToken);
-          localStorage.setItem("refreshToken", data.refreshToken);
-
-          // Save user profile
-          localStorage.setItem("user", JSON.stringify(data.profile));
-          useAuthStore.getState().loginUser(data.profile);
-
-          setTimeout(() => {
-            if (data.profile.role === Role.INSTRUCTOR) {
-              navigate({ to: "/instructor/analytics" });
-            } else if (data.profile.role === Role.STUDENT) {
-              navigate({ to: "/student/analytics" });
-            } else {
-              navigate({ to: "/" });
-            }
-          }, 1000);
-        },
-        onError: () => {
-          toast.error("Login failed", {
-            description: "There was an error logging in. Please try again.",
-            position: "top-center",
-          });
-        },
-      }
-    );
-  };
+ const { formData, handleChange, handleSubmit, isPending } = useLoginForm();
 
   return (
     <main
@@ -84,30 +33,15 @@ function RouteComponent() {
       <Toaster />
 
       {/* Header */}
-      <div className="w-full pt-10 pb-6 text-center">
-        <Link
-          to="/"
-          className="inline-flex items-center gap-2 font-bold text-4xl bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent hover:from-blue-700 hover:to-indigo-700 transition-all"
-        >
-          <BookOpen className="w-10 h-10 text-blue-600" />
-          DevLearn
-        </Link>
-      </div>
-
+      <AuthPageHeader fromColor="blue-600" toColor="indigo-600" />
       {/* Login Card */}
       <div className="flex items-center justify-center px-6 pb-20 flex-grow">
         <Card className="w-full max-w-md shadow-2xl border-0 bg-white/80 backdrop-blur-sm">
-          <CardHeader className="space-y-3 text-center pb-4 pt-8">
-            <div className="mx-auto w-16 h-16 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center shadow-lg">
-              <User className="w-8 h-8 text-white" />
-            </div>
-            <CardTitle className="text-3xl font-bold text-gray-900">
-              Welcome Back
-            </CardTitle>
-            <CardDescription className="text-base text-gray-600">
-              Sign in to continue your learning journey
-            </CardDescription>
-          </CardHeader>
+          <AuthCardHeader
+            icon={<User className="w-8 h-8 text-white" />}
+            title="Welcome Back"
+            description="Sign in to continue your learning journey"
+          />
 
           <form onSubmit={handleSubmit}>
             <CardContent className="space-y-5 px-6 pt-2 pb-4">
@@ -119,19 +53,16 @@ function RouteComponent() {
                 >
                   Email Address
                 </Label>
-                <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
-                  <Input
-                    id="email"
-                    name="email"
-                    type="email"
-                    placeholder="name@example.com"
-                    required
-                    value={formData.email}
-                    onChange={handleChange}
-                   className="pl-10 h-12 border-[var(--color-text-muted)] focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--color-primary)]/20 text-[var(--color-text)] placeholder:text-gray-400 bg-white/90"
-                  />
-                </div>
+                <InputWithIcon
+                  id="email"
+                  name="email"
+                  type="email"
+                  placeholder="name@example.com"
+                  required
+                  value={formData.email}
+                  onChange={handleChange}
+                  icon={<Mail />}
+                />
               </div>
 
               {/* Password */}
@@ -150,19 +81,16 @@ function RouteComponent() {
                     Forgot password?
                   </Link>
                 </div>
-                <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
-                  <Input
-                    id="password"
-                    name="password"
-                    type="password"
-                    placeholder="Enter your password"
-                    required
-                    value={formData.password}
-                    onChange={handleChange}
-                   className="pl-10 h-12 border-[var(--color-text-muted)] focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--color-primary)]/20 text-[var(--color-text)] placeholder:text-gray-400 bg-white/90"
-                  />
-                </div>
+                <InputWithIcon
+                  id="password"
+                  name="password"
+                  type="password"
+                  placeholder="Enter your password"
+                  required
+                  value={formData.password}
+                  onChange={handleChange}
+                  icon={<Lock />}
+                />
               </div>
             </CardContent>
 

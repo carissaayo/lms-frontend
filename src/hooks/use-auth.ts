@@ -1,4 +1,3 @@
-// src/hooks/useAuth.ts
 import { useMutation } from "@tanstack/react-query";
 import {
   adminLoginApi,
@@ -12,9 +11,6 @@ export function useLogin() {
     mutationFn: loginApi,
     onSuccess: (data) => {
       console.log("data", data);
-      // Save token (if not cookie-based)
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("user", JSON.stringify(data.user));
     },
   });
 }
@@ -33,7 +29,6 @@ export function useAdminLogin() {
     mutationFn: adminLoginApi,
     onSuccess: (data) => {
       console.log("Admin login data", data);
-      // Save tokens (if not cookie-based)
       localStorage.setItem("accessToken", data.accessToken);
       localStorage.setItem("refreshToken", data.refreshToken);
       localStorage.setItem("user", JSON.stringify(data.profile));

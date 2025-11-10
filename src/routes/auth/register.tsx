@@ -1,22 +1,5 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
-import { useRegister } from "@/hooks/use-auth";
-import { Button } from "@/components/ui/button";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { toast, Toaster } from "sonner";
-import { Role } from "@/types/user.types";
-import {
-  Book,
   User,
   Phone,
   Mail,
@@ -27,64 +10,30 @@ import {
   Loader2,
   Settings,
 } from "lucide-react";
+import {  Toaster } from "sonner";
+
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+} from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { AuthPageHeader } from "@/components/auth/AuthPageHeader";
+import { AuthCardHeader } from "@/components/auth/AuthHeader";
+import { InputWithIcon } from "@/components/form/InputWithIcon";
+import { useRegisterForm } from "@/hooks/auth/use-register-form";
+import { Role } from "@/types/user.types";
 
 export const Route = createFileRoute("/auth/register")({
   component: RouteComponent,
 });
 
 function RouteComponent() {
-  const navigate = useNavigate();
-  const { mutate: register, isPending } = useRegister();
+ const { formData, handleChange, handleRoleChange, handleSubmit, isPending } =
+   useRegisterForm();
 
-  const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    phoneNumber: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-    role: Role.STUDENT,
-  });
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleRoleChange = (value: string) => {
-    setFormData((prev) => ({ ...prev, role: value as Role }));
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (formData.password !== formData.confirmPassword) {
-      toast.warning("Passwords do not match", {
-        description: "Please make sure your passwords match.",
-        position: "top-center",
-      });
-      return;
-    }
-
-    register(formData, {
-      onSuccess: () => {
-        toast.success("Registration successful", {
-          description: "Your account has been created successfully.",
-          position: "top-center",
-        });
-        setTimeout(() => {
-          navigate({ to: "/auth/login" });
-        }, 2000);
-      },
-      onError: () => {
-        toast.error("Registration failed", {
-          description:
-            "There was an error creating your account. Please try again.",
-          position: "top-center",
-        });
-      },
-    });
-  };
 
   return (
     <main
@@ -97,65 +46,43 @@ function RouteComponent() {
       <Toaster />
 
       {/* Header */}
-      <div className="w-full pt-8 pb-4 text-center">
-        <Link
-          to="/"
-          className="inline-flex items-center gap-2 font-bold text-4xl bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent hover:from-blue-700 hover:to-indigo-700 transition-all"
-        >
-          <Book className="w-10 h-10 text-blue-600" strokeWidth={2.5} />
-          DevLearn
-        </Link>
-      </div>
+      <AuthPageHeader fromColor="blue-600" toColor="indigo-600" />
 
       {/* Register Card */}
       <div className="flex items-center justify-center px-4 py-8 pb-16">
         <Card className="w-full max-w-3xl shadow-2xl border-0 bg-white/80 backdrop-blur-sm">
-          <CardHeader className="space-y-3 text-center pb-6">
-            <div className="mx-auto w-16 h-16 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center shadow-lg">
-              <User className="w-8 h-8 text-white" strokeWidth={2.5} />
-            </div>
-            <CardTitle className="text-3xl font-bold text-gray-900">
-              Create Your Account
-            </CardTitle>
-            <CardDescription className="text-base text-gray-600">
-              Join DevLearn and start your learning journey today
-            </CardDescription>
-          </CardHeader>
+          <AuthCardHeader
+            icon={<User className="w-8 h-8 text-white" strokeWidth={2.5} />}
+            title="Create Your Account"
+            description="Join DevLearn and start your learning journey today"
+          />
 
           <form onSubmit={handleSubmit}>
             <CardContent className="space-y-5 px-6">
-              {/* First & Last Name */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div className="space-y-2">
                   <Label htmlFor="firstName">First Name</Label>
-                  <div className="relative">
-                    <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                    <Input
-                      id="firstName"
-                      name="firstName"
-                      placeholder="John"
-                      required
-                      value={formData.firstName}
-                      onChange={handleChange}
-                      className="pl-10 h-12 border-[var(--color-text-muted)] focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--color-primary)]/20 text-[var(--color-text)] placeholder:text-gray-400 bg-white/90"
-                    />
-                  </div>
+                  <InputWithIcon
+                    id="firstName"
+                    name="firstName"
+                    placeholder="John"
+                    required
+                    value={formData.firstName}
+                    onChange={handleChange}
+                    icon={<User />}
+                  />
                 </div>
-
                 <div className="space-y-2">
                   <Label htmlFor="lastName">Last Name</Label>
-                  <div className="relative">
-                    <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                    <Input
-                      id="lastName"
-                      name="lastName"
-                      placeholder="Doe"
-                      required
-                      value={formData.lastName}
-                      onChange={handleChange}
-                      className="pl-10 h-12 border-[var(--color-text-muted)] focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--color-primary)]/20 text-[var(--color-text)] placeholder:text-gray-400 bg-white/90"
-                    />
-                  </div>
+                  <InputWithIcon
+                    id="lastName"
+                    name="lastName"
+                    placeholder="Doe"
+                    required
+                    value={formData.lastName}
+                    onChange={handleChange}
+                    icon={<User />}
+                  />
                 </div>
               </div>
 
@@ -163,73 +90,59 @@ function RouteComponent() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div className="space-y-2">
                   <Label htmlFor="phoneNumber">Phone Number</Label>
-                  <div className="relative">
-                    <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                    <Input
-                      id="phoneNumber"
-                      name="phoneNumber"
-                      type="tel"
-                      placeholder="+234 801 234 5678"
-                      required
-                      value={formData.phoneNumber}
-                      onChange={handleChange}
-                      className="pl-10 h-12 border-[var(--color-text-muted)] focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--color-primary)]/20 text-[var(--color-text)] placeholder:text-gray-400 bg-white/90"
-                    />
-                  </div>
+                  <InputWithIcon
+                    id="phoneNumber"
+                    name="phoneNumber"
+                    type="tel"
+                    placeholder="+234 801 234 5678"
+                    required
+                    value={formData.phoneNumber}
+                    onChange={handleChange}
+                    icon={<Phone />}
+                  />
                 </div>
-
                 <div className="space-y-2">
                   <Label htmlFor="email">Email Address</Label>
-                  <div className="relative">
-                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                    <Input
-                      id="email"
-                      name="email"
-                      type="email"
-                      placeholder="name@example.com"
-                      required
-                      value={formData.email}
-                      onChange={handleChange}
-                      className="pl-10 h-12 border-[var(--color-text-muted)] focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--color-primary)]/20 text-[var(--color-text)] placeholder:text-gray-400 bg-white/90"
-                    />
-                  </div>
+                  <InputWithIcon
+                    id="email"
+                    name="email"
+                    type="email"
+                    placeholder="name@example.com"
+                    required
+                    value={formData.email}
+                    onChange={handleChange}
+                    icon={<Mail />}
+                  />
                 </div>
               </div>
 
-              {/* Password & Confirm */}
+              {/* Password & Confirm Password */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div className="space-y-2">
                   <Label htmlFor="password">Password</Label>
-                  <div className="relative">
-                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                    <Input
-                      id="password"
-                      name="password"
-                      type="password"
-                      placeholder="Create a strong password"
-                      required
-                      value={formData.password}
-                      onChange={handleChange}
-                      className="pl-10 h-12 border-[var(--color-text-muted)] focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--color-primary)]/20 text-[var(--color-text)] placeholder:text-gray-400 bg-white/90"
-                    />
-                  </div>
+                  <InputWithIcon
+                    id="password"
+                    name="password"
+                    type="password"
+                    placeholder="Create a strong password"
+                    required
+                    value={formData.password}
+                    onChange={handleChange}
+                    icon={<Lock />}
+                  />
                 </div>
-
                 <div className="space-y-2">
                   <Label htmlFor="confirmPassword">Confirm Password</Label>
-                  <div className="relative">
-                    <CheckCircle2 className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                    <Input
-                      id="confirmPassword"
-                      name="confirmPassword"
-                      type="password"
-                      placeholder="Confirm your password"
-                      required
-                      value={formData.confirmPassword}
-                      onChange={handleChange}
-                      className="pl-10 h-12 border-[var(--color-text-muted)] focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--color-primary)]/20 text-[var(--color-text)] placeholder:text-gray-400 bg-white/90"
-                    />
-                  </div>
+                  <InputWithIcon
+                    id="confirmPassword"
+                    name="confirmPassword"
+                    type="password"
+                    placeholder="Confirm your password"
+                    required
+                    value={formData.confirmPassword}
+                    onChange={handleChange}
+                    icon={<CheckCircle2 />}
+                  />
                 </div>
               </div>
 
