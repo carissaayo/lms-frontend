@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { DashboardShell } from "@/components/dashboard-shell";
 import { createFileRoute, useNavigate, useParams } from "@tanstack/react-router";
@@ -40,7 +39,6 @@ import {
   PlayCircle,
   AlertCircle,
 } from "lucide-react";
-import {  useQueryClient } from "@tanstack/react-query";
 import { useSingleCourseAdmin, useUpdateCourseStatusAdmin } from "@/hooks/use-course";
 import { NairaIcon } from "@/components/analytics/admin/NairaIcon";
 import { CourseStatus } from "@/types/course.types";
@@ -126,7 +124,6 @@ const getStatusBadge = (status: string) => {
 function RouteComponent() {
   const navigate = useNavigate();
   const { id } = useParams({ from: "/admin/courses/$id" });
-  const queryClient = useQueryClient();
 
   const [actionDialogOpen, setActionDialogOpen] = useState(false);
   const [actionType, setActionType] = useState<CourseStatus|null>(null);

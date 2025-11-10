@@ -19,7 +19,6 @@ import {
   Mail,
   BookOpen,
   CheckCircle,
-  DollarSign,
   Calendar,
   Eye,
   Ban,

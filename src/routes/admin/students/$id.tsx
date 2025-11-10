@@ -41,7 +41,7 @@ import {
   useUpdateStudentStatusAdmin,
 } from "@/hooks/use-student";
 import { StudentStatus } from "@/types/user.types";
-import { useQueryClient } from "@tanstack/react-query";
+
 
 export const Route = createFileRoute("/admin/students/$id")({
   component: RouteComponent,
@@ -124,6 +124,8 @@ function RouteComponent() {
 
   return (
     <DashboardShell>
+        <main className="mb-12">
+
       <div className="flex items-center justify-between mb-6">
         <Button
           variant="ghost"
@@ -157,8 +159,8 @@ function RouteComponent() {
       <Card className="mb-6">
         <CardContent className="flex flex-col md:flex-row gap-6 p-6">
           <img
-            src={student.avatar}
-            alt="avatar"
+            src={student.picture}
+            alt="picture"
             className="w-32 h-32 rounded-full object-cover border-4 border-white shadow"
           />
           <div className="flex-1">
@@ -241,7 +243,7 @@ function RouteComponent() {
                     {enr.course.title}
                   </h3>
                   <p className="text-xs text-gray-500">
-                    Enrolled: {new Date(enr.enrolledDate).toLocaleDateString()}
+                    Enrolled: {new Date(enr.createdAt).toLocaleDateString()}
                   </p>
                 </div>
               </div>
@@ -297,7 +299,7 @@ function RouteComponent() {
                   <td className="p-3 font-semibold">
                     ₦{p.amount.toLocaleString()}
                   </td>
-                  <td className="p-3 text-gray-600">{p.paymentMethod}</td>
+                  <td className="p-3 text-gray-600">{p.provider}</td>
                   <td className="p-3">
                     <Badge
                       className={
@@ -355,6 +357,7 @@ function RouteComponent() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+        </main>
     </DashboardShell>
   );
 }

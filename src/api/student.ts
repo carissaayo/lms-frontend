@@ -20,7 +20,7 @@ export const getAdminStudentsApi = async (filters: AdminStudentsFilters) => {
 };
 
 export const getSingleStudentAdmin = async (id: string) => {
-  const { data } = await api.get(`/admin-users/students/${id}`);
+  const { data } = await api.get(`/admin-students/${id}`);
   return data;
 };
 
