@@ -13,7 +13,7 @@ export async function getInstructorAnalyticsApi(params = {}) {
 }
 
 export async function getStudentAnalyticsApi(params = {}) {
-  const res = await api.get("/student/analytics", { params });
+  const res = await api.get("/students/analytics", { params });
 
 
   return res.data;

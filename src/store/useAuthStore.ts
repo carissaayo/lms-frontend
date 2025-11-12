@@ -3,10 +3,15 @@ import { persist } from "zustand/middleware";
 
 interface AuthState {
   user: any;
-  token?: string;
+  accessToken?: string;
+  refreshToken?: string;
   isAuthenticated: boolean;
 
-  loginUser: (user: any) => void;
+  loginUser: (data: {
+    user: any;
+    accessToken: string;
+    refreshToken: string;
+  }) => void;
   logoutUser: () => void;
 }
 
@@ -14,22 +19,33 @@ const useAuthStore = create<AuthState>()(
   persist(
     (set) => ({
       user: null,
-      token: undefined,
+      accessToken: undefined,
+      refreshToken: undefined,
       isAuthenticated: false,
 
-      loginUser: (userData) => {
+      loginUser: ({ user, accessToken, refreshToken }) => {
+        // Persist both in Zustand & localStorage (for axios)
+        localStorage.setItem("accessToken", accessToken);
+        localStorage.setItem("refreshToken", refreshToken);
+
         set({
-          user: userData,
+          user,
+          accessToken,
+          refreshToken,
           isAuthenticated: true,
         });
       },
 
       logoutUser: () => {
-        set({ user: null, token: undefined, isAuthenticated: false });
- 
         localStorage.removeItem("accessToken");
         localStorage.removeItem("refreshToken");
-        localStorage.removeItem("user");
+
+        set({
+          user: null,
+          accessToken: undefined,
+          refreshToken: undefined,
+          isAuthenticated: false,
+        });
       },
     }),
     {

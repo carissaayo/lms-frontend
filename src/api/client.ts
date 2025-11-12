@@ -18,46 +18,46 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-api.interceptors.response.use(
-  (response) => {
-    console.log("alowow");
+// api.interceptors.response.use(
+//   (response) => {
 
-    const statusCode = response.data?.statusCode;
 
-    if (statusCode === 401) {
-      const store = useAuthStore.getState();
-      const role = store.user?.role;
-      store.logoutUser();
+//     const statusCode = response.data?.statusCode;
 
-      // Use setTimeout to avoid navigation during render
-      setTimeout(() => {
-        if (role === "admin") {
-          window.location.href = "/admin/auth/login";
-        } else {
-          window.location.href = "/auth/login";
-        }
-      }, 0);
+//     if (statusCode === 401) {
+//       const store = useAuthStore.getState();
+//       const role = store.user?.role;
+//       store.logoutUser();
 
-      return Promise.reject(new Error(response.data.message || "Unauthorized"));
-    }
+//       // Use setTimeout to avoid navigation during render
+//       setTimeout(() => {
+//         if (role === "admin") {
+//           window.location.href = "/admin/auth/login";
+//         } else {
+//           window.location.href = "/auth/login";
+//         }
+//       }, 0);
 
-    return response;
-  },
-  (error) => {
-    // Handle actual HTTP 401 errors (just in case)
-    if (error.response?.status === 401) {
-      const store = useAuthStore.getState();
-      const role = store.user?.role;
-      store.logoutUser();
+//       return Promise.reject(new Error(response.data.message || "Unauthorized"));
+//     }
 
-      setTimeout(() => {
-        if (role === "admin") {
-          window.location.href = "/admin/auth/login";
-        } else {
-          window.location.href = "/auth/login";
-        }
-      }, 0);
-    }
-    return Promise.reject(error);
-  }
-);
+//     return response;
+//   },
+//   (error) => {
+//     // Handle actual HTTP 401 errors (just in case)
+//     if (error.response?.status === 401) {
+//       const store = useAuthStore.getState();
+//       const role = store.user?.role;
+//       store.logoutUser();
+
+//       setTimeout(() => {
+//         if (role === "admin") {
+//           window.location.href = "/admin/auth/login";
+//         } else {
+//           window.location.href = "/auth/login";
+//         }
+//       }, 0);
+//     }
+//     return Promise.reject(error);
+//   }
+// );

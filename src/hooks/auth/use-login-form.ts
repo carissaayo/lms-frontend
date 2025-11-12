@@ -1,4 +1,3 @@
-// src/hooks/use-login-form.ts
 import { useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
@@ -18,15 +17,16 @@ export function useLoginForm() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-
+ console.log("Form submitted, running mutation...");
     login(formData, {
       onSuccess: (data) => {
         toast.success("Welcome back", { position: "top-center" });
 
-        localStorage.setItem("accessToken", data.accessToken);
-        localStorage.setItem("refreshToken", data.refreshToken);
-        localStorage.setItem("user", JSON.stringify(data.profile));
-        useAuthStore.getState().loginUser(data.profile);
+       useAuthStore.getState().loginUser({
+         user: data.profile,
+         accessToken: data.accessToken,
+         refreshToken: data.refreshToken,
+       });
 
         setTimeout(() => {
           if (data.profile.role === Role.INSTRUCTOR)
