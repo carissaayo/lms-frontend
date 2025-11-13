@@ -23,11 +23,6 @@ function RouteComponent() {
   const courses: Course[] = data?.courses ?? [];
   const results = data?.results ?? 0;
 
-  if (error) {
-    return (
-      <p className="text-red-600 text-center mt-10">Failed to load courses.</p>
-    );
-  }
 
   // Group by status
   const totalCourses = courses.length;
@@ -71,7 +66,15 @@ function RouteComponent() {
           </div>
         )}
 
-        {!isLoading && (
+        {error && (
+          <div className="w-full flex justify-center my-10">
+            <p className="text-red-600 text-center mt-10">
+              Failed to load courses.
+            </p>
+          </div>
+        )}
+
+        {!isLoading && !error && (
           <>
             {/* Stats Section */}
             <motion.div

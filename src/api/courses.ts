@@ -5,13 +5,13 @@ import { api } from "./client";
 // ==============================
 
 export async function getCoursesApi() {
-  const res = await api.get("/courses");
+  const res = await api.get("/instructor-courses/");
   console.log("API response:", res.data);
   return res.data;
 }
 
 export async function createCourseApi(formData: FormData) {
-  const res = await api.post("/courses", formData, {
+  const res = await api.post("/instructor-courses", formData, {
     headers: {
       "Content-Type": "multipart/form-data",
     },
@@ -20,17 +20,17 @@ export async function createCourseApi(formData: FormData) {
 }
 
 export async function submitCourseApi(courseId: string) {
-  const res = await api.patch(`/courses/${courseId}/submit`);
+  const res = await api.patch(`/instructor-courses/${courseId}/submit`);
   return res.data;
 }
 
 export async function publishCourseApi(courseId: string) {
-  const res = await api.patch(`/courses/${courseId}/publish`);
+  const res = await api.patch(`/instructor-courses/${courseId}/publish`);
   return res.data;
 }
 
 export async function deleteCourseApi(courseId: string) {
-  const res = await api.delete(`/courses/${courseId}`);
+  const res = await api.delete(`/instructor-courses/${courseId}`);
   return res.data;
 }
 

@@ -15,7 +15,7 @@ export async function getLessonsInACourseApi(id: string) {
 }
 
 export async function createLessonApi(formData: FormData) {
-  const res = await api.post("/lessons/create", formData, {});
+  const res = await api.post("/lessons", formData, {});
   return res.data;
 }
 

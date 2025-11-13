@@ -271,7 +271,7 @@ export function DashboardShell({ children }: DashboardShellProps) {
                 </Link>
 
                 <Link
-                  to="/"
+                  to="/settings"
                   className="h-10 w-10 flex items-center justify-center rounded-full bg-background transition-all duration-200 hover:bg-primary-light/30 hover:shadow-md group"
                 >
                   <Settings className="h-5 w-5 cursor-pointer text-primary-dark transition-transform group-hover:rotate-90" />
