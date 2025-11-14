@@ -13,4 +13,5 @@ export interface Lesson {
   progress: string[];
   createdAt: string;
   updatedAt: string;
+  duration:number
 }

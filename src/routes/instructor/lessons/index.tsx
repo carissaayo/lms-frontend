@@ -19,7 +19,7 @@ function RouteComponent() {
 
   return (
     <DashboardShell>
-      <main className="space-y-10">
+      <main className="space-y-10 mb-10">
         {/* Header */}
         <div className="flex sm:items-center justify-between flex-col sm:flex-row gap-4">
           <div>
@@ -68,6 +68,17 @@ function RouteComponent() {
                   key={lesson._id}
                   className="bg-background-light rounded-2xl shadow p-6 flex flex-col gap-3 hover:shadow-lg transition  cursor-pointer"
                 >
+                  <video
+                    src={lesson.videoUrl}
+                    className="w-full h-60 object-cover rounded-lg"
+                    muted
+                    
+                    loop
+                    playsInline
+                    controls={false}
+                    style={{ pointerEvents: "none" }} // disables click/interaction
+                  />
+
                   <h2 className="text-xl font-semibold">{lesson.title}</h2>
                   <p className="text-sm text-muted-foreground line-clamp-2">
                     {lesson.description || "No description provided."}
