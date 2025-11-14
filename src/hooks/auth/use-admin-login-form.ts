@@ -29,13 +29,11 @@ export function useAdminLoginForm() {
             position: "top-center",
           });
 
-          // Save tokens
-          localStorage.setItem("accessToken", data.accessToken);
-          localStorage.setItem("refreshToken", data.refreshToken);
-
-          // Save user profile
-          localStorage.setItem("user", JSON.stringify(data.profile));
-          useAuthStore.getState().loginUser(data.profile);
+        useAuthStore.getState().loginUser({
+          user: data.profile,
+          accessToken: data.accessToken,
+          refreshToken: data.refreshToken,
+        });
 
           setTimeout(() => {
             navigate({ to: "/admin/analytics" });

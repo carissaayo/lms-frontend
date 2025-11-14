@@ -8,7 +8,6 @@ import {
   CircleUser,
   FileText,
   Gauge,
-  LogOut,
   NotebookPen,
   Settings,
   Store,
@@ -20,6 +19,7 @@ import {
 } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import useAuthStore from "@/store/useAuthStore";
+import { LogoutDialog } from "./logout-dialog";
 
 interface DashboardShellProps {
   children: ReactNode;
@@ -27,8 +27,11 @@ interface DashboardShellProps {
 
 export function DashboardShell({ children }: DashboardShellProps) {
   const { user } = useAuthStore((state) => state);
+console.log(user,"user");
 
-  const userRole = user?.role;
+  const userRole:string = user?.role;
+  console.log("userRole",userRole);
+  
 
   return (
     <div className="w-full h-screen flex flex-col font-primary text-text overflow-hidden">
@@ -49,7 +52,8 @@ export function DashboardShell({ children }: DashboardShellProps) {
                     to="/instructor/analytics"
                     className="flex items-center gap-3 rounded-xl px-4 py-3 transition-all duration-200 hover:bg-white/10 hover:shadow-md text-white/90 hover:text-white hover:translate-x-1"
                     activeProps={{
-                      className: "bg-white/20 text-white shadow-lg backdrop-blur-sm border border-white/20",
+                      className:
+                        "bg-white/20 text-white shadow-lg backdrop-blur-sm border border-white/20",
                     }}
                   >
                     <FileText className="h-5 w-5" />
@@ -59,7 +63,8 @@ export function DashboardShell({ children }: DashboardShellProps) {
                     to="/instructor/courses"
                     className="flex items-center gap-3 rounded-xl px-4 py-3 transition-all duration-200 hover:bg-white/10 hover:shadow-md text-white/90 hover:text-white hover:translate-x-1"
                     activeProps={{
-                      className: "bg-white/20 text-white shadow-lg backdrop-blur-sm border border-white/20",
+                      className:
+                        "bg-white/20 text-white shadow-lg backdrop-blur-sm border border-white/20",
                     }}
                   >
                     <BookOpen className="h-5 w-5" />
@@ -70,7 +75,8 @@ export function DashboardShell({ children }: DashboardShellProps) {
                     to="/instructor/lessons"
                     className="flex items-center gap-3 rounded-xl px-4 py-3 transition-all duration-200 hover:bg-white/10 hover:shadow-md text-white/90 hover:text-white hover:translate-x-1"
                     activeProps={{
-                      className: "bg-white/20 text-white shadow-lg backdrop-blur-sm border border-white/20",
+                      className:
+                        "bg-white/20 text-white shadow-lg backdrop-blur-sm border border-white/20",
                     }}
                   >
                     <BookOpen className="h-5 w-5" />
@@ -80,7 +86,8 @@ export function DashboardShell({ children }: DashboardShellProps) {
                     to="/instructor/assignments"
                     className="flex items-center gap-3 rounded-xl px-4 py-3 transition-all duration-200 hover:bg-white/10 hover:shadow-md text-white/90 hover:text-white hover:translate-x-1"
                     activeProps={{
-                      className: "bg-white/20 text-white shadow-lg backdrop-blur-sm border border-white/20",
+                      className:
+                        "bg-white/20 text-white shadow-lg backdrop-blur-sm border border-white/20",
                     }}
                   >
                     <NotebookPen className="h-5 w-5" />
@@ -90,7 +97,8 @@ export function DashboardShell({ children }: DashboardShellProps) {
                     to="/instructor/students"
                     className="flex items-center gap-3 rounded-xl px-4 py-3 transition-all duration-200 hover:bg-white/10 hover:shadow-md text-white/90 hover:text-white hover:translate-x-1"
                     activeProps={{
-                      className: "bg-white/20 text-white shadow-lg backdrop-blur-sm border border-white/20",
+                      className:
+                        "bg-white/20 text-white shadow-lg backdrop-blur-sm border border-white/20",
                     }}
                   >
                     <UsersRound className="h-5 w-5" />
@@ -100,7 +108,8 @@ export function DashboardShell({ children }: DashboardShellProps) {
                     to="/instructor/earnings"
                     className="flex items-center gap-3 rounded-xl px-4 py-3 transition-all duration-200 hover:bg-white/10 hover:shadow-md text-white/90 hover:text-white hover:translate-x-1"
                     activeProps={{
-                      className: "bg-white/20 text-white shadow-lg backdrop-blur-sm border border-white/20",
+                      className:
+                        "bg-white/20 text-white shadow-lg backdrop-blur-sm border border-white/20",
                     }}
                   >
                     <Wallet className="h-5 w-5" />
@@ -116,7 +125,8 @@ export function DashboardShell({ children }: DashboardShellProps) {
                     to="/student/analytics"
                     className="flex items-center gap-3 rounded-xl px-4 py-3 transition-all duration-200 hover:bg-white/10 hover:shadow-md text-white/90 hover:text-white hover:translate-x-1"
                     activeProps={{
-                      className: "bg-white/20 text-white shadow-lg backdrop-blur-sm border border-white/20",
+                      className:
+                        "bg-white/20 text-white shadow-lg backdrop-blur-sm border border-white/20",
                     }}
                   >
                     <Gauge className="h-5 w-5" />
@@ -126,7 +136,8 @@ export function DashboardShell({ children }: DashboardShellProps) {
                     to="/student/enrollments"
                     className="flex items-center gap-3 rounded-xl px-4 py-3 transition-all duration-200 hover:bg-white/10 hover:shadow-md text-white/90 hover:text-white hover:translate-x-1"
                     activeProps={{
-                      className: "bg-white/20 text-white shadow-lg backdrop-blur-sm border border-white/20",
+                      className:
+                        "bg-white/20 text-white shadow-lg backdrop-blur-sm border border-white/20",
                     }}
                   >
                     <BookOpen className="h-5 w-5" />
@@ -136,7 +147,8 @@ export function DashboardShell({ children }: DashboardShellProps) {
                     to="/student/courses"
                     className="flex items-center gap-3 rounded-xl px-4 py-3 transition-all duration-200 hover:bg-white/10 hover:shadow-md text-white/90 hover:text-white hover:translate-x-1"
                     activeProps={{
-                      className: "bg-white/20 text-white shadow-lg backdrop-blur-sm border border-white/20",
+                      className:
+                        "bg-white/20 text-white shadow-lg backdrop-blur-sm border border-white/20",
                     }}
                   >
                     <Store className="h-5 w-5" />
@@ -146,7 +158,8 @@ export function DashboardShell({ children }: DashboardShellProps) {
                     to="/student/assigments"
                     className="flex items-center gap-3 rounded-xl px-4 py-3 transition-all duration-200 hover:bg-white/10 hover:shadow-md text-white/90 hover:text-white hover:translate-x-1"
                     activeProps={{
-                      className: "bg-white/20 text-white shadow-lg backdrop-blur-sm border border-white/20",
+                      className:
+                        "bg-white/20 text-white shadow-lg backdrop-blur-sm border border-white/20",
                     }}
                   >
                     <FileText className="h-5 w-5" />
@@ -157,7 +170,8 @@ export function DashboardShell({ children }: DashboardShellProps) {
                     to="/student/payments"
                     className="flex items-center gap-3 rounded-xl px-4 py-3 transition-all duration-200 hover:bg-white/10 hover:shadow-md text-white/90 hover:text-white hover:translate-x-1"
                     activeProps={{
-                      className: "bg-white/20 text-white shadow-lg backdrop-blur-sm border border-white/20",
+                      className:
+                        "bg-white/20 text-white shadow-lg backdrop-blur-sm border border-white/20",
                     }}
                   >
                     <FileText className="h-5 w-5" />
@@ -173,7 +187,8 @@ export function DashboardShell({ children }: DashboardShellProps) {
                     to="/admin/analytics"
                     className="flex items-center gap-3 rounded-xl px-4 py-3 transition-all duration-200 hover:bg-white/10 hover:shadow-md text-white/90 hover:text-white hover:translate-x-1"
                     activeProps={{
-                      className: "bg-white/20 text-white shadow-lg backdrop-blur-sm border border-white/20",
+                      className:
+                        "bg-white/20 text-white shadow-lg backdrop-blur-sm border border-white/20",
                     }}
                   >
                     <BookOpen className="h-5 w-5" />
@@ -184,7 +199,8 @@ export function DashboardShell({ children }: DashboardShellProps) {
                     to="/admin/courses"
                     className="flex items-center gap-3 rounded-xl px-4 py-3 transition-all duration-200 hover:bg-white/10 hover:shadow-md text-white/90 hover:text-white hover:translate-x-1"
                     activeProps={{
-                      className: "bg-white/20 text-white shadow-lg backdrop-blur-sm border border-white/20",
+                      className:
+                        "bg-white/20 text-white shadow-lg backdrop-blur-sm border border-white/20",
                     }}
                   >
                     <BookOpen className="h-5 w-5" />
@@ -195,7 +211,8 @@ export function DashboardShell({ children }: DashboardShellProps) {
                     to="/admin/instructors"
                     className="flex items-center gap-3 rounded-xl px-4 py-3 transition-all duration-200 hover:bg-white/10 hover:shadow-md text-white/90 hover:text-white hover:translate-x-1"
                     activeProps={{
-                      className: "bg-white/20 text-white shadow-lg backdrop-blur-sm border border-white/20",
+                      className:
+                        "bg-white/20 text-white shadow-lg backdrop-blur-sm border border-white/20",
                     }}
                   >
                     <Users className="h-5 w-5" />
@@ -205,7 +222,8 @@ export function DashboardShell({ children }: DashboardShellProps) {
                     to="/admin/students"
                     className="flex items-center gap-3 rounded-xl px-4 py-3 transition-all duration-200 hover:bg-white/10 hover:shadow-md text-white/90 hover:text-white hover:translate-x-1"
                     activeProps={{
-                      className: "bg-white/20 text-white shadow-lg backdrop-blur-sm border border-white/20",
+                      className:
+                        "bg-white/20 text-white shadow-lg backdrop-blur-sm border border-white/20",
                     }}
                   >
                     <User2 className="h-5 w-5" />
@@ -220,7 +238,8 @@ export function DashboardShell({ children }: DashboardShellProps) {
                   to="/profile"
                   className="flex items-center gap-3 rounded-xl px-4 py-3 transition-all duration-200 hover:bg-white/10 hover:shadow-md text-white/90 hover:text-white hover:translate-x-1"
                   activeProps={{
-                    className: "bg-white/20 text-white shadow-lg backdrop-blur-sm border border-white/20",
+                    className:
+                      "bg-white/20 text-white shadow-lg backdrop-blur-sm border border-white/20",
                   }}
                 >
                   <User className="h-5 w-5" />
@@ -230,7 +249,8 @@ export function DashboardShell({ children }: DashboardShellProps) {
                   to="/settings"
                   className="flex items-center gap-3 rounded-xl px-4 py-3 transition-all duration-200 hover:bg-white/10 hover:shadow-md text-white/90 hover:text-white hover:translate-x-1"
                   activeProps={{
-                    className: "bg-white/20 text-white shadow-lg backdrop-blur-sm border border-white/20",
+                    className:
+                      "bg-white/20 text-white shadow-lg backdrop-blur-sm border border-white/20",
                   }}
                 >
                   <Settings className="h-5 w-5" />
@@ -277,12 +297,9 @@ export function DashboardShell({ children }: DashboardShellProps) {
                   <Settings className="h-5 w-5 cursor-pointer text-primary-dark transition-transform group-hover:rotate-90" />
                 </Link>
 
-                <Link
-                  to="/auth/login"
-                  className="h-10 w-10 flex items-center justify-center rounded-full bg-background transition-all duration-200 hover:bg-error-light hover:shadow-md group"
-                >
-                  <LogOut className="h-5 w-5 cursor-pointer text-primary-dark group-hover:text-error transition-colors" />
-                </Link>
+                <div className="h-10 w-10 flex items-center justify-center">
+                  <LogoutDialog/>
+                </div>
 
                 <div className="h-10 w-10 flex items-center justify-center rounded-full bg-gradient-to-br from-primary to-primary-dark cursor-pointer transition-all duration-200 hover:shadow-lg hover:scale-105 ring-2 ring-primary-light/30">
                   <CircleUser className="h-6 w-6 text-white" />
