@@ -1,10 +1,12 @@
-// File: /admin/courses/$courseId.tsx
 import { useState } from "react";
 import { DashboardShell } from "@/components/dashboard-shell";
-import { createFileRoute, useNavigate, useParams } from "@tanstack/react-router";
+import {
+  createFileRoute,
+  useNavigate,
+  useParams,
+} from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Textarea } from "@/components/ui/textarea";
 import {
   Card,
   CardContent,
@@ -12,186 +14,84 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/components/ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   ArrowLeft,
   CheckCircle,
-  XCircle,
-  PauseCircle,
   Clock,
   Users,
-  DollarSign,
   Star,
-  Calendar,
   BookOpen,
   PlayCircle,
-  FileText,
   Award,
   AlertCircle,
+  ShoppingCart,
+  Sparkles,
+  MessageSquare,
+  Globe,
+  BarChart,
 } from "lucide-react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
-// Define types
-interface CourseDetail {
-  id: string;
-  title: string;
-  description: string;
-  instructor: {
-    id: string;
-    name: string;
-    email: string;
-    rating: number;
-    totalCourses: number;
-  };
-  status: "APPROVED" | "PENDING" | "REJECTED" | "SUSPENDED";
-  thumbnail: string;
-  price: number;
-  enrollments: number;
-  rating: number;
-  totalReviews: number;
-  createdAt: string;
-  updatedAt: string;
-  category: string;
-  duration: string;
-  level: string;
-  language: string;
-  modules: Array<{
-    id: string;
-    title: string;
-    lessons: number;
-  }>;
-  requirements: string[];
-  learningOutcomes: string[];
-  rejectionReason?: string;
-  suspensionReason?: string;
-}
+import { toast } from "sonner";
+import { useSingleCourse } from "@/hooks/use-course";
+import { useEnrollCourse } from "@/hooks/use-enrollment";
 
-// API hooks
-const useCourseDetail = (courseId: string) => {
-  return useQuery({
-    queryKey: ["admin-course", courseId],
-    queryFn: async () => {
-      const response = await fetch(`/api/admin/courses/${courseId}`);
-      if (!response.ok) throw new Error("Failed to fetch course");
-      return response.json();
-    },
-  });
-};
+import { PaymentDialog } from "@/components/enrollments/PaymentDialog";
+import { CourseDetail } from "@/types/course.types";
+
+
 
 export const Route = createFileRoute("/student/courses/$id")({
-  component: AdminCourseDetailPage,
+  component: StudentCourseDetailPage,
 });
 
-const getStatusBadge = (status: string) => {
-  const statusConfig: Record<string, { label: string; className: string; icon: any }> = {
-    APPROVED: {
-      label: "Approved",
-      className: "bg-green-100 text-green-700",
-      icon: CheckCircle,
-    },
-    PENDING: {
-      label: "Pending Review",
-      className: "bg-yellow-100 text-yellow-700",
-      icon: Clock,
-    },
-    REJECTED: {
-      label: "Rejected",
-      className: "bg-red-100 text-red-700",
-      icon: XCircle,
-    },
-    SUSPENDED: {
-      label: "Suspended",
-      className: "bg-gray-100 text-gray-700",
-      icon: PauseCircle,
-    },
-  };
-
-  const config = statusConfig[status] || statusConfig.PENDING;
-  const Icon = config.icon;
-
-  return (
-    <Badge className={`${config.className} flex items-center gap-1 px-3 py-1`}>
-      <Icon className="h-4 w-4" />
-      {config.label}
-    </Badge>
-  );
-};
-
-function AdminCourseDetailPage() {
+function StudentCourseDetailPage() {
   const navigate = useNavigate();
-  const { id } = useParams({ from: "/admin/courses/$id" });
-  const queryClient = useQueryClient();
+  const [paymentDialogOpen, setPaymentDialogOpen] = useState(false);
+  const [paymentLink, setPaymentLink] = useState<string | null>(null);
+  const [selectedTab, setSelectedTab] = useState("overview");
 
-  const [actionDialogOpen, setActionDialogOpen] = useState(false);
-  const [actionType, setActionType] = useState<"approve" | "reject" | "suspend" | null>(null);
-  const [actionReason, setActionReason] = useState("");
+  const { id } = useParams({ from: "/student/courses/$id" });
 
-  const { data, isLoading, error } = useCourseDetail(id);
+  const { data, isLoading, error } = useSingleCourse(id);
+  console.log(data,"data");
+  
   const course: CourseDetail | undefined = data?.course;
 
-  const updateCourseMutation = useMutation({
-    mutationFn: async ({ action, reason }: { action: string; reason?: string }) => {
-      const response = await fetch(`/api/admin/courses/${id}/${action}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ reason }),
-      });
-      if (!response.ok) throw new Error(`Failed to ${action} course`);
-      return response.json();
+const enrollMutation = useEnrollCourse();
+
+const handleEnroll = () => {
+  enrollMutation.mutate(id, {
+    onSuccess: (res: any) => {
+      if (res?.message === "Payment required" && res?.paymentLink) {
+        setPaymentLink(res.paymentLink);
+        setPaymentDialogOpen(true);
+        return;
+      }
+
+      toast.success("Successfully enrolled in course!");
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["admin-course", id] });
-      queryClient.invalidateQueries({ queryKey: ["admin-courses"] });
-      setActionDialogOpen(false);
-      setActionReason("");
-      setActionType(null);
+
+    onError: (err) => {
+      toast.error(err.message || "Failed to enroll in course");
     },
   });
-
-  const handleAction = (type: "approve" | "reject" | "suspend") => {
-    setActionType(type);
-    if (type === "approve") {
-      // Approve directly without dialog
-      updateCourseMutation.mutate({ action: "approve" });
-    } else {
-      setActionDialogOpen(true);
-    }
-  };
-
-  const confirmAction = () => {
-    if (actionType) {
-      updateCourseMutation.mutate({
-        action: actionType,
-        reason: actionReason,
-      });
-    }
-  };
+};
 
   if (error) {
     return (
       <DashboardShell>
         <div className="flex flex-col items-center justify-center h-64">
           <AlertCircle className="h-16 w-16 text-red-600 mb-4" />
-          <p className="text-red-600 text-center">Failed to load course details.</p>
+          <p className="text-red-600 text-center mb-2">
+            Failed to load course details.
+          </p>
+          <p className="text-gray-600 text-sm mb-4">Please try again later.</p>
           <Button
             variant="outline"
-            className="mt-4"
-            onClick={() => navigate({ to: "/admin/courses" })}
+            onClick={() => navigate({ to: "/student/courses" })}
           >
+            <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Courses
           </Button>
         </div>
@@ -214,191 +114,200 @@ function AdminCourseDetailPage() {
       <DashboardShell>
         <div className="flex flex-col items-center justify-center h-64">
           <BookOpen className="h-16 w-16 text-gray-400 mb-4" />
-          <p className="text-gray-600 text-center">Course not found</p>
+          <p className="text-gray-600 text-center mb-4">Course not found</p>
+          <Button
+            variant="outline"
+            onClick={() => navigate({ to: "/student/courses" })}
+          >
+            <ArrowLeft className="h-4 w-4 mr-2" />
+            Back to Courses
+          </Button>
         </div>
       </DashboardShell>
     );
   }
 
+  const totalLessons = course.lessons?.length
+
   return (
     <DashboardShell>
+      {/* <Toaster/> */}
+      <PaymentDialog
+        open={paymentDialogOpen}
+        onOpenChange={setPaymentDialogOpen}
+        paymentLink={paymentLink}
+      />
       <main className="space-y-6 mb-10">
         {/* Header */}
         <div className="flex items-center justify-between">
           <Button
             variant="ghost"
-            onClick={() => navigate({ to: "/admin/courses" })}
-            className="gap-2"
+            onClick={() => navigate({ to: "/student/courses" })}
+            className="gap-2 hover:bg-gray-100"
           >
             <ArrowLeft className="h-4 w-4" />
             Back to Courses
           </Button>
-          <div className="flex items-center gap-3">
-            {course.status === "PENDING" && (
-              <>
-                <Button
-                  variant="outline"
-                  className="text-red-600 border-red-600 hover:bg-red-50"
-                  onClick={() => handleAction("reject")}
-                  disabled={updateCourseMutation.isPending}
-                >
-                  <XCircle className="h-4 w-4 mr-2" />
-                  Reject Course
-                </Button>
-                <Button
-                  className="bg-green-600 hover:bg-green-700"
-                  onClick={() => handleAction("approve")}
-                  disabled={updateCourseMutation.isPending}
-                >
-                  <CheckCircle className="h-4 w-4 mr-2" />
-                  Approve Course
-                </Button>
-              </>
-            )}
-            {course.status === "APPROVED" && (
-              <Button
-                variant="outline"
-                onClick={() => handleAction("suspend")}
-                disabled={updateCourseMutation.isPending}
-              >
-                <PauseCircle className="h-4 w-4 mr-2" />
-                Suspend Course
-              </Button>
-            )}
-            {course.status === "SUSPENDED" && (
-              <Button
-                className="bg-green-600 hover:bg-green-700"
-                onClick={() => handleAction("approve")}
-                disabled={updateCourseMutation.isPending}
-              >
-                <CheckCircle className="h-4 w-4 mr-2" />
-                Reactivate Course
-              </Button>
-            )}
-            {course.status === "REJECTED" && (
-              <Button
-                className="bg-green-600 hover:bg-green-700"
-                onClick={() => handleAction("approve")}
-                disabled={updateCourseMutation.isPending}
-              >
-                <CheckCircle className="h-4 w-4 mr-2" />
-                Approve Course
-              </Button>
-            )}
-          </div>
         </div>
 
-        {/* Course Header */}
-        <div className="bg-white rounded-xl border border-gray-200 p-6">
-          <div className="flex flex-col lg:flex-row gap-6">
-            <img
-              src={course.thumbnail}
-              alt={course.title}
-              className="w-full lg:w-80 h-48 object-cover rounded-lg"
-            />
-            <div className="flex-1">
-              <div className="flex items-start justify-between mb-4">
-                <div>
-                  <h1 className="text-3xl font-bold text-gray-900 mb-2">
-                    {course.title}
-                  </h1>
-                  <p className="text-gray-600">
-                    by{" "}
-                    <span className="font-semibold text-primary">
-                      {course.instructor.name}
-                    </span>
-                  </p>
-                </div>
-                {getStatusBadge(course.status)}
+        {/* Course Hero Section */}
+        <div className="bg-gradient-to-br from-blue-600 to-purple-600 rounded-2xl overflow-hidden">
+          <div className="grid lg:grid-cols-2 gap-8 p-8 lg:p-12">
+            <div className="text-white space-y-6">
+              <div className="flex flex-wrap gap-2 mb-4">
+                <Badge className="bg-white/20 text-white border-white/30">
+                  {course?.category}
+                </Badge>
+                <Badge className="bg-white/20 text-white border-white/30">
+                  {course?.level}
+                </Badge>
+                <Badge className="bg-white/20 text-white border-white/30 flex items-center gap-1">
+                  <Globe className="h-3 w-3" />
+                  {course?.language}
+                </Badge>
               </div>
 
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
-                <div className="flex items-center gap-2 text-sm">
-                  <Users className="h-5 w-5 text-gray-400" />
-                  <div>
-                    <p className="font-semibold text-gray-900">{course.enrollments}</p>
-                    <p className="text-gray-600">Students</p>
+              <h1 className="text-4xl lg:text-5xl font-bold leading-tight">
+                {course?.title}
+              </h1>
+
+              <p className="text-lg text-white/90">
+                {course?.description.substring(0, 150)}...
+              </p>
+
+              <div className="flex items-center gap-6 text-sm">
+                <div className="flex items-center gap-2">
+                  <div className="h-10 w-10 rounded-full bg-white/20 flex items-center justify-center text-lg font-bold">
+                    {course?.instructor?.name?.charAt(0)}
                   </div>
-                </div>
-                <div className="flex items-center gap-2 text-sm">
-                  <Star className="h-5 w-5 text-yellow-500" />
                   <div>
-                    <p className="font-semibold text-gray-900">{course.rating}</p>
-                    <p className="text-gray-600">{course.totalReviews} reviews</p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-2 text-sm">
-                  <Clock className="h-5 w-5 text-gray-400" />
-                  <div>
-                    <p className="font-semibold text-gray-900">{course.duration}</p>
-                    <p className="text-gray-600">Duration</p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-2 text-sm">
-                  <DollarSign className="h-5 w-5 text-gray-400" />
-                  <div>
-                    <p className="font-semibold text-gray-900">
-                      ₦{course.price.toLocaleString()}
-                    </p>
-                    <p className="text-gray-600">Price</p>
+                    <p className="font-medium">Created by</p>
+                    <p className="text-white/80">{course?.instructor?.name}</p>
                   </div>
                 </div>
               </div>
 
-              <div className="flex flex-wrap gap-2">
-                <Badge variant="outline">{course.category}</Badge>
-                <Badge variant="outline">{course.level}</Badge>
-                <Badge variant="outline">{course.language}</Badge>
+              <div className="flex flex-wrap gap-4 pt-4">
+                <div className="flex items-center gap-2">
+                  <Star className="h-5 w-5 text-yellow-300 fill-yellow-300" />
+                  <span className="font-semibold">{course?.rating}</span>
+                  <span className="text-white/80">
+                    ({course?.totalReviews} reviews)
+                  </span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Users className="h-5 w-5" />
+                  <span>{course?.enrollments?.toLocaleString()} students</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Clock className="h-5 w-5" />
+                  <span>{course?.duration}</span>
+                </div>
               </div>
+            </div>
+
+            <div className="flex items-center justify-center">
+              <Card className="w-full max-w-md bg-white shadow-2xl">
+                <CardContent className="p-8">
+                  <div className="aspect-video bg-gray-100 rounded-lg mb-6 overflow-hidden">
+                    <img
+                      src={course?.coverImage}
+                      alt={course?.title}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+
+                  <div className="space-y-4">
+                    <div className="flex items-baseline gap-2">
+                      <span className="text-4xl font-bold text-gray-900">
+                        ₦{course?.price?.toLocaleString()}
+                      </span>
+                    </div>
+
+                    <Button
+                      onClick={handleEnroll}
+                      disabled={course?.isEnrolled || enrollMutation.isPending}
+                      className="w-full py-6 text-lg font-semibold bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      {enrollMutation.isPending ? (
+                        <>
+                          <div className="h-5 w-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
+                          Enrolling...
+                        </>
+                      ) : course.isEnrolled ? (
+                        <>
+                          <CheckCircle className="h-5 w-5 mr-2" />
+                          Already Enrolled
+                        </>
+                      ) : (
+                        <>
+                          <ShoppingCart className="h-5 w-5 mr-2" />
+                          Enroll Now
+                        </>
+                      )}
+                    </Button>
+
+                    <div className="pt-4 border-t space-y-3 text-sm text-gray-600">
+                      <div className="flex items-center gap-2">
+                        <Sparkles className="h-4 w-4 text-primary" />
+                        <span>Lifetime access</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <PlayCircle className="h-4 w-4 text-primary" />
+                        <span>{totalLessons} video lessons</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Award className="h-4 w-4 text-primary" />
+                        <span>Certificate of completion</span>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
             </div>
           </div>
         </div>
 
-        {/* Rejection/Suspension Reason */}
-        {(course.rejectionReason || course.suspensionReason) && (
-          <Card className="border-red-200 bg-red-50">
-            <CardHeader>
-              <CardTitle className="text-red-900 flex items-center gap-2">
-                <AlertCircle className="h-5 w-5" />
-                {course.status === "REJECTED" ? "Rejection Reason" : "Suspension Reason"}
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-red-800">
-                {course.rejectionReason || course.suspensionReason}
-              </p>
-            </CardContent>
-          </Card>
-        )}
-
-        {/* Tabs */}
-        <Tabs defaultValue="overview" className="w-full">
-          <TabsList className="grid w-full grid-cols-4">
+        {/* Tabs Section */}
+        <Tabs
+          value={selectedTab}
+          onValueChange={setSelectedTab}
+          className="w-full"
+        >
+          <TabsList className="grid w-full grid-cols-4 lg:w-auto lg:inline-grid">
             <TabsTrigger value="overview">Overview</TabsTrigger>
-            <TabsTrigger value="content">Content</TabsTrigger>
+            <TabsTrigger value="curriculum">Curriculum</TabsTrigger>
             <TabsTrigger value="instructor">Instructor</TabsTrigger>
-            <TabsTrigger value="stats">Statistics</TabsTrigger>
+            <TabsTrigger value="reviews">Reviews</TabsTrigger>
           </TabsList>
 
-          <TabsContent value="overview" className="space-y-6">
+          <TabsContent value="overview" className="space-y-6 mt-6">
             <Card>
               <CardHeader>
-                <CardTitle>Course Description</CardTitle>
+                <CardTitle className="flex items-center gap-2">
+                  <BookOpen className="h-5 w-5 text-primary" />
+                  About This Course
+                </CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-700 whitespace-pre-wrap">{course.description}</p>
+                <p className="text-gray-700 whitespace-pre-wrap leading-relaxed">
+                  {course?.description}
+                </p>
               </CardContent>
             </Card>
 
             <div className="grid md:grid-cols-2 gap-6">
               <Card>
                 <CardHeader>
-                  <CardTitle>What You'll Learn</CardTitle>
+                  <CardTitle className="flex items-center gap-2">
+                    <CheckCircle className="h-5 w-5 text-green-600" />
+                    What You'll Learn
+                  </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <ul className="space-y-2">
-                    {course.learningOutcomes.map((outcome, index) => (
-                      <li key={index} className="flex items-start gap-2">
+                  <ul className="space-y-3">
+                    {course?.learningOutcomes?.map((outcome, index) => (
+                      <li key={index} className="flex items-start gap-3">
                         <CheckCircle className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
                         <span className="text-gray-700">{outcome}</span>
                       </li>
@@ -409,13 +318,16 @@ function AdminCourseDetailPage() {
 
               <Card>
                 <CardHeader>
-                  <CardTitle>Requirements</CardTitle>
+                  <CardTitle className="flex items-center gap-2">
+                    <BarChart className="h-5 w-5 text-blue-600" />
+                    Requirements
+                  </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <ul className="space-y-2">
-                    {course.requirements.map((req, index) => (
-                      <li key={index} className="flex items-start gap-2">
-                        <div className="h-2 w-2 rounded-full bg-primary mt-2 flex-shrink-0" />
+                  <ul className="space-y-3">
+                    {course?.requirements?.map((req, index) => (
+                      <li key={index} className="flex items-start gap-3">
+                        <div className="h-2 w-2 rounded-full bg-blue-600 mt-2 flex-shrink-0" />
                         <span className="text-gray-700">{req}</span>
                       </li>
                     ))}
@@ -425,78 +337,98 @@ function AdminCourseDetailPage() {
             </div>
           </TabsContent>
 
-          <TabsContent value="content" className="space-y-6">
+          <TabsContent value="curriculum" className="space-y-6 mt-6">
             <Card>
               <CardHeader>
                 <CardTitle>Course Curriculum</CardTitle>
-                <CardDescription>
-                  {course.modules.length} modules •{" "}
-                  {course.modules.reduce((sum, m) => sum + m.lessons, 0)} lessons
-                </CardDescription>
+                <CardDescription>{totalLessons} lessons</CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="space-y-4">
-                  {course.modules.map((module, index) => (
-                    <div
-                      key={module.id}
-                      className="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 transition-colors"
-                    >
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-3">
-                          <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
-                            <span className="font-semibold text-primary">{index + 1}</span>
-                          </div>
-                          <div>
-                            <h3 className="font-semibold text-gray-900">{module.title}</h3>
-                            <p className="text-sm text-gray-600">{module.lessons} lessons</p>
+                <div className="space-y-3">
+                  {course?.lessons &&
+                    course?.lessons?.map((lesson, index) => (
+                      <div
+                        key={lesson?._id}
+                        className="border border-gray-200 rounded-xl p-5 hover:shadow-md hover:border-primary/30 transition-all duration-200"
+                      >
+                        <div className="flex items-start justify-between gap-4">
+                          <div className="flex items-start gap-4 flex-1">
+                            <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center flex-shrink-0">
+                              <span className="font-bold text-white text-lg">
+                                {index + 1}
+                              </span>
+                            </div>
+                            <div className="flex-1">
+                              <h3 className="font-semibold text-gray-900 mb-1 text-lg">
+                                {lesson?.title}
+                              </h3>
+                              {lesson?.description && (
+                                <p className="text-sm text-gray-600 mb-2">
+                                  {lesson?.description}
+                                </p>
+                              )}
+                              <div className="flex items-center gap-4 text-sm text-gray-500">
+                                {lesson?.duration && (
+                                  <span className="flex items-center gap-1">
+                                    <Clock className="h-4 w-4" />
+                                    {lesson.duration}
+                                  </span>
+                                )}
+                              </div>
+                            </div>
                           </div>
                         </div>
-                        <PlayCircle className="h-5 w-5 text-gray-400" />
                       </div>
-                    </div>
-                  ))}
+                    ))}
                 </div>
               </CardContent>
             </Card>
           </TabsContent>
 
-          <TabsContent value="instructor" className="space-y-6">
+          <TabsContent value="instructor" className="space-y-6 mt-6">
             <Card>
               <CardHeader>
-                <CardTitle>Instructor Information</CardTitle>
+                <CardTitle>About the Instructor</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="flex items-start gap-4">
-                  <div className="h-20 w-20 rounded-full bg-gradient-to-br from-primary to-blue-600 flex items-center justify-center text-white text-2xl font-bold">
-                    {course.instructor.name.charAt(0)}
+                <div className="flex flex-col md:flex-row gap-6">
+                  <div className="flex-shrink-0">
+                    <div className="h-32 w-32 rounded-2xl bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center text-white text-4xl font-bold shadow-lg">
+                      {course?.instructor?.name.charAt(0)}
+                    </div>
                   </div>
-                  <div className="flex-1">
-                    <h3 className="text-xl font-semibold text-gray-900 mb-1">
-                      {course.instructor.name}
-                    </h3>
-                    <p className="text-gray-600 mb-4">{course.instructor.email}</p>
-                    <div className="grid grid-cols-3 gap-4">
+                  <div className="flex-1 space-y-4">
+                    <div>
+                      <h3 className="text-2xl font-bold text-gray-900 mb-1">
+                        {course.instructor.name}
+                      </h3>
+                      <p className="text-gray-600">{course.instructor.email}</p>
+                    </div>
+                    {course.instructor.bio && (
+                      <p className="text-gray-700 leading-relaxed">
+                        {course.instructor.bio}
+                      </p>
+                    )}
+                    <div className="flex flex-wrap gap-6 pt-4 border-t">
                       <div>
-                        <p className="text-sm text-gray-600">Instructor Rating</p>
-                        <div className="flex items-center gap-1 mt-1">
+                        <p className="text-sm text-gray-600 mb-1">
+                          Students Taught
+                        </p>
+                        <p className="text-2xl font-bold text-gray-900">
+                          {course.enrollments.toLocaleString()}
+                        </p>
+                      </div>
+                      <div>
+                        <p className="text-sm text-gray-600 mb-1">
+                          Course Rating
+                        </p>
+                        <div className="flex items-center gap-1">
                           <Star className="h-5 w-5 text-yellow-500 fill-yellow-500" />
-                          <span className="font-semibold text-gray-900">
-                            {course.instructor.rating}
+                          <span className="text-2xl font-bold text-gray-900">
+                            {course.rating}
                           </span>
                         </div>
                       </div>
-                      <div>
-                        <p className="text-sm text-gray-600">Total Courses</p>
-                        <p className="font-semibold text-gray-900 mt-1">
-                          {course.instructor.totalCourses}
-                        </p>
-                      </div>
-                      <div>
-                        <p className="text-sm text-gray-600">Total Students</p>
-                        <p className="font-semibold text-gray-900 mt-1">
-                          {course.enrollments * course.instructor.totalCourses}
-                        </p>
-                      </div>
                     </div>
                   </div>
                 </div>
@@ -504,126 +436,74 @@ function AdminCourseDetailPage() {
             </Card>
           </TabsContent>
 
-          <TabsContent value="stats" className="space-y-6">
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-              <Card>
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-sm font-medium text-gray-600">
-                    Total Enrollments
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-3xl font-bold text-gray-900">{course.enrollments}</p>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-sm font-medium text-gray-600">
-                    Average Rating
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-3xl font-bold text-gray-900">{course.rating}</p>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-sm font-medium text-gray-600">
-                    Total Reviews
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-3xl font-bold text-gray-900">{course.totalReviews}</p>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-sm font-medium text-gray-600">
-                    Total Revenue
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-3xl font-bold text-gray-900">
-                    ₦{(course.enrollments * course.price).toLocaleString()}
-                  </p>
-                </CardContent>
-              </Card>
-            </div>
-
+          <TabsContent value="reviews" className="space-y-6 mt-6">
             <Card>
               <CardHeader>
-                <CardTitle>Course Timeline</CardTitle>
+                <CardTitle className="flex items-center gap-2">
+                  <MessageSquare className="h-5 w-5 text-primary" />
+                  Student Reviews
+                </CardTitle>
+                <CardDescription>
+                  {course.totalReviews} reviews • Average rating:{" "}
+                  {course.rating}
+                </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="space-y-4">
-                  <div className="flex items-center gap-3">
-                    <Calendar className="h-5 w-5 text-gray-400" />
-                    <div>
-                      <p className="font-medium text-gray-900">Created</p>
-                      <p className="text-sm text-gray-600">
-                        {new Date(course.createdAt).toLocaleDateString()}
-                      </p>
-                    </div>
+                {course.reviews && course.reviews.length > 0 ? (
+                  <div className="space-y-6">
+                    {course.reviews.map((review) => (
+                      <div
+                        key={review._id}
+                        className="border-b border-gray-100 last:border-0 pb-6 last:pb-0"
+                      >
+                        <div className="flex items-start gap-4">
+                          <div className="h-12 w-12 rounded-full bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center text-white font-semibold flex-shrink-0">
+                            {review.user.name.charAt(0)}
+                          </div>
+                          <div className="flex-1">
+                            <div className="flex items-center justify-between mb-2">
+                              <h4 className="font-semibold text-gray-900">
+                                {review.user.name}
+                              </h4>
+                              <span className="text-sm text-gray-500">
+                                {new Date(
+                                  review.createdAt
+                                ).toLocaleDateString()}
+                              </span>
+                            </div>
+                            <div className="flex items-center gap-1 mb-2">
+                              {Array.from({ length: 5 }).map((_, i) => (
+                                <Star
+                                  key={i}
+                                  className={`h-4 w-4 ${
+                                    i < review.rating
+                                      ? "text-yellow-500 fill-yellow-500"
+                                      : "text-gray-300"
+                                  }`}
+                                />
+                              ))}
+                            </div>
+                            <p className="text-gray-700 leading-relaxed">
+                              {review.comment}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
                   </div>
-                  <div className="flex items-center gap-3">
-                    <Calendar className="h-5 w-5 text-gray-400" />
-                    <div>
-                      <p className="font-medium text-gray-900">Last Updated</p>
-                      <p className="text-sm text-gray-600">
-                        {new Date(course.updatedAt).toLocaleDateString()}
-                      </p>
-                    </div>
+                ) : (
+                  <div className="text-center py-12">
+                    <MessageSquare className="h-12 w-12 text-gray-300 mx-auto mb-3" />
+                    <p className="text-gray-600">No reviews yet</p>
+                    <p className="text-sm text-gray-500 mt-1">
+                      Be the first to review this course!
+                    </p>
                   </div>
-                </div>
+                )}
               </CardContent>
             </Card>
           </TabsContent>
         </Tabs>
-
-        {/* Action Dialog */}
-        <Dialog open={actionDialogOpen} onOpenChange={setActionDialogOpen}>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>
-                {actionType === "reject" ? "Reject Course" : "Suspend Course"}
-              </DialogTitle>
-              <DialogDescription>
-                Please provide a reason for {actionType === "reject" ? "rejecting" : "suspending"}{" "}
-                this course. This will be visible to the instructor.
-              </DialogDescription>
-            </DialogHeader>
-            <Textarea
-              placeholder="Enter reason..."
-              value={actionReason}
-              onChange={(e) => setActionReason(e.target.value)}
-              rows={4}
-              className="resize-none"
-            />
-            <DialogFooter>
-              <Button
-                variant="outline"
-                onClick={() => {
-                  setActionDialogOpen(false);
-                  setActionReason("");
-                  setActionType(null);
-                }}
-              >
-                Cancel
-              </Button>
-              <Button
-                onClick={confirmAction}
-                disabled={!actionReason.trim() || updateCourseMutation.isPending}
-                className={
-                  actionType === "reject"
-                    ? "bg-red-600 hover:bg-red-700"
-                    : ""
-                }
-              >
-                {updateCourseMutation.isPending ? "Processing..." : "Confirm"}
-              </Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
       </main>
     </DashboardShell>
   );

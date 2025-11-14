@@ -44,3 +44,46 @@ export type Course = {
   tags?: string[];
   duration: number;
 };
+
+export interface CourseDetail {
+  _id: string;
+  title: string;
+  description: string;
+  instructor: {
+    _id: string;
+    name: string;
+    email: string;
+    bio?: string;
+    avatar?: string;
+  };
+  coverImage: string;
+  price: number;
+  enrollments: number;
+  rating: number;
+  totalReviews: number;
+  createdAt: string;
+  updatedAt: string;
+  category: string;
+  duration: string;
+  level: string;
+  language: string;
+  lessons: Array<{
+    _id: string;
+    title: string;
+    description?: string;
+    duration?: string;
+  }>;
+  requirements: string[];
+  learningOutcomes: string[];
+  isEnrolled?: boolean;
+  reviews?: Array<{
+    _id: string;
+    user: {
+      name: string;
+      avatar?: string;
+    };
+    rating: number;
+    comment: string;
+    createdAt: string;
+  }>;
+}

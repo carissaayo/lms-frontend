@@ -1,5 +1,6 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
+  enrollInCourseApi,
   getEnrolledCourseApi,
   getStudentEnrollmentsApi,
   getUserEnrollmentsApi,
@@ -35,5 +36,18 @@ export function useSingleEnrollment(courseId: string) {
     queryKey: [courseId],
     queryFn: () => getEnrolledCourseApi(courseId),
     refetchOnWindowFocus: false,
+  });
+}
+
+
+// 🔹 Enroll in course
+export function useEnrollCourse() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (courseId: string) => enrollInCourseApi(courseId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["courses"] });
+      queryClient.invalidateQueries({ queryKey: ["singleCourse"] });
+    },
   });
 }

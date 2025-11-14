@@ -48,7 +48,7 @@ export async function getCoursesForStudentsApi({
   page,
   limit,
 }: any) {
-  const res = await api.get(`/courses`, {
+  const res = await api.get(`/student-courses`, {
     params: {
       category: category !== "all" ? category : undefined,
       title: search || undefined,
@@ -66,15 +66,10 @@ export async function getCoursesForStudentsApi({
 
 // Get a single course (for student detail page)
 export async function getSingleCourseApi(courseId: string) {
-  const res = await api.get(`/courses/${courseId}`);
+  const res = await api.get(`/student-courses/${courseId}`);
   return res.data;
 }
 
-// Enroll a student in a course
-export async function enrollInCourseApi(courseId: string) {
-  const res = await api.post(`students/enroll/${courseId}`);
-  return res.data;
-}
 
 // ADMIN
 export async function getAdminCoursesApi(filters: any) {

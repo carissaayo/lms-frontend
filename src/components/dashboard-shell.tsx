@@ -27,10 +27,7 @@ interface DashboardShellProps {
 
 export function DashboardShell({ children }: DashboardShellProps) {
   const { user } = useAuthStore((state) => state);
-console.log(user,"user");
-
   const userRole:string = user?.role;
-  console.log("userRole",userRole);
   
 
   return (

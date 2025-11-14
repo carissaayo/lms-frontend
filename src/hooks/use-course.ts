@@ -7,7 +7,6 @@ import {
   deleteCourseApi,
   getCoursesForStudentsApi,
   getSingleCourseApi,
-  enrollInCourseApi,
   getAdminCoursesApi,
   getSingleCourseAdminApi,
   updateCourseStatusAdminApi,
@@ -101,17 +100,7 @@ export function useSingleCourse(id: string) {
   });
 }
 
-// 🔹 Enroll in course
-export function useEnrollCourse() {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: (courseId: string) => enrollInCourseApi(courseId),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["courses"] });
-      queryClient.invalidateQueries({ queryKey: ["singleCourse"] });
-    },
-  });
-}
+
 
 // ADMIN
 export function useAdminCourses(filters: any) {

@@ -41,10 +41,14 @@ export async function getStudentEnrollmentsApi({
 }
 
 export async function getEnrolledCourseApi(courseId: string) {
-  console.log("Enrolled Single Course API response hwee");
 
-  const res = await api.get(`students/courses/${courseId}`);
+  const res = await api.get(`student-courses/${courseId}`);
+  return res.data;
+}
 
-  console.log("Enrolled Single Course API response:", res.data);
+
+// Enroll a student in a course
+export async function enrollInCourseApi(courseId: string) {
+  const res = await api.post(`students/enroll/${courseId}`);
   return res.data;
 }
