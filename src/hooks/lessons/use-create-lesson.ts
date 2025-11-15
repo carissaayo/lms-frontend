@@ -14,9 +14,11 @@ export function useCreateLessonForm() {
     title: "",
     description: "",
     courseId: "",
+    duration:""
   });
   const [videoFile, setVideoFile] = useState<File | null>(null);
   const [noteFile, setNoteFile] = useState<File | null>(null);
+const [videoPreview, setVideoPreview] = useState<string | null>(null);
 
   const { mutate: createLesson, isPending } = useCreateLesson();
 
@@ -28,7 +30,10 @@ export function useCreateLessonForm() {
 
   const handleVideoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
+     if (!file) return;
     if (file) setVideoFile(file);
+     const previewUrl = URL.createObjectURL(file);
+     setVideoPreview(previewUrl);
   };
 
   const handleNoteChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -42,6 +47,7 @@ export function useCreateLessonForm() {
     dataToSend.append("title", formData.title);
     dataToSend.append("description", formData.description);
     dataToSend.append("courseId", formData.courseId);
+    dataToSend.append("duration", formData.duration);
     if (videoFile) dataToSend.append("video", videoFile);
     if (noteFile) dataToSend.append("note", noteFile);
 
@@ -74,5 +80,7 @@ export function useCreateLessonForm() {
     handleVideoChange,
     handleNoteChange,
     handleSubmit,
+    videoPreview,
+    setFormData,
   };
 }

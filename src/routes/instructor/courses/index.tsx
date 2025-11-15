@@ -22,6 +22,8 @@ function RouteComponent() {
   const { data, isLoading, error } = useCourses();
   const courses: Course[] = data?.courses ?? [];
   const results = data?.results ?? 0;
+  console.log(data?.courses,"courses");
+  
 
 
   // Group by status
