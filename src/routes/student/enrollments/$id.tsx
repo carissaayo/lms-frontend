@@ -1,27 +1,16 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
+
 import { DashboardShell } from "@/components/dashboard-shell";
-import { useQueryClient } from "@tanstack/react-query";
-import { useSingleEnrollment } from "@/hooks/use-enrollment";
-import { Lesson } from "@/types/lesson.types";
-import { Course } from "@/types/course.types";
-import { toast } from "sonner";
 import { Toaster } from "@/components/ui/sonner";
-import { useStartLesson } from "@/hooks/use-lessons";
+
 import {
   ArrowLeft,
   PlayCircle,
   BookOpen,
-  Clock,
   CheckCircle,
-  Lock,
-  Sparkles,
-  TrendingUp,
   Award,
-  GraduationCap,
   Zap,
 } from "lucide-react";
 

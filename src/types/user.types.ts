@@ -12,9 +12,10 @@ export enum InstructorStatus {
 }
 
 export enum StudentStatus {
-  ACTIVE = "active",
+  PENDING = "pending",
+  APPROVED = "approved",
+  REJECTED = "rejected",
   SUSPENDED = "suspended",
-  INACTIVE = "inactive",
 }
 export interface RegisterData {
   firstName: string;

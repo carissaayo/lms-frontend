@@ -15,7 +15,7 @@ export const getAdminStudentsApi = async (filters: AdminStudentsFilters) => {
   if (filters.page) params.append("page", filters.page.toString());
   if (filters.limit) params.append("limit", filters.limit.toString());
 
-  const { data } = await api.get(`/admin-users/students?${params.toString()}`);
+  const { data } = await api.get(`/admin-students/?${params.toString()}`);
   return data;
 };
 

@@ -37,7 +37,7 @@ interface Instructor {
   _id: string;
   name: string;
   email: string;
-  avatar: string;
+  picture: string;
   bio: string;
   status: InstructorStatus;
   coursesCount: number;
@@ -284,7 +284,7 @@ function AdminInstructorsPage() {
                       <div className="flex items-start justify-between mb-4">
                         <div className="flex items-center gap-3">
                           <img
-                            src={instructor.avatar}
+                            src={instructor.picture}
                             alt={instructor.name}
                             className="h-16 w-16 rounded-full object-cover border-2 border-white shadow-md"
                           />

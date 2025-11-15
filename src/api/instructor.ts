@@ -11,7 +11,7 @@ export async function getInstructorEarningsApi(params = {}) {
 }
 
 export const getAdminInstructors = async (params: any) => {
-  const { data } = await api.get("/admin-users/instructors", { params });
+  const { data } = await api.get("/admin-instructors", { params });
   return data;
 };
 

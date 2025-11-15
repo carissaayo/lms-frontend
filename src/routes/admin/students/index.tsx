@@ -115,7 +115,7 @@ function AdminStudentsPage() {
   // Calculate stats
   const totalStudents = students.length;
   const activeStudents = students.filter(
-    (s) => s.status === StudentStatus.ACTIVE
+    (s) => s.status === StudentStatus.APPROVED
   ).length;
   const suspendedStudents = students.filter(
     (s) => s.status === StudentStatus.SUSPENDED
@@ -235,11 +235,11 @@ function AdminStudentsPage() {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="all">All Status</SelectItem>
-                    <SelectItem value={StudentStatus.ACTIVE}>Active</SelectItem>
+                    <SelectItem value={StudentStatus.APPROVED}>Active</SelectItem>
                     <SelectItem value={StudentStatus.SUSPENDED}>
                       Suspended
                     </SelectItem>
-                    <SelectItem value={StudentStatus.INACTIVE}>
+                    <SelectItem value={StudentStatus.PENDING}>
                       Inactive
                     </SelectItem>
                   </SelectContent>

@@ -31,7 +31,6 @@ import {
   BookOpen,
   Clock,
   DollarSign,
- 
   Phone,
   MapPin,
   Eye,
@@ -54,8 +53,8 @@ function getStatusBadge(status: string) {
     string,
     { label: string; color: string; icon: any }
   > = {
-    [StudentStatus.ACTIVE]: {
-      label: "Active",
+    [StudentStatus.APPROVED]: {
+      label: "Approved",
       color: "bg-green-100 text-green-700",
       icon: CheckCircle,
     },
@@ -64,14 +63,14 @@ function getStatusBadge(status: string) {
       color: "bg-red-100 text-red-700",
       icon: Ban,
     },
-    [StudentStatus.INACTIVE]: {
-      label: "Inactive",
+    [StudentStatus.PENDING]: {
+      label: "Pending",
       color: "bg-gray-100 text-gray-700",
       icon: Clock,
     },
   };
 
-  const config = statusConfig[status] || statusConfig[StudentStatus.INACTIVE];
+  const config = statusConfig[status] || statusConfig[StudentStatus.PENDING];
   const Icon = config.icon;
 
   return (
@@ -87,6 +86,8 @@ function RouteComponent() {
   const navigate = useNavigate();
 
   const { data, isLoading, error } = useSingleStudentAdmin(id);
+  console.log(data);
+  
   const updateStudent = useUpdateStudentStatusAdmin();
 
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -135,7 +136,7 @@ function RouteComponent() {
           <ArrowLeft className="h-4 w-4" /> Back to Students
         </Button>
 
-        {student.status === StudentStatus.ACTIVE ? (
+        {student.status === StudentStatus.APPROVED ? (
           <Button
             variant="outline"
             className="text-red-600 border-red-600 hover:bg-red-50"
@@ -147,7 +148,7 @@ function RouteComponent() {
           <Button
             className="bg-green-600 hover:bg-green-700"
             onClick={() =>
-              updateStudent.mutate({ id, status: StudentStatus.ACTIVE })
+              updateStudent.mutate({ id, status: StudentStatus.APPROVED })
             }
           >
             <CheckCircle className="h-4 w-4 mr-2" /> Reactivate
