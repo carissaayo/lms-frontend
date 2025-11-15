@@ -42,4 +42,5 @@ export type UserProfile = {
   country?: string;
   picture?: string;
   street?: string;
+  bio?:string
 };

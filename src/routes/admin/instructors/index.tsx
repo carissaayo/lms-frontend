@@ -41,7 +41,7 @@ interface Instructor {
   bio: string;
   status: InstructorStatus;
   coursesCount: number;
-  studentsCount: number;
+  enrollmentsCount: number;
   totalRevenue: number;
   rating: number;
   createdAt: string;
@@ -329,7 +329,7 @@ function AdminInstructorsPage() {
                         <div className="text-center p-2 bg-gray-50 rounded-lg">
                           <Users className="h-4 w-4 mx-auto mb-1 text-primary" />
                           <p className="text-lg font-semibold text-gray-900">
-                            {instructor.studentsCount}
+                            {instructor.enrollmentsCount}
                           </p>
                           <p className="text-xs text-gray-600">Students</p>
                         </div>

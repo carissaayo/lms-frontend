@@ -3,21 +3,22 @@ import { DashboardShell } from "@/components/dashboard-shell";
 import AddressCard from "@/components/profile/AddressCard";
 import PersonalInfoCard from "@/components/profile/PersonInfo";
 import ProfileOverview from "@/components/profile/ProfileOverview";
-import { useProfile, useUpdateProfile } from "@/hooks/use-profile";
+import { useAdminProfile, useAdminUpdateProfile } from "@/hooks/use-profile";
 import { UserProfile } from "@/types/user.types";
 import { useState } from "react";
 import { toast } from "sonner";
 
-export const Route = createFileRoute("/profile/")({
+
+export const Route = createFileRoute("/admin/profile/")({
   component: RouteComponent,
 });
 
 function RouteComponent() {
-  const { data, isLoading, isError, refetch } = useProfile();
+  const { data, isLoading, isError, refetch } = useAdminProfile();
   const [editMode, setEditMode] = useState(false);
   const [newPictureFile, setNewPictureFile] = useState<File | null>(null);
   const [editedUser, setEditedUser] = useState<UserProfile | null>(null);
-  const updateProfile = useUpdateProfile();
+  const updateProfile = useAdminUpdateProfile();
   const editableFields = [
     "firstName",
     "lastName",

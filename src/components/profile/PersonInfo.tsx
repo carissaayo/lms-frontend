@@ -66,6 +66,19 @@ export default function PersonalInfoCard({
             <p className="text-base font-medium">{user.email}</p>
           </div>
         </div>
+        <div>
+          <p className="text-sm text-muted-foreground">Bio </p>
+          {editMode ? (
+            <textarea
+            minLength={32}
+              value={user.bio}
+              onChange={(e) => onFieldChange?.("bio", e.target.value)}
+              className="border px-2 py-1 rounded w-full"
+            />
+          ) : (
+            <p className="text-base font-medium">{user.bio}</p>
+          )}
+        </div>
       </CardContent>
     </Card>
   );

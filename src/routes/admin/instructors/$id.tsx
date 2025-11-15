@@ -44,7 +44,7 @@ import {
   MessageSquare,
   Eye,
 } from "lucide-react";
-import { useQueryClient } from "@tanstack/react-query";
+
 import { InstructorStatus } from "@/types/user.types";
 import { useSingleInstructorAdmin, useUpdateInstructorStatusAdmin } from "@/hooks/use-instructor";
 
@@ -56,7 +56,7 @@ interface InstructorDetail {
   lastName: string;
   email: string;
   phone?: string;
-  avatar: string;
+  picture: string;
   bio: string;
   status: InstructorStatus;
   specialization: string;
@@ -78,7 +78,7 @@ interface InstructorDetail {
   }>;
   stats: {
     totalCourses: number;
-    totalStudents: number;
+    totalEnrollments: number;
     totalRevenue: number;
     averageRating: number;
     totalReviews: number;
@@ -145,13 +145,15 @@ const getStatusBadge = (status: string) => {
 function RouteComponent() {
   const navigate = useNavigate();
   const { id } = useParams({ from: "/admin/instructors/$id" });
-  const queryClient = useQueryClient();
+
 
   const [actionDialogOpen, setActionDialogOpen] = useState(false);
   const [actionType, setActionType] = useState<InstructorStatus | null>(null);
   const [actionReason, setActionReason] = useState("");
 
   const { data, isLoading, error } = useSingleInstructorAdmin(id);
+  console.log(data);
+  
   const instructor: InstructorDetail | undefined = data?.instructor;
 
   const updateInstructorMutation = useUpdateInstructorStatusAdmin();
@@ -296,7 +298,7 @@ function RouteComponent() {
           <div className="bg-gradient-to-br from-primary/10 to-primary/5 p-6">
             <div className="flex flex-col lg:flex-row gap-6">
               <img
-                src={instructor.avatar}
+                src={instructor.picture}
                 alt={`${instructor.firstName} ${instructor.lastName}`}
                 className="w-32 h-32 rounded-full object-cover border-4 border-white shadow-lg"
               />
@@ -342,7 +344,7 @@ function RouteComponent() {
                   <div className="bg-white rounded-lg p-3 shadow-sm">
                     <Users className="h-5 w-5 text-primary mb-1" />
                     <p className="text-2xl font-bold text-gray-900">
-                      {instructor.stats.totalStudents}
+                      {instructor.stats.totalEnrollments}
                     </p>
                     <p className="text-xs text-gray-600">Students</p>
                   </div>
@@ -479,7 +481,7 @@ function RouteComponent() {
                   <div className="flex justify-between items-center">
                     <span className="text-gray-600">Total Students</span>
                     <span className="font-semibold text-gray-900">
-                      {instructor.stats.totalStudents}
+                      {instructor.stats.totalEnrollments}
                     </span>
                   </div>
                   <div className="flex justify-between items-center">
@@ -655,7 +657,7 @@ function RouteComponent() {
                 </CardHeader>
                 <CardContent>
                   <p className="text-3xl font-bold text-gray-900">
-                    {instructor.stats.totalStudents}
+                    {instructor.stats.totalEnrollments}
                   </p>
                   <p className="text-sm text-gray-600 mt-1">
                     Across all courses
@@ -671,7 +673,7 @@ function RouteComponent() {
                 <CardContent>
                   <p className="text-3xl font-bold text-gray-900">
                     {Math.round(
-                      instructor.stats.totalStudents /
+                      instructor.stats.totalEnrollments /
                         instructor.stats.totalCourses || 0
                     )}
                   </p>

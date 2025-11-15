@@ -232,7 +232,7 @@ export function DashboardShell({ children }: DashboardShellProps) {
               {/* Shared Navs */}
               <div className="pt-4 mt-4 border-t border-white/10">
                 <Link
-                  to="/profile"
+                  to={userRole==="admin" ?"/admin/profile":"/profile"}
                   className="flex items-center gap-3 rounded-xl px-4 py-3 transition-all duration-200 hover:bg-white/10 hover:shadow-md text-white/90 hover:text-white hover:translate-x-1"
                   activeProps={{
                     className:

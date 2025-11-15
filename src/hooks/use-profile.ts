@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { getuserProfileApi, updateProfileApi } from "@/api/profile";
+import { getAdminProfileApi, getuserProfileApi, updateAdminProfileApi, updateProfileApi } from "@/api/profile";
 
 export function useProfile() {
   return useQuery({
@@ -13,5 +13,20 @@ export function useProfile() {
 export function useUpdateProfile() {
   return useMutation({
     mutationFn: (payload: FormData) => updateProfileApi(payload),
+  });
+}
+
+export function useAdminProfile() {
+  return useQuery({
+    queryKey: ["admin-profile"],
+    queryFn: getAdminProfileApi,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+  });
+}
+
+export function useAdminUpdateProfile() {
+  return useMutation({
+    mutationFn: (payload: FormData) => updateAdminProfileApi(payload),
   });
 }

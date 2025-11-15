@@ -30,6 +30,7 @@ import { Route as InstructorCoursesIndexRouteImport } from './routes/instructor/
 import { Route as InstructorAssignmentsIndexRouteImport } from './routes/instructor/assignments/index'
 import { Route as InstructorAnalyticsIndexRouteImport } from './routes/instructor/analytics/index'
 import { Route as AdminStudentsIndexRouteImport } from './routes/admin/students/index'
+import { Route as AdminProfileIndexRouteImport } from './routes/admin/profile/index'
 import { Route as AdminInstructorsIndexRouteImport } from './routes/admin/instructors/index'
 import { Route as AdminCoursesIndexRouteImport } from './routes/admin/courses/index'
 import { Route as AdminAnalyticsIndexRouteImport } from './routes/admin/analytics/index'
@@ -153,6 +154,11 @@ const AdminStudentsIndexRoute = AdminStudentsIndexRouteImport.update({
   path: '/admin/students/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminProfileIndexRoute = AdminProfileIndexRouteImport.update({
+  id: '/admin/profile/',
+  path: '/admin/profile/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminInstructorsIndexRoute = AdminInstructorsIndexRouteImport.update({
   id: '/admin/instructors/',
   path: '/admin/instructors/',
@@ -254,6 +260,7 @@ export interface FileRoutesByFullPath {
   '/admin/analytics': typeof AdminAnalyticsIndexRoute
   '/admin/courses': typeof AdminCoursesIndexRoute
   '/admin/instructors': typeof AdminInstructorsIndexRoute
+  '/admin/profile': typeof AdminProfileIndexRoute
   '/admin/students': typeof AdminStudentsIndexRoute
   '/instructor/analytics': typeof InstructorAnalyticsIndexRoute
   '/instructor/assignments': typeof InstructorAssignmentsIndexRoute
@@ -292,6 +299,7 @@ export interface FileRoutesByTo {
   '/admin/analytics': typeof AdminAnalyticsIndexRoute
   '/admin/courses': typeof AdminCoursesIndexRoute
   '/admin/instructors': typeof AdminInstructorsIndexRoute
+  '/admin/profile': typeof AdminProfileIndexRoute
   '/admin/students': typeof AdminStudentsIndexRoute
   '/instructor/analytics': typeof InstructorAnalyticsIndexRoute
   '/instructor/assignments': typeof InstructorAssignmentsIndexRoute
@@ -331,6 +339,7 @@ export interface FileRoutesById {
   '/admin/analytics/': typeof AdminAnalyticsIndexRoute
   '/admin/courses/': typeof AdminCoursesIndexRoute
   '/admin/instructors/': typeof AdminInstructorsIndexRoute
+  '/admin/profile/': typeof AdminProfileIndexRoute
   '/admin/students/': typeof AdminStudentsIndexRoute
   '/instructor/analytics/': typeof InstructorAnalyticsIndexRoute
   '/instructor/assignments/': typeof InstructorAssignmentsIndexRoute
@@ -371,6 +380,7 @@ export interface FileRouteTypes {
     | '/admin/analytics'
     | '/admin/courses'
     | '/admin/instructors'
+    | '/admin/profile'
     | '/admin/students'
     | '/instructor/analytics'
     | '/instructor/assignments'
@@ -409,6 +419,7 @@ export interface FileRouteTypes {
     | '/admin/analytics'
     | '/admin/courses'
     | '/admin/instructors'
+    | '/admin/profile'
     | '/admin/students'
     | '/instructor/analytics'
     | '/instructor/assignments'
@@ -447,6 +458,7 @@ export interface FileRouteTypes {
     | '/admin/analytics/'
     | '/admin/courses/'
     | '/admin/instructors/'
+    | '/admin/profile/'
     | '/admin/students/'
     | '/instructor/analytics/'
     | '/instructor/assignments/'
@@ -486,6 +498,7 @@ export interface RootRouteChildren {
   AdminAnalyticsIndexRoute: typeof AdminAnalyticsIndexRoute
   AdminCoursesIndexRoute: typeof AdminCoursesIndexRoute
   AdminInstructorsIndexRoute: typeof AdminInstructorsIndexRoute
+  AdminProfileIndexRoute: typeof AdminProfileIndexRoute
   AdminStudentsIndexRoute: typeof AdminStudentsIndexRoute
   InstructorAnalyticsIndexRoute: typeof InstructorAnalyticsIndexRoute
   InstructorAssignmentsIndexRoute: typeof InstructorAssignmentsIndexRoute
@@ -652,6 +665,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminStudentsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/profile/': {
+      id: '/admin/profile/'
+      path: '/admin/profile'
+      fullPath: '/admin/profile'
+      preLoaderRoute: typeof AdminProfileIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/instructors/': {
       id: '/admin/instructors/'
       path: '/admin/instructors'
@@ -782,6 +802,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminAnalyticsIndexRoute: AdminAnalyticsIndexRoute,
   AdminCoursesIndexRoute: AdminCoursesIndexRoute,
   AdminInstructorsIndexRoute: AdminInstructorsIndexRoute,
+  AdminProfileIndexRoute: AdminProfileIndexRoute,
   AdminStudentsIndexRoute: AdminStudentsIndexRoute,
   InstructorAnalyticsIndexRoute: InstructorAnalyticsIndexRoute,
   InstructorAssignmentsIndexRoute: InstructorAssignmentsIndexRoute,
