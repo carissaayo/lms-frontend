@@ -18,7 +18,7 @@ export function useUpdateProfile() {
 
 export function useAdminProfile() {
   return useQuery({
-    queryKey: ["admin-profile"],
+    queryKey: ["profile"],
     queryFn: getAdminProfileApi,
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,

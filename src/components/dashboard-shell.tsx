@@ -10,6 +10,7 @@ import {
   Gauge,
   NotebookPen,
   Settings,
+  ShieldUser,
   Store,
   User,
   User2,
@@ -191,6 +192,17 @@ export function DashboardShell({ children }: DashboardShellProps) {
                     <BookOpen className="h-5 w-5" />
                     Analytics
                   </Link>
+                  <Link
+                    to="/admin/admins"
+                    className="flex items-center gap-3 rounded-xl px-4 py-3 transition-all duration-200 hover:bg-white/10 hover:shadow-md text-white/90 hover:text-white hover:translate-x-1"
+                    activeProps={{
+                      className:
+                        "bg-white/20 text-white shadow-lg backdrop-blur-sm border border-white/20",
+                    }}
+                  >
+                    <ShieldUser className="h-5 w-5" />
+                    Admins
+                  </Link>
 
                   <Link
                     to="/admin/courses"
@@ -232,7 +244,7 @@ export function DashboardShell({ children }: DashboardShellProps) {
               {/* Shared Navs */}
               <div className="pt-4 mt-4 border-t border-white/10">
                 <Link
-                  to={userRole==="admin" ?"/admin/profile":"/profile"}
+                  to={userRole === "admin" ? "/admin/profile" : "/profile"}
                   className="flex items-center gap-3 rounded-xl px-4 py-3 transition-all duration-200 hover:bg-white/10 hover:shadow-md text-white/90 hover:text-white hover:translate-x-1"
                   activeProps={{
                     className:
@@ -295,7 +307,7 @@ export function DashboardShell({ children }: DashboardShellProps) {
                 </Link>
 
                 <div className="h-10 w-10 flex items-center justify-center">
-                  <LogoutDialog/>
+                  <LogoutDialog />
                 </div>
 
                 <div className="h-10 w-10 flex items-center justify-center rounded-full bg-gradient-to-br from-primary to-primary-dark cursor-pointer transition-all duration-200 hover:shadow-lg hover:scale-105 ring-2 ring-primary-light/30">
