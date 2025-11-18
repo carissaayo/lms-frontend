@@ -17,6 +17,13 @@ export enum StudentStatus {
   REJECTED = "rejected",
   SUSPENDED = "suspended",
 }
+
+export enum AdminStatus {
+  PENDING = "pending",
+  APPROVED = "approved",
+  REJECTED = "rejected",
+  SUSPENDED = "suspended",
+}
 export interface RegisterData {
   firstName: string;
   lastName: string;
