@@ -24,6 +24,8 @@ import { PaginationControls } from "@/components/courses/Pagination";
 import { useAdminStudents } from "@/hooks/use-student";
 import { NairaIcon } from "@/components/analytics/admin/NairaIcon";
 import { StudentsTable } from "@/components/admin/UserTable";
+import useAuthStore from "@/store/useAuthStore";
+import Forbidden from "@/components/forbidden";
 
 export const Route = createFileRoute("/admin/students/")({
   component: AdminStudentsPage,
@@ -88,6 +90,8 @@ const StudentStatCard = ({
 
 
 function AdminStudentsPage() {
+  const { isForbidden } = useAuthStore.getState();
+
   const navigate = useNavigate();
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState("all");
@@ -166,13 +170,15 @@ function AdminStudentsPage() {
           </div>
         )}
 
-        {error && (
+        {isForbidden && error && <Forbidden />}
+
+        {error && !isForbidden && (
           <p className="text-red-600 text-center mt-10">
-            Failed to load students.
+            Failed to load admins.
           </p>
         )}
 
-        {!isLoading && (
+        {!isLoading && !isForbidden && (
           <>
             {/* Stats Section */}
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
@@ -235,7 +241,9 @@ function AdminStudentsPage() {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="all">All Status</SelectItem>
-                    <SelectItem value={StudentStatus.APPROVED}>Active</SelectItem>
+                    <SelectItem value={StudentStatus.APPROVED}>
+                      Active
+                    </SelectItem>
                     <SelectItem value={StudentStatus.SUSPENDED}>
                       Suspended
                     </SelectItem>

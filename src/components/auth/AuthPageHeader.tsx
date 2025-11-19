@@ -20,7 +20,7 @@ export const AuthPageHeader: React.FC<AuthPageHeaderProps> = ({
     <div className="w-full pt-10 pb-6 text-center">
       <Link
         to={to}
-        className={`inline-flex items-center gap-2 font-bold text-4xl bg-gradient-to-r from-${fromColor} to-${toColor} bg-clip-text text-transparent hover:from-${fromColor} hover:to-${toColor} transition-all`}
+        className={`inline-flex items-center gap-2 font-bold text-4xl bg-gradient-to-r from-${fromColor} to-${toColor} bg-clip-text text-transparent hover:from-${fromColor} hover:to-${toColor} transition-all text-white`}
       >
         <BookOpen className={`w-10 h-10 text-${fromColor}`} />
         {title}

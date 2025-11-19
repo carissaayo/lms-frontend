@@ -6,6 +6,7 @@ interface AuthState {
   accessToken?: string;
   refreshToken?: string;
   isAuthenticated: boolean;
+  isForbidden: boolean;
 
   loginUser: (data: {
     user: any;
@@ -13,6 +14,7 @@ interface AuthState {
     refreshToken: string;
   }) => void;
   logoutUser: () => void;
+  forbidden: () => void;
 }
 
 const useAuthStore = create<AuthState>()(
@@ -22,7 +24,7 @@ const useAuthStore = create<AuthState>()(
       accessToken: undefined,
       refreshToken: undefined,
       isAuthenticated: false,
-
+      isForbidden: false,
       loginUser: ({ user, accessToken, refreshToken }) => {
         // Persist both in Zustand & localStorage (for axios)
         localStorage.setItem("accessToken", accessToken);
@@ -41,8 +43,6 @@ const useAuthStore = create<AuthState>()(
         localStorage.removeItem("refreshToken");
         localStorage.removeItem("user");
 
-        
-
         set({
           user: null,
           accessToken: undefined,
@@ -50,6 +50,7 @@ const useAuthStore = create<AuthState>()(
           isAuthenticated: false,
         });
       },
+      forbidden: () => set({ isForbidden: true }),
     }),
     {
       name: "auth-storage",

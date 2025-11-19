@@ -47,6 +47,8 @@ import {
 
 import { InstructorStatus } from "@/types/user.types";
 import { useSingleInstructorAdmin, useUpdateInstructorStatusAdmin } from "@/hooks/use-instructor";
+import Forbidden from "@/components/forbidden";
+import useAuthStore from "@/store/useAuthStore";
 
 
 
@@ -143,6 +145,8 @@ const getStatusBadge = (status: string) => {
 };
 
 function RouteComponent() {
+  const { isForbidden } = useAuthStore.getState();
+
   const navigate = useNavigate();
   const { id } = useParams({ from: "/admin/instructors/$id" });
 
@@ -223,6 +227,22 @@ function RouteComponent() {
     );
   }
 
+    if (error && isForbidden) {
+      return (
+        <DashboardShell>
+          <Forbidden />
+          <Button
+            variant="outline"
+            onClick={() => navigate({ to: "/admin/students" })}
+            className="mt-4"
+          >
+            Back to Students
+          </Button>
+        </DashboardShell>
+      );
+    }
+
+    
   if (!instructor) {
     return (
       <DashboardShell>
@@ -233,7 +253,7 @@ function RouteComponent() {
       </DashboardShell>
     );
   }
-
+  
   return (
     <DashboardShell>
       <main className="space-y-6 mb-10">

@@ -42,6 +42,8 @@ import {
 import { useSingleCourseAdmin, useUpdateCourseStatusAdmin } from "@/hooks/use-course";
 import { NairaIcon } from "@/components/analytics/admin/NairaIcon";
 import { CourseStatus } from "@/types/course.types";
+import Forbidden from "@/components/forbidden";
+import useAuthStore from "@/store/useAuthStore";
 
 // Define types
 interface CourseDetail {
@@ -122,6 +124,8 @@ const getStatusBadge = (status: string) => {
 };
 
 function RouteComponent() {
+  const { isForbidden } = useAuthStore.getState();
+
   const navigate = useNavigate();
   const { id } = useParams({ from: "/admin/courses/$id" });
 
@@ -165,6 +169,20 @@ const updateCourseMutation = useUpdateCourseStatusAdmin();
      }
    );
  };
+   if (error && isForbidden) {
+     return (
+       <DashboardShell>
+         <Forbidden />
+         <Button
+           variant="outline"
+           onClick={() => navigate({ to: "/admin/students" })}
+           className="mt-4"
+         >
+           Back to Students
+         </Button>
+       </DashboardShell>
+     );
+   }
   if (error) {
     return (
       <DashboardShell>

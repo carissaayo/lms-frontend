@@ -24,6 +24,8 @@ import { useAdminCourses } from "@/hooks/use-course";
 import { useDebounce } from "@/hooks/use-debounce";
 import {  PaginationControls } from "@/components/courses/Pagination";
 import { NairaIcon } from "@/components/analytics/admin/NairaIcon";
+import Forbidden from "@/components/forbidden";
+import useAuthStore from "@/store/useAuthStore";
 
 export const Route = createFileRoute("/admin/courses/")({
   component: AdminCoursesPage,
@@ -91,6 +93,8 @@ const getStatusBadge = (status: string) => {
 };
 
 function AdminCoursesPage() {
+  const { isForbidden } = useAuthStore.getState();
+
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
@@ -110,6 +114,8 @@ const { data, isLoading, error } = useAdminCourses({
   page,
   limit,
 });
+
+
   const courses: Course[] = data?.courses ?? [];
   const total = data?.total ?? 0;
   
@@ -147,16 +153,6 @@ const { data, isLoading, error } = useAdminCourses({
     navigate({ to: `/admin/courses/${courseId}` });
   };
 
-  if (error) {
-    return (
-      <DashboardShell>
-        <p className="text-red-600 text-center mt-10">
-          Failed to load courses.
-        </p>
-      </DashboardShell>
-    );
-  }
-
   return (
     <DashboardShell>
       <main className="space-y-8 mb-10">
@@ -178,8 +174,15 @@ const { data, isLoading, error } = useAdminCourses({
             <div className="h-10 w-10 border-4 border-gray-300 border-t-primary rounded-full animate-spin"></div>
           </div>
         )}
+        {isForbidden && error && <Forbidden />}
 
-        {!isLoading && (
+        {error && !isForbidden && (
+          <p className="text-red-600 text-center mt-10">
+            Failed to load courses.
+          </p>
+        )}
+
+        {!isLoading && !isForbidden && (
           <>
             {/* Stats Section */}
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-5">
@@ -386,7 +389,7 @@ const { data, isLoading, error } = useAdminCourses({
               }}
               onLimitChange={(newLimit) => {
                 setLimit(newLimit);
-                setPage(1); 
+                setPage(1);
               }}
               className="mt-8"
             />

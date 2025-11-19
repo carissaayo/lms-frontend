@@ -28,6 +28,8 @@ import { useDebounce } from "@/hooks/use-debounce";
 import { PaginationControls } from "@/components/courses/Pagination";
 import { InstructorStatus } from "@/types/user.types";
 import { useAdminInstructors } from "@/hooks/use-instructor";
+import useAuthStore from "@/store/useAuthStore";
+import Forbidden from "@/components/forbidden";
 
 export const Route = createFileRoute("/admin/instructors/")({
   component: AdminInstructorsPage,
@@ -108,6 +110,8 @@ const getStatusBadge = (status: string) => {
 };
 
 function AdminInstructorsPage() {
+  const { isForbidden } = useAuthStore.getState();
+
   const navigate = useNavigate();
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState("all");
@@ -145,16 +149,6 @@ function AdminInstructorsPage() {
     navigate({ to: `/admin/instructors/${instructorId}` });
   };
 
-  if (error) {
-    return (
-      <DashboardShell>
-        <p className="text-red-600 text-center mt-10">
-          Failed to load instructors.
-        </p>
-      </DashboardShell>
-    );
-  }
-
   return (
     <DashboardShell>
       <main className="space-y-8 mb-10">
@@ -176,8 +170,14 @@ function AdminInstructorsPage() {
             <div className="h-10 w-10 border-4 border-gray-300 border-t-primary rounded-full animate-spin"></div>
           </div>
         )}
+        {isForbidden && error && <Forbidden />}
+        {error && !isForbidden && (
+          <p className="text-red-600 text-center mt-10">
+            Failed to load instructor.
+          </p>
+        )}
 
-        {!isLoading && (
+        {!isLoading&& !isForbidden && (
           <>
             {/* Stats Section */}
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-5">

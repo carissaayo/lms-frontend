@@ -40,6 +40,8 @@ import {
   useUpdateStudentStatusAdmin,
 } from "@/hooks/use-student";
 import { StudentStatus } from "@/types/user.types";
+import useAuthStore from '@/store/useAuthStore';
+import Forbidden from "@/components/forbidden";
 
 
 export const Route = createFileRoute("/admin/students/$id")({
@@ -82,6 +84,8 @@ function getStatusBadge(status: string) {
 }
 
 function RouteComponent() {
+  const { isForbidden } = useAuthStore.getState();
+
   const { id } = useParams({ from: "/admin/students/$id" });
   const navigate = useNavigate();
 
@@ -104,6 +108,20 @@ function RouteComponent() {
       </DashboardShell>
     );
   }
+     if (error && isForbidden) {
+       return (
+         <DashboardShell>
+           <Forbidden />
+           <Button
+             variant="outline"
+             onClick={() => navigate({ to: "/admin/students" })}
+             className="mt-4"
+           >
+             Back to Students
+           </Button>
+         </DashboardShell>
+       );
+     }
 
   if (error || !student) {
     return (
@@ -123,6 +141,7 @@ function RouteComponent() {
     );
   }
 
+ 
   return (
     <DashboardShell>
         <main className="mb-12">

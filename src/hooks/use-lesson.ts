@@ -12,8 +12,8 @@ export function useLessons() {
   return useQuery({
     queryKey: ["lessons"],
     queryFn: getLessonsApi,
-    refetchOnWindowFocus: false, // ⛔ don't spam on focus
-    refetchOnReconnect: false, // ⛔ don't spam on reconnect
+    refetchOnWindowFocus: false, 
+    refetchOnReconnect: false, 
   });
 }
 

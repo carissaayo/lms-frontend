@@ -47,7 +47,7 @@ function RouteComponent() {
             description=" Sign in to access the admin dashboard"
             fromColor="purple-500"
             toColor="pink-500"
-            dark
+            dark={true}
           />
 
           <form onSubmit={handleSubmit}>

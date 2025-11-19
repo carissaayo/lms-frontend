@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { DashboardShell } from "@/components/dashboard-shell";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
@@ -41,7 +40,6 @@ import {
   Search,
   UserCheck,
   UserX,
-  Shield,
   Plus,
   MoreVertical,
   Mail,
@@ -51,6 +49,7 @@ import {
   Unlock,
   Trash2,
   UserCog,
+  User2Icon,
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -62,21 +61,18 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useDebounce } from "@/hooks/use-debounce";
 import { PaginationControls } from "@/components/courses/Pagination";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { useAdmins } from "@/hooks/use-admin";
-import { AdminStatus, Role } from "@/types/user.types";
+import { useAddNewAdmin, useAdmins } from "@/hooks/use-admin";
+import { AdminStatus } from "@/types/user.types";
 import { Admin } from "@/hooks/admins/use-admin-admins";
+import { Toaster } from "@/components/ui/sonner";
+import useAuthStore from "@/store/useAuthStore";
+import Forbidden from "@/components/forbidden";
 
 export const Route = createFileRoute("/admin/admins/")({
   component: AdminManagementPage,
 });
-
-
-
-
-
-
 
 const StatCard = ({
   title,
@@ -120,6 +116,7 @@ const StatCard = ({
 );
 
 function AdminManagementPage() {
+  const { isForbidden } = useAuthStore.getState();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
@@ -137,10 +134,7 @@ function AdminManagementPage() {
   >(null);
 
   const [newAdmin, setNewAdmin] = useState({
-    firstName: "",
-    lastName: "",
     email: "",
-    
   });
 
   const [debouncedSearch] = useDebounce(search, 500);
@@ -152,8 +146,7 @@ function AdminManagementPage() {
     limit,
   });
 
-  console.log(data,"data");
-  
+  console.log(data, "data");
 
   const admins: Admin[] = data?.admins ?? [];
   const total = data?.total ?? 0;
@@ -167,33 +160,8 @@ function AdminManagementPage() {
   const suspendedAdmins = admins.filter(
     (a) => a.status === AdminStatus.SUSPENDED
   ).length;
-  
 
-  // Create Admin Mutation
-  const createAdminMutation = useMutation({
-    mutationFn: async (adminData: typeof newAdmin) => {
-      const response = await fetch("/api/admin-admins", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(adminData),
-      });
-      if (!response.ok) throw new Error("Failed to create admin");
-      return response.json();
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["admins"] });
-      toast.success("Admin created successfully");
-      setCreateDialogOpen(false);
-      setNewAdmin({
-        firstName: "",
-        lastName: "",
-        email: "",
-      });
-    },
-    onError: (error: Error) => {
-      toast.error(error.message || "Failed to create admin");
-    },
-  });
+  const { mutate: createAdmin, isPending, isError } = useAddNewAdmin();
 
   // Update Admin Status Mutation
   const updateAdminMutation = useMutation({
@@ -224,7 +192,7 @@ function AdminManagementPage() {
   });
 
   const handleCreateAdmin = () => {
-    createAdminMutation.mutate(newAdmin);
+    createAdmin(newAdmin);
   };
 
   const handleAdminAction = (
@@ -249,8 +217,6 @@ function AdminManagementPage() {
     navigate({ to: `/admin/admins/${adminId}` });
   };
 
-
-
   const getStatusBadge = (status: AdminStatus) => {
     const statusConfig = {
       [AdminStatus.APPROVED]: {
@@ -265,7 +231,7 @@ function AdminManagementPage() {
         label: "Suspended",
         className: "bg-red-100 text-red-700 border-red-200",
       },
-        [AdminStatus.REJECTED]: {
+      [AdminStatus.REJECTED]: {
         label: "Rejected",
         className: "bg-red-100 text-red-700 border-red-200",
       },
@@ -274,8 +240,11 @@ function AdminManagementPage() {
     return <Badge className={config?.className}>{config?.label}</Badge>;
   };
 
+
+
   return (
     <DashboardShell>
+      <Toaster />
       <main className="space-y-8 mb-10">
         {/* Header */}
         <div className="flex items-center justify-between flex-col sm:flex-row gap-4 border-b border-gray-300 pb-4">
@@ -287,9 +256,12 @@ function AdminManagementPage() {
               Manage platform administrators and their permissions
             </p>
           </div>
+
+
           <Button
             onClick={() => setCreateDialogOpen(true)}
             className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
+            disabled={!!isForbidden||!!error}
           >
             <Plus className="h-4 w-4 mr-2" />
             Add New Admin
@@ -302,14 +274,17 @@ function AdminManagementPage() {
             <div className="h-10 w-10 border-4 border-gray-300 border-t-primary rounded-full animate-spin"></div>
           </div>
         )}
+        {isForbidden && error && (
+          <Forbidden/>
+        )}
 
-        {error && (
+        {error && !isForbidden && (
           <p className="text-red-600 text-center mt-10">
             Failed to load admins.
           </p>
         )}
 
-        {!isLoading && (
+        {!isLoading && !isForbidden && (
           <>
             {/* Stats Section */}
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
@@ -359,7 +334,9 @@ function AdminManagementPage() {
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="all">All Status</SelectItem>
-                      <SelectItem value={AdminStatus.APPROVED}>Active</SelectItem>
+                      <SelectItem value={AdminStatus.APPROVED}>
+                        Active
+                      </SelectItem>
                       <SelectItem value={AdminStatus.PENDING}>
                         Inactive
                       </SelectItem>
@@ -368,7 +345,6 @@ function AdminManagementPage() {
                       </SelectItem>
                     </SelectContent>
                   </Select>
-                
                 </div>
                 <div className="mt-4 flex items-center justify-between">
                   <p className="text-sm text-gray-600">
@@ -431,28 +407,29 @@ function AdminManagementPage() {
                             <TableCell>
                               <div className="flex items-center gap-3">
                                 <div className="h-10 w-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-semibold">
-                                  {admin.avatar ? (
+                                  {admin?.avatar ? (
                                     <img
-                                      src={admin.avatar}
-                                      alt={admin.firstName}
+                                      src={admin?.avatar}
+                                      alt={admin?.firstName}
                                       className="h-10 w-10 rounded-full object-cover"
                                     />
                                   ) : (
-                                    `${admin.firstName.charAt(0)}${admin.lastName.charAt(0)}`
+                                    // `${admin?.firstName?.charAt(0)}${admin?.lastName?.charAt(0)}`
+                                    <User2Icon className="rounded-full" />
                                   )}
                                 </div>
                                 <div>
                                   <p className="font-medium text-gray-900">
-                                    {admin.firstName} {admin.lastName}
+                                    {admin?.firstName} {admin?.lastName}
                                   </p>
                                   <div className="flex items-center gap-1 text-sm text-gray-600">
                                     <Mail className="h-3 w-3" />
-                                    {admin.email}
+                                    {admin?.email}
                                   </div>
                                 </div>
                               </div>
                             </TableCell>
-                           
+
                             <TableCell>
                               {getStatusBadge(admin.status)}
                             </TableCell>
@@ -464,13 +441,15 @@ function AdminManagementPage() {
                             </TableCell>
                             <TableCell>
                               <span className="text-sm text-gray-600">
-                                {admin.activityCount} actions
+                                {admin?.activityCount} actions
                               </span>
                             </TableCell>
                             <TableCell>
                               <div className="flex items-center gap-1 text-sm text-gray-600">
                                 <Calendar className="h-3 w-3" />
-                                {new Date(admin.createdAt).toLocaleDateString()}
+                                {new Date(
+                                  admin?.createdAt
+                                ).toLocaleDateString()}
                               </div>
                             </TableCell>
                             <TableCell className="text-right">
@@ -555,36 +534,10 @@ function AdminManagementPage() {
             <DialogHeader>
               <DialogTitle>Add New Administrator</DialogTitle>
               <DialogDescription>
-                Create a new admin account with appropriate permissions
+                Add them by adding up their email
               </DialogDescription>
             </DialogHeader>
             <div className="space-y-4 py-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <Label htmlFor="firstName">First Name</Label>
-                  <Input
-                    id="firstName"
-                    value={newAdmin.firstName}
-                    onChange={(e) =>
-                      setNewAdmin({ ...newAdmin, firstName: e.target.value })
-                    }
-                    placeholder="John"
-                    className="mt-1.5"
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="lastName">Last Name</Label>
-                  <Input
-                    id="lastName"
-                    value={newAdmin.lastName}
-                    onChange={(e) =>
-                      setNewAdmin({ ...newAdmin, lastName: e.target.value })
-                    }
-                    placeholder="Doe"
-                    className="mt-1.5"
-                  />
-                </div>
-              </div>
               <div>
                 <Label htmlFor="email">Email</Label>
                 <Input
@@ -598,7 +551,6 @@ function AdminManagementPage() {
                   className="mt-1.5"
                 />
               </div>
-             
             </div>
             <DialogFooter>
               <Button
@@ -609,15 +561,10 @@ function AdminManagementPage() {
               </Button>
               <Button
                 onClick={handleCreateAdmin}
-                disabled={
-                  createAdminMutation.isPending ||
-                  !newAdmin.firstName ||
-                  !newAdmin.lastName ||
-                  !newAdmin.email
-                }
+                disabled={isPending || !newAdmin.email}
                 className="bg-gradient-to-r from-blue-600 to-purple-600"
               >
-                {createAdminMutation.isPending ? "Creating..." : "Create Admin"}
+                {isPending ? "Creating..." : "Create Admin"}
               </Button>
             </DialogFooter>
           </DialogContent>
