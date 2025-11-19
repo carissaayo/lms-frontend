@@ -1,22 +1,22 @@
 import { Link } from "@tanstack/react-router";
-import { BookOpen, FileText, Gauge, Store } from "lucide-react";
+import { BookOpen,  ShieldUser, User2, Users } from "lucide-react";
 
 const AdminSideNavs = () => {
   return (
     <>
       <Link
-        to="/student/analytics"
+        to="/admin/instructors"
         className="flex items-center gap-3 rounded-xl px-4 py-3 transition-all duration-200 hover:bg-white/10 hover:shadow-md text-white/90 hover:text-white hover:translate-x-1"
         activeProps={{
           className:
             "bg-white/20 text-white shadow-lg backdrop-blur-sm border border-white/20",
         }}
       >
-        <Gauge className="h-5 w-5" />
-        Analytics
+        <ShieldUser className="h-5 w-5" />
+        Admins
       </Link>
       <Link
-        to="/student/enrollments"
+        to="/admin/analytics"
         className="flex items-center gap-3 rounded-xl px-4 py-3 transition-all duration-200 hover:bg-white/10 hover:shadow-md text-white/90 hover:text-white hover:translate-x-1"
         activeProps={{
           className:
@@ -24,41 +24,42 @@ const AdminSideNavs = () => {
         }}
       >
         <BookOpen className="h-5 w-5" />
-        Enrollments
-      </Link>
-      <Link
-        to="/student/courses"
-        className="flex items-center gap-3 rounded-xl px-4 py-3 transition-all duration-200 hover:bg-white/10 hover:shadow-md text-white/90 hover:text-white hover:translate-x-1"
-        activeProps={{
-          className:
-            "bg-white/20 text-white shadow-lg backdrop-blur-sm border border-white/20",
-        }}
-      >
-        <Store className="h-5 w-5" />
-        Courses
-      </Link>
-      <Link
-        to="/student/assigments"
-        className="flex items-center gap-3 rounded-xl px-4 py-3 transition-all duration-200 hover:bg-white/10 hover:shadow-md text-white/90 hover:text-white hover:translate-x-1"
-        activeProps={{
-          className:
-            "bg-white/20 text-white shadow-lg backdrop-blur-sm border border-white/20",
-        }}
-      >
-        <FileText className="h-5 w-5" />
-        Assignments
+        Analytics
       </Link>
 
       <Link
-        to="/student/payments"
+        to="/admin/courses"
         className="flex items-center gap-3 rounded-xl px-4 py-3 transition-all duration-200 hover:bg-white/10 hover:shadow-md text-white/90 hover:text-white hover:translate-x-1"
         activeProps={{
           className:
             "bg-white/20 text-white shadow-lg backdrop-blur-sm border border-white/20",
         }}
       >
-        <FileText className="h-5 w-5" />
-        Payments
+        <BookOpen className="h-5 w-5" />
+        Courses
+      </Link>
+
+      <Link
+        to="/admin/instructors"
+        className="flex items-center gap-3 rounded-xl px-4 py-3 transition-all duration-200 hover:bg-white/10 hover:shadow-md text-white/90 hover:text-white hover:translate-x-1"
+        activeProps={{
+          className:
+            "bg-white/20 text-white shadow-lg backdrop-blur-sm border border-white/20",
+        }}
+      >
+        <Users className="h-5 w-5" />
+        Instructors
+      </Link>
+      <Link
+        to="/admin/students"
+        className="flex items-center gap-3 rounded-xl px-4 py-3 transition-all duration-200 hover:bg-white/10 hover:shadow-md text-white/90 hover:text-white hover:translate-x-1"
+        activeProps={{
+          className:
+            "bg-white/20 text-white shadow-lg backdrop-blur-sm border border-white/20",
+        }}
+      >
+        <User2 className="h-5 w-5" />
+        Students
       </Link>
     </>
   );

@@ -23,6 +23,8 @@ export function useCourses() {
     queryFn: getCoursesApi,
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
+    retry: false,
+    retryOnMount: false,
   });
 }
 
@@ -30,6 +32,7 @@ export function useCourses() {
 export function useCreateCourse() {
   return useMutation({
     mutationFn: createCourseApi,
+    retry: false,
   });
 }
 
@@ -41,6 +44,7 @@ export function useSubmitCourse() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["courses"] });
     },
+    retry: false,
   });
 }
 
@@ -52,6 +56,7 @@ export function usePublishCourse() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["courses"] });
     },
+    retry: false,
   });
 }
 
@@ -63,6 +68,7 @@ export function useDeleteCourse() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["courses"] });
     },
+    retry: false,
   });
 }
 
@@ -86,6 +92,8 @@ export function useStudentsCourses(filters: any) {
     queryFn: () => getCoursesForStudentsApi(filters),
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
+    retry: false,
+    retryOnMount: false,
   });
 }
 
@@ -97,6 +105,8 @@ export function useSingleCourse(id: string) {
     enabled: !!id,
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
+    retry: false,
+    retryOnMount: false,
   });
 }
 
@@ -113,6 +123,8 @@ export function useAdminCourses(filters: any) {
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
     placeholderData: keepPreviousData,
+    retry: false,
+    retryOnMount: false,
   });
 }
 
@@ -123,6 +135,8 @@ export function useSingleCourseAdmin(courseId: string) {
     queryFn: () => getSingleCourseAdminApi(courseId),
     enabled: !!courseId,
     refetchOnWindowFocus: false,
+    retry: false,
+    retryOnMount: false,
   });
 }
 
@@ -151,5 +165,7 @@ export function useUpdateCourseStatusAdmin() {
         error?.response?.data || error
       );
     },
+    retry: false,
+    
   });
 }

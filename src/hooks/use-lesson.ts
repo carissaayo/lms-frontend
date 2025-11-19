@@ -12,8 +12,10 @@ export function useLessons() {
   return useQuery({
     queryKey: ["lessons"],
     queryFn: getLessonsApi,
-    refetchOnWindowFocus: false, 
-    refetchOnReconnect: false, 
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+    retry: false,
+    retryOnMount: false,
   });
 }
 
@@ -24,6 +26,8 @@ export function useLessonsInACourse(courseId: string) {
     enabled: !!courseId,
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
+    retry: false,
+    retryOnMount: false,
   });
 }
 
@@ -31,6 +35,8 @@ export function useCreateLesson() {
   return useMutation({
     mutationFn: createLessonApi,
     onError: (error: any) => console.log("Mutation failed:", error),
+    retry: false,
+    
   });
 }
 
@@ -39,6 +45,8 @@ export function useUpdateLesson() {
     mutationFn: ({ id, formData }: { id: string; formData: FormData }) =>
       updateLessonApi(id, formData),
     onError: (error: any) => console.log("Mutation failed:", error),
+    retry: false,
+    
   });
 }
 
@@ -46,6 +54,8 @@ export function useDeleteLesson() {
   return useMutation({
     mutationFn: deleteLessonApi,
     onError: (error: any) => console.log("Mutation failed:", error),
+    retry: false,
+    
   });
 }
 
@@ -59,5 +69,7 @@ export function useLessonsStudentApi(courseId: string) {
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
     staleTime: 1000 * 60 * 10,
+    retry: false,
+    retryOnMount: false,
   });
 }

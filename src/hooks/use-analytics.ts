@@ -31,6 +31,8 @@ export function useInstructorAnalytics(
     refetchOnWindowFocus: false,
     staleTime: 5 * 60 * 1000,
     gcTime: 10 * 60 * 1000,
+    retry: false,
+    retryOnMount: false,
   });
 }
 
@@ -44,5 +46,7 @@ export function useAdminAnalytics(
     refetchOnWindowFocus: false,
     staleTime: 5 * 60 * 1000,
     gcTime: 10 * 60 * 1000,
+    retry: false,
+    retryOnMount: false,
   });
 }

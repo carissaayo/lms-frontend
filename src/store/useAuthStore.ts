@@ -7,7 +7,7 @@ interface AuthState {
   refreshToken?: string;
   isAuthenticated: boolean;
   isForbidden: boolean;
-
+  errorMessage:string;
   loginUser: (data: {
     user: any;
     accessToken: string;
@@ -15,6 +15,9 @@ interface AuthState {
   }) => void;
   logoutUser: () => void;
   forbidden: () => void;
+  resetForbidden:()=>void;
+  setErrorMessage:(errMessage:string)=>void;
+  
 }
 
 const useAuthStore = create<AuthState>()(
@@ -25,6 +28,7 @@ const useAuthStore = create<AuthState>()(
       refreshToken: undefined,
       isAuthenticated: false,
       isForbidden: false,
+      errorMessage: "",
       loginUser: ({ user, accessToken, refreshToken }) => {
         // Persist both in Zustand & localStorage (for axios)
         localStorage.setItem("accessToken", accessToken);
@@ -51,6 +55,8 @@ const useAuthStore = create<AuthState>()(
         });
       },
       forbidden: () => set({ isForbidden: true }),
+      resetForbidden: () => set({ isForbidden: false }),
+      setErrorMessage: (errMessage:string) => set({ errorMessage: errMessage }),
     }),
     {
       name: "auth-storage",

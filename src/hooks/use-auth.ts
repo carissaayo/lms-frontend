@@ -12,6 +12,8 @@ export function useLogin() {
     onSuccess: (data) => {
       console.log("data", data);
     },
+    retry: false,
+    
   });
 }
 
@@ -21,6 +23,7 @@ export function useRegister() {
     onSuccess: (data) => {
       console.log("data", data);
     },
+    retry: false,
   });
 }
 
@@ -33,6 +36,7 @@ export function useAdminLogin() {
       localStorage.setItem("refreshToken", data.refreshToken);
       localStorage.setItem("user", JSON.stringify(data.profile));
     },
+    retry: false,
   });
 }
 
@@ -42,5 +46,6 @@ export function useAdminRegister() {
     onSuccess: (data) => {
       console.log("Admin registration data", data);
     },
+    retry: false,
   });
 }

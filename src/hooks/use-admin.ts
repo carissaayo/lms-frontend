@@ -12,6 +12,8 @@ export const useAdmins = (params: {
     queryFn: () => getAdminsApi(params),
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
+    retry: false, 
+    retryOnMount: false,
   });
 };
 
@@ -20,12 +22,13 @@ export const useAddNewAdmin = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (payload: any) => createNewAdminApi(payload), 
+    mutationFn: (payload: any) => createNewAdminApi(payload),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["admin-admins"] });
     },
     onError: (error: any) => {
       console.log(error.response?.data?.message || "Failed to create admin");
     },
+    retry: false,
   });
 };

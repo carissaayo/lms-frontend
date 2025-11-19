@@ -11,6 +11,8 @@ export function useUserEnrollments() {
     queryKey: [],
     queryFn: () => getUserEnrollmentsApi(),
     refetchOnWindowFocus: false,
+    retry: false,
+    retryOnMount: false,
   });
 }
 export function useStudentEnrollments(filters: any) {
@@ -36,6 +38,8 @@ export function useSingleEnrollment(courseId: string) {
     queryKey: [courseId],
     queryFn: () => getEnrolledCourseApi(courseId),
     refetchOnWindowFocus: false,
+    retry: false,
+    retryOnMount: false,
   });
 }
 
@@ -49,5 +53,7 @@ export function useEnrollCourse() {
       queryClient.invalidateQueries({ queryKey: ["courses"] });
       queryClient.invalidateQueries({ queryKey: ["singleCourse"] });
     },
+    retry: false,
+    
   });
 }

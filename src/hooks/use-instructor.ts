@@ -45,7 +45,9 @@ export const useAdminInstructors = (filters: {
     queryFn: () => getAdminInstructors(filters),
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
-    placeholderData: keepPreviousData, 
+    placeholderData: keepPreviousData,
+    retry: false,
+    retryOnMount: false,
   });
 };
 
@@ -54,6 +56,8 @@ export const useSingleInstructorAdmin = (id: string) =>
     queryKey: ["admin-instructor", id],
     queryFn: () => getSingleInstructorAdmin(id),
     enabled: !!id,
+    retry: false,
+    retryOnMount: false,
   });
 
 export const useUpdateInstructorStatusAdmin = () => {
@@ -68,5 +72,6 @@ export const useUpdateInstructorStatusAdmin = () => {
         error.response?.data?.message || "Failed to update instructor status"
       );
     },
+    retry: false,
   });
 };
