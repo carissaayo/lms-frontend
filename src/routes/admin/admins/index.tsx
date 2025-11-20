@@ -1,3 +1,4 @@
+import { createFileRoute } from "@tanstack/react-router";
 import { Plus } from "lucide-react";
 import { PaginationControls } from "@/components/courses/Pagination";
 import { DashboardShell } from "@/components/dashboard-shell";
@@ -12,7 +13,9 @@ import { Toaster } from "@/components/ui/sonner";
 import { useAdminManagement } from "@/hooks/admins/use-admin-admins";
 
 
-
+export const Route = createFileRoute("/admin/admins/")({
+  component: AdminManagementPage,
+});
 function AdminManagementPage() {
   const admin = useAdminManagement();
 
