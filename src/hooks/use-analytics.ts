@@ -3,6 +3,7 @@ import {
   getStudentAnalyticsApi,
   getAdminAnalyticsApi,
 } from "@/api/analytics";
+import useAuthStore from "@/store/useAuthStore";
 import { ApiErrorResponse } from "@/types/main.types";
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { AxiosError } from "axios";
@@ -13,11 +14,16 @@ export function useStudentAnalytics(
 ): UseQueryResult<any, AxiosError<ApiErrorResponse>> {
   return useQuery({
     queryKey: ["student-analytics", timeRange],
-    queryFn: () => getStudentAnalyticsApi({ timeRange }),
+    queryFn: () => {
+      useAuthStore.getState().resetForbidden();
+      return getStudentAnalyticsApi({ timeRange });
+    },
+    staleTime: 0,
+    refetchOnMount: "always",
+    retry: false,
     refetchOnWindowFocus: false,
-    staleTime: 5 * 60 * 1000, // 5 minutes
-    gcTime: 10 * 60 * 1000, // 10 minutes
-    retry: 3,
+    refetchOnReconnect: false,
+    gcTime: 10 * 60 * 1000,
   });
 }
 
@@ -27,26 +33,33 @@ export function useInstructorAnalytics(
 ): UseQueryResult<any, AxiosError<ApiErrorResponse>> {
   return useQuery({
     queryKey: ["instructor-analytics", timeRange],
-    queryFn: () => getInstructorAnalyticsApi({ timeRange }),
-    refetchOnWindowFocus: false,
-    staleTime: 5 * 60 * 1000,
-    gcTime: 10 * 60 * 1000,
+    queryFn: () => {
+      useAuthStore.getState().resetForbidden();
+      return getInstructorAnalyticsApi({ timeRange });
+    },
+    staleTime: 0,
+    refetchOnMount: "always",
     retry: false,
-    retryOnMount: false,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+    gcTime: 10 * 60 * 1000,
   });
 }
 
 // --- Admin Analytics ---
-export function useAdminAnalytics(
-  timeRange: string
-): UseQueryResult<any, AxiosError<ApiErrorResponse>> {
+export function useAdminAnalytics(timeRange: string) {
   return useQuery({
     queryKey: ["admin-analytics", timeRange],
-    queryFn: () => getAdminAnalyticsApi({ timeRange }),
-    refetchOnWindowFocus: false,
-    staleTime: 5 * 60 * 1000,
-    gcTime: 10 * 60 * 1000,
+    queryFn: async () => {
+      useAuthStore.getState().resetForbidden();
+      return getAdminAnalyticsApi({ timeRange });
+    },
+    staleTime: 0,
+    refetchOnMount: "always",
     retry: false,
-    retryOnMount: false,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+    gcTime: 10 * 60 * 1000,
   });
 }
+

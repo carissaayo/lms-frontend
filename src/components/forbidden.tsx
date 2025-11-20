@@ -2,7 +2,6 @@ import useAuthStore from "@/store/useAuthStore";
 
 const Forbidden = () => {
     const { errorMessage } = useAuthStore((state) => state);
-    console.log(errorMessage,"fjjf");
     
   return (
    <div className="w-full flex justify-center my-10">

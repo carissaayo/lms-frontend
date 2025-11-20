@@ -1,14 +1,20 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { getAdminProfileApi, getuserProfileApi, updateAdminProfileApi, updateProfileApi } from "@/api/profile";
+import useAuthStore from "@/store/useAuthStore";
 
 export function useProfile() {
   return useQuery({
     queryKey: ["profile"],
-    queryFn: getuserProfileApi,
+    queryFn: () => {
+      useAuthStore.getState().resetForbidden();
+      return getuserProfileApi;
+    },
+    staleTime: 0,
+    refetchOnMount: "always",
+    retry: false,
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
-    retry: false,
-    retryOnMount: false,
+    gcTime: 10 * 60 * 1000,
   });
 }
 
@@ -22,11 +28,16 @@ export function useUpdateProfile() {
 export function useAdminProfile() {
   return useQuery({
     queryKey: ["profile"],
-    queryFn: getAdminProfileApi,
+    queryFn: () => {
+      useAuthStore.getState().resetForbidden();
+      return getAdminProfileApi;
+    },
+    staleTime: 0,
+    refetchOnMount: "always",
+    retry: false,
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
-    retry: false,
-    retryOnMount: false,
+    gcTime: 10 * 60 * 1000,
   });
 }
 

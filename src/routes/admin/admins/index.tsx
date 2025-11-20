@@ -119,6 +119,7 @@ function AdminManagementPage() {
   const { isForbidden } = useAuthStore.getState();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+console.log(isForbidden,"isFor");
 
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState("all");
@@ -161,7 +162,7 @@ function AdminManagementPage() {
     (a) => a.status === AdminStatus.SUSPENDED
   ).length;
 
-  const { mutate: createAdmin, isPending, isError } = useAddNewAdmin();
+  const { mutate: createAdmin, isPending } = useAddNewAdmin();
 
   // Update Admin Status Mutation
   const updateAdminMutation = useMutation({

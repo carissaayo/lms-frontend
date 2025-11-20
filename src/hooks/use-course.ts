@@ -11,6 +11,7 @@ import {
   getSingleCourseAdminApi,
   updateCourseStatusAdminApi,
 } from "@/api/courses";
+import useAuthStore from "@/store/useAuthStore";
 
 // ==============================
 // Instructor Hooks
@@ -20,11 +21,16 @@ import {
 export function useCourses() {
   return useQuery({
     queryKey: ["courses"],
-    queryFn: getCoursesApi,
+    queryFn: () => {
+      useAuthStore.getState().resetForbidden();
+      return getCoursesApi;
+    },
+    staleTime: 0,
+    refetchOnMount: "always",
+    retry: false,
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
-    retry: false,
-    retryOnMount: false,
+    gcTime: 10 * 60 * 1000,
   });
 }
 
@@ -89,11 +95,15 @@ export function useStudentsCourses(filters: any) {
       filters.page,
       filters.limit,
     ],
-    queryFn: () => getCoursesForStudentsApi(filters),
+    queryFn: () => {
+      useAuthStore.getState().resetForbidden();
+      return getCoursesForStudentsApi(filters);},
+    staleTime: 0,
+    refetchOnMount: "always",
+    retry: false,
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
-    retry: false,
-    retryOnMount: false,
+    gcTime: 10 * 60 * 1000,
   });
 }
 
@@ -101,12 +111,15 @@ export function useStudentsCourses(filters: any) {
 export function useSingleCourse(id: string) {
   return useQuery({
     queryKey: ["singleCourse", id],
-    queryFn: () => getSingleCourseApi(id),
-    enabled: !!id,
+    queryFn: () => {
+      useAuthStore.getState().resetForbidden();
+      return getSingleCourseApi(id)},
+    staleTime: 0,
+    refetchOnMount: "always",
+    retry: false,
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
-    retry: false,
-    retryOnMount: false,
+    gcTime: 10 * 60 * 1000,
   });
 }
 
@@ -125,6 +138,7 @@ export function useAdminCourses(filters: any) {
     placeholderData: keepPreviousData,
     retry: false,
     retryOnMount: false,
+    
   });
 }
 
@@ -132,11 +146,17 @@ export function useAdminCourses(filters: any) {
 export function useSingleCourseAdmin(courseId: string) {
   return useQuery({
     queryKey: ["singleCourse", courseId],
-    queryFn: () => getSingleCourseAdminApi(courseId),
+    queryFn: () => {
+      useAuthStore.getState().resetForbidden();
+      return getSingleCourseAdminApi(courseId);
+    },
     enabled: !!courseId,
-    refetchOnWindowFocus: false,
+    staleTime: 0,
+    refetchOnMount: "always",
     retry: false,
-    retryOnMount: false,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+    gcTime: 10 * 60 * 1000,
   });
 }
 

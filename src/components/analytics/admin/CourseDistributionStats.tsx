@@ -80,7 +80,7 @@ const CourseDistributionStats: React.FC<CourseStatsProps> = ({categoryDistributi
                 dataKey="value"
               >
                 {categoryDistribution?.map(
-                  (entry: any, index: number) => (
+                  (_entry: any, index: number) => (
                     <Cell
                       key={`cell-${index}`}
                       fill={COLORS[index % COLORS.length]}

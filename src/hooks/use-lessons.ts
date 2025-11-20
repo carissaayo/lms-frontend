@@ -1,5 +1,6 @@
 import { getSingleLessonApi, startLessonApi } from "@/api/lessons";
 import { updateLessonProgressApi } from "@/api/lessons";
+import useAuthStore from "@/store/useAuthStore";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
 export function useUpdateLessonProgress() {
@@ -27,10 +28,16 @@ export function useStartLesson() {
 export function useSingleLesson(lessonId: string) {
   return useQuery({
     queryKey: ["lesson", lessonId],
-    queryFn: () => getSingleLessonApi(lessonId),
+    queryFn: () => {
+      useAuthStore.getState().resetForbidden();
+      return getSingleLessonApi(lessonId);
+    },
     enabled: !!lessonId,
-    refetchOnWindowFocus: false,
+    staleTime: 0,
+    refetchOnMount: "always",
     retry: false,
-    retryOnMount: false,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+    gcTime: 10 * 60 * 1000,
   });
 }

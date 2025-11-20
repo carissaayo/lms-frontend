@@ -1,4 +1,5 @@
 import { createNewAdminApi, getAdminsApi } from "@/api/admin";
+import useAuthStore from "@/store/useAuthStore";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export const useAdmins = (params: {
@@ -9,11 +10,15 @@ export const useAdmins = (params: {
 }) => {
   return useQuery({
     queryKey: ["admins", params],
-    queryFn: () => getAdminsApi(params),
+    queryFn: () => {
+      useAuthStore.getState().resetForbidden();
+      console.log(useAuthStore.getState().isForbidden,"slks");
+     return getAdminsApi(params);
+    },
+    refetchOnMount: "always",
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
-    retry: false, 
-    retryOnMount: false,
+    retry: false,
   });
 };
 

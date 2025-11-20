@@ -1,18 +1,22 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { getAdminStudentsApi, getSingleStudentAdmin, getStudentPaymentsApi, updateStudentStatus } from "@/api/student";
 import { AdminStudentsFilters } from "@/types/student.types";
+import useAuthStore from "@/store/useAuthStore";
 
 export function useStudentPayments(params: Record<string, any> = {}) {
   return useQuery({
     queryKey: ["student-payments", params],
-    queryFn: () => getStudentPaymentsApi(params),
+    queryFn: () => {
+      useAuthStore.getState().resetForbidden();
+      return getStudentPaymentsApi(params);
+    },
     placeholderData: (previousData) => previousData,
-    staleTime: 1000 * 60 * 5,
-    refetchOnWindowFocus: false,
-    refetchOnMount: false,
-    refetchOnReconnect: false,
+    staleTime: 0,
+    refetchOnMount: "always",
     retry: false,
-    retryOnMount: false,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+    gcTime: 10 * 60 * 1000,
   });
 }
 export const useAdminStudents = (filters: AdminStudentsFilters) => {
@@ -24,24 +28,34 @@ export const useAdminStudents = (filters: AdminStudentsFilters) => {
       filters.page ?? 1,
       filters.limit ?? 10,
     ],
-    queryFn: () => getAdminStudentsApi(filters),
+    queryFn: () => {
+      useAuthStore.getState().resetForbidden();
+      return getAdminStudentsApi(filters);
+    },
     placeholderData: (previousData) => previousData,
-    staleTime: 1000 * 60 * 5,
-    refetchOnWindowFocus: false,
-    refetchOnMount: false,
-    refetchOnReconnect: false,
+    staleTime: 0,
+    refetchOnMount: "always",
     retry: false,
-    retryOnMount: false,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+    gcTime: 10 * 60 * 1000,
   });
 };
 
 export const useSingleStudentAdmin = (id: string) =>
   useQuery({
     queryKey: ["admin-student", id],
-    queryFn: () => getSingleStudentAdmin(id),
+    queryFn: () => {
+      useAuthStore.getState().resetForbidden();
+      return getSingleStudentAdmin(id);
+    },
     enabled: !!id,
+    staleTime: 0,
+    refetchOnMount: "always",
     retry: false,
-    retryOnMount: false,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+    gcTime: 10 * 60 * 1000,
   });
 
   export const useUpdateStudentStatusAdmin = () => {

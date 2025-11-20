@@ -6,23 +6,31 @@ import {
   getSingleInstructorAdmin,
   updateInstructorStatusAdmin,
 } from "@/api/instructor";
+import useAuthStore from "@/store/useAuthStore";
 
 export function useInstructorStudents(params: Record<string, any> = {}) {
   return useQuery({
     queryKey: ["instructor-students", params],
-    queryFn: () => getInstructorStudentsApi(params),
+    queryFn: () => {
+      useAuthStore.getState().resetForbidden();
+      return getInstructorStudentsApi(params);
+    },
     placeholderData: (previousData) => previousData,
-    staleTime: 1000 * 60 * 5,
+    staleTime: 0,
+    refetchOnMount: "always",
+    retry: false,
     refetchOnWindowFocus: false,
-    refetchOnMount: false,
     refetchOnReconnect: false,
+    gcTime: 10 * 60 * 1000,
   });
 }
 
 export function useInstructorEarnings(params: Record<string, any> = {}) {
   return useQuery({
     queryKey: ["instructor-earnings", params],
-    queryFn: () => getInstructorEarningsApi(params),
+    queryFn: () =>{ 
+      useAuthStore.getState().resetForbidden();
+      return getInstructorEarningsApi(params);},
     placeholderData: (previousData) => previousData,
     staleTime: 1000 * 60 * 5,
     refetchOnWindowFocus: false,
@@ -42,22 +50,34 @@ export const useAdminInstructors = (filters: {
 
   return useQuery({
     queryKey: ["admin-instructors", search, status, category, page, limit],
-    queryFn: () => getAdminInstructors(filters),
+    queryFn: () => {
+      useAuthStore.getState().resetForbidden();
+      return getAdminInstructors(filters);
+    },
+    placeholderData: keepPreviousData,
+    staleTime: 0,
+    refetchOnMount: "always",
+    retry: false,
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
-    placeholderData: keepPreviousData,
-    retry: false,
-    retryOnMount: false,
+    gcTime: 10 * 60 * 1000,
   });
 };
 
 export const useSingleInstructorAdmin = (id: string) =>
   useQuery({
     queryKey: ["admin-instructor", id],
-    queryFn: () => getSingleInstructorAdmin(id),
+    queryFn: () => {
+      useAuthStore.getState().resetForbidden();
+      return getSingleInstructorAdmin(id);
+    },
     enabled: !!id,
+    staleTime: 0,
+    refetchOnMount: "always",
     retry: false,
-    retryOnMount: false,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+    gcTime: 10 * 60 * 1000,
   });
 
 export const useUpdateInstructorStatusAdmin = () => {
