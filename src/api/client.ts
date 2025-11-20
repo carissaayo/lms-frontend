@@ -19,6 +19,8 @@ api.interceptors.request.use((config) => {
   if (refreshToken) {
     config.headers.refreshtoken = refreshToken;
   }
+             store.resetForbidden();
+
   return config;
 });
 
@@ -32,7 +34,6 @@ api.interceptors.response.use(
   (error) => {
     // Handle actual HTTP 401 errors (just in case)
     if (error.response?.status === 401) {
-      const store = useAuthStore.getState();
       const role = store.user?.role;
       store.logoutUser();
       setTimeout(() => {

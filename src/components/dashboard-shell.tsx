@@ -1,7 +1,4 @@
 import type { ReactNode } from "react";
-
-
-
 import Sidebar from "./shell/Sidebar";
 import TopNav from "./shell/TopNav";
 interface DashboardShellProps {
