@@ -2,19 +2,11 @@ import { BookOpen, GraduationCap, Users } from "lucide-react";
 import React from "react";
 import { StatsCard } from "./StatCard";
 import { NairaIcon } from "./NairaIcon";
+import { OverviewData } from "@/types/adminAnalytics.types";
 
-interface Overview {
-  activeCourses: number;
-  activeStudents: number;
-  totalCourses: number;
-  totalEnrollments: number;
-  totalInstructors: number;
-  totalRevenue: number;
-  totalStudents: number;
-}
 
 interface OverviewProps {
-  overview: Overview;
+  overview: OverviewData;
 }
 
 const AnalyticStatsCon: React.FC<OverviewProps> = ({ overview }) => {

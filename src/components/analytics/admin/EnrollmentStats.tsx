@@ -1,27 +1,10 @@
 import { Activity, Banknote, Target, UserCheck } from "lucide-react";
 import { StatsCard } from "./StatCard";
+import { EngagementMetrics, OverviewData } from "@/types/adminAnalytics.types";
 
-
-interface Overview {
-  activeCourses: number;
-  activeStudents: number;
-  totalCourses: number;
-  totalEnrollments: number;
-  totalInstructors: number;
-  totalRevenue: number;
-  totalStudents: number;
-  totalWithdrawals:number
-}
-interface EngagementMetrics {
-  studentRetentionRate: number;
-  avgCompletionRate: number;
-  avgCourseRating: number;
-  avgSessionDuration: number;
-  
-}
 
 interface OverviewProps {
-  overview: Overview;
+  overview: OverviewData;
   engagementMetrics: EngagementMetrics;
 }
 
