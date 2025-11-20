@@ -7,7 +7,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { X } from "lucide-react";
+import { Search,  } from "lucide-react";
+import {
+  Card,
+  CardContent,
+} from "@/components/ui/card";
+import { AdminStatus } from "@/types/user.types";
 
 export function AdminFilters({
   search,
@@ -15,12 +20,16 @@ export function AdminFilters({
   setSearch,
   setStatus,
   setPage,
+  pages,
+  page
 }: {
   search: string;
   status: string;
   setSearch: (v: string) => void;
   setStatus: (v: string) => void;
   setPage: (v: number) => void;
+  pages:number,
+  page:number
 }) {
   function clearFilters() {
     setSearch("");
@@ -29,40 +38,42 @@ export function AdminFilters({
   }
 
   return (
-    <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-      <Input
-        placeholder="Search admin..."
-        className="w-full md:w-72"
-        value={search}
-        onChange={(e) => {
-          setSearch(e.target.value);
-          setPage(1);
-        }}
-      />
-
-      <div className="flex items-center gap-3">
-        <Select
-          value={status}
-          onValueChange={(v) => {
-            setStatus(v);
-            setPage(1);
-          }}
-        >
-          <SelectTrigger className="w-40">
-            <SelectValue placeholder="Status" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All</SelectItem>
-            <SelectItem value="active">Active</SelectItem>
-            <SelectItem value="suspended">Suspended</SelectItem>
-          </SelectContent>
-        </Select>
-
-        <Button variant="outline" className="gap-2" onClick={clearFilters}>
-          <X className="h-4 w-4" />
-          Clear
-        </Button>
-      </div>
-    </div>
+    <Card>
+      <CardContent className="pt-6">
+        <div className="flex flex-col lg:flex-row gap-4">
+          <div className="flex-1 relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+            <Input
+              placeholder="Search by name or email..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="pl-10"
+            />
+          </div>
+          <Select value={status} onValueChange={setStatus}>
+            <SelectTrigger className="w-full lg:w-48">
+              <SelectValue placeholder="Filter by status" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Status</SelectItem>
+              <SelectItem value={AdminStatus.APPROVED}>Active</SelectItem>
+              <SelectItem value={AdminStatus.PENDING}>Inactive</SelectItem>
+              <SelectItem value={AdminStatus.SUSPENDED}>Suspended</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="mt-4 flex items-center justify-between">
+          <p className="text-sm text-gray-600">
+            Showing page <span className="font-semibold">{page}</span> of{" "}
+            <span className="font-semibold">{pages || 1}</span>
+          </p>
+          {(search || status !== "all") && (
+            <Button variant="ghost" size="sm" onClick={clearFilters}>
+              Clear filters
+            </Button>
+          )}
+        </div>
+      </CardContent>
+    </Card>
   );
 }
