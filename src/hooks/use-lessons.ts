@@ -13,12 +13,14 @@ export function useUpdateLessonProgress() {
       videoDuration: number;
       watchedDuration: number;
     }) => updateLessonProgressApi(lessonId, { videoDuration, watchedDuration }),
+    retry: false,
   });
 }
 
 export function useStartLesson() {
   return useMutation({
     mutationFn: (lessonId: string) => startLessonApi(lessonId),
+    retry: false,
   });
 }
 
@@ -28,5 +30,7 @@ export function useSingleLesson(lessonId: string) {
     queryFn: () => getSingleLessonApi(lessonId),
     enabled: !!lessonId,
     refetchOnWindowFocus: false,
+    retry: false,
+    retryOnMount: false,
   });
 }

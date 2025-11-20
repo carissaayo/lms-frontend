@@ -7,12 +7,15 @@ export function useProfile() {
     queryFn: getuserProfileApi,
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
+    retry: false,
+    retryOnMount: false,
   });
 }
 
 export function useUpdateProfile() {
   return useMutation({
     mutationFn: (payload: FormData) => updateProfileApi(payload),
+    retry: false,
   });
 }
 
@@ -22,11 +25,14 @@ export function useAdminProfile() {
     queryFn: getAdminProfileApi,
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
+    retry: false,
+    retryOnMount: false,
   });
 }
 
 export function useAdminUpdateProfile() {
   return useMutation({
     mutationFn: (payload: FormData) => updateAdminProfileApi(payload),
+    retry: false,
   });
 }

@@ -11,6 +11,8 @@ export function useStudentPayments(params: Record<string, any> = {}) {
     refetchOnWindowFocus: false,
     refetchOnMount: false,
     refetchOnReconnect: false,
+    retry: false,
+    retryOnMount: false,
   });
 }
 export const useAdminStudents = (filters: AdminStudentsFilters) => {
@@ -28,6 +30,8 @@ export const useAdminStudents = (filters: AdminStudentsFilters) => {
     refetchOnWindowFocus: false,
     refetchOnMount: false,
     refetchOnReconnect: false,
+    retry: false,
+    retryOnMount: false,
   });
 };
 
@@ -36,6 +40,8 @@ export const useSingleStudentAdmin = (id: string) =>
     queryKey: ["admin-student", id],
     queryFn: () => getSingleStudentAdmin(id),
     enabled: !!id,
+    retry: false,
+    retryOnMount: false,
   });
 
   export const useUpdateStudentStatusAdmin = () => {
@@ -47,5 +53,6 @@ export const useSingleStudentAdmin = (id: string) =>
         queryClient.invalidateQueries({ queryKey: ["admin-student"] });
         queryClient.invalidateQueries({ queryKey: ["admin-students"] });
       },
+      retry: false,
     });
   };
