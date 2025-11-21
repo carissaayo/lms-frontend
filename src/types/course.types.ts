@@ -48,13 +48,16 @@ export type Course = {
 export interface CourseDetail {
   _id: string;
   title: string;
+  status: CourseStatus;
   description: string;
   instructor: {
     _id: string;
-    name: string;
+    firstName: string;
+    lastName: string;
     email: string;
     bio?: string;
     avatar?: string;
+    rating: number;
   };
   coverImage: string;
   price: number;
@@ -69,6 +72,7 @@ export interface CourseDetail {
   language: string;
   lessons: Array<{
     _id: string;
+    id: string;
     title: string;
     description?: string;
     duration?: string;
@@ -86,4 +90,7 @@ export interface CourseDetail {
     comment: string;
     createdAt: string;
   }>;
+  rejectionReason?: string;
+  suspensionReason?: string;
+  totalCourses:number;
 }
