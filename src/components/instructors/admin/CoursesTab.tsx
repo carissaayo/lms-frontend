@@ -1,7 +1,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Eye, Star, Users } from "lucide-react";
 import { InstructorDetail } from "@/types/instructor.types";
-import { Badge } from "../ui/badge";
+import { Badge } from "../../ui/badge";
 import { Link } from "@tanstack/react-router";
 
 const CoursesTab = ({ instructor }: { instructor: InstructorDetail }) => {

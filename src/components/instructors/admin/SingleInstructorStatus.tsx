@@ -1,5 +1,5 @@
 import { CheckCircle, PauseCircle, XCircle } from "lucide-react";
-import { Button } from "../ui/button";
+import { Button } from "../../ui/button";
 import { InstructorDetail } from "@/types/instructor.types";
 import { InstructorStatus } from "@/types/user.types";
 

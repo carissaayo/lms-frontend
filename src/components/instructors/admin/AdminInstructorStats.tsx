@@ -1,5 +1,6 @@
-import InstructorStatCard from "./instructorStatCard";
+
 import { BookOpen, PauseCircle, UserCheck, Users, UserX } from "lucide-react";
+import InstructorStatCard from "./InstructorStatCard";
 
 const AdminInstructorStats = ({
   totalInstructors,

@@ -17,8 +17,8 @@ import {
 import { PaginationControls } from "@/components/courses/Pagination";
 import { InstructorStatus } from "@/types/user.types";
 import useAuthStore from "@/store/useAuthStore";
-import AdminInstructorStats from "@/components/instructors/AdminInstructorStats";
-import InstructorsCon from "@/components/instructors/InstructorsCon";
+import AdminInstructorStats from "@/components/instructors/admin/AdminInstructorStats";
+import InstructorsCon from "@/components/instructors/admin/InstructorsCon";
 import { useAdminInstructorsPage } from "@/hooks/admins/use-admin-instructors";
 import LoadingForbiddenAndError from "@/components/LoadingForbiddenAndError";
 

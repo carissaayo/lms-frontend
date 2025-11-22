@@ -5,14 +5,14 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ArrowLeft } from "lucide-react";
 
 import SingleLoadingForbiddenError from "@/components/SingleLoadingForbiddenError";
-import SingleInstructorHeader from "@/components/instructors/SingleInstructorHeader";
-import SingleInstructorStatus from "@/components/instructors/SingleInstructorStatus";
-import SuspensionReasonCard from "@/components/instructors/SuspensionReason";
-import OverviewTab from "@/components/instructors/OverviewTab";
-import CoursesTab from "@/components/instructors/CoursesTab";
-import CredentialsTab from "@/components/instructors/Credentials";
-import InstructorAnalyticTab from "@/components/instructors/InstructorAnalyticTab";
-import SingleInstructorActionDialog from "@/components/instructors/SingleInstructorActionDialog";
+import SingleInstructorHeader from "@/components/instructors/admin/SingleInstructorHeader";
+import SingleInstructorStatus from "@/components/instructors/admin/SingleInstructorStatus";
+import SuspensionReasonCard from "@/components/instructors/admin/SuspensionReason";
+import OverviewTab from "@/components/instructors/admin/OverviewTab";
+import CoursesTab from "@/components/instructors/admin/CoursesTab";
+import CredentialsTab from "@/components/instructors/admin/Credentials";
+import InstructorAnalyticTab from "@/components/instructors/admin/InstructorAnalyticTab";
+import SingleInstructorActionDialog from "@/components/instructors/admin/SingleInstructorActionDialog";
 import { useAdminSingleInstructor } from "@/hooks/admins/use-admin-single-instructor";
 
 export const Route = createFileRoute("/admin/instructors/$id")({

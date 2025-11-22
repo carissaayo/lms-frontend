@@ -3,7 +3,6 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Route as NewCourseRoute } from "./new";
 
 import { Button } from "@/components/ui/button";
-import CourseStatCard from "@/components/courses/courseStatsCard";
 import RecentCoursesTable from "@/components/courses/recentCoursesTable";
 import BestSellingCourse from "@/components/courses/BestSellingCourse";
 import { columns } from "@/components/courses/Column";
@@ -13,16 +12,21 @@ import { useCourses } from "@/hooks/use-course";
 import { Course, CourseStatus } from "@/types/course.types";
 
 import { motion } from "framer-motion";
+import LoadingForbiddenAndError from "@/components/LoadingForbiddenAndError";
+import useAuthStore from "@/store/useAuthStore";
+import InstructorCourseStatsCon from "@/components/analytics/instructor/CourseStatsCon";
 
 export const Route = createFileRoute("/instructor/courses/")({
   component: RouteComponent,
 });
 
 function RouteComponent() {
+  const { isForbidden } = useAuthStore.getState();
+
   const { data, isLoading, error } = useCourses();
   const courses: Course[] = data?.courses ?? [];
   const results = data?.results ?? 0;
-  console.log(data?.courses,"courses");
+  
   
 
 
@@ -62,21 +66,13 @@ function RouteComponent() {
         </div>
 
         {/* Loading Spinner */}
-        {isLoading && (
-          <div className="w-full flex justify-center my-10">
-            <div className="h-10 w-10 border-4 border-gray-300 border-t-primary rounded-full animate-spin"></div>
-          </div>
-        )}
+        <LoadingForbiddenAndError
+          error={error}
+          isLoading={isLoading}
+          title="Courses"
+        />
 
-        {error && (
-          <div className="w-full flex justify-center my-10">
-            <p className="text-red-600 text-center mt-10">
-              Failed to load courses.
-            </p>
-          </div>
-        )}
-
-        {!isLoading && !error && (
+        {!isLoading && !error && !isForbidden && (
           <>
             {/* Stats Section */}
             <motion.div
@@ -85,41 +81,12 @@ function RouteComponent() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ staggerChildren: 0.1 }}
             >
-              <CourseStatCard
-                title="Total Courses"
-                description="All created courses"
-                count={totalCourses}
-                bgColor="bg-primary-light"
-              />
-
-              <CourseStatCard
-                title="Approved"
-                description="Approved by moderators"
-                count={approvedCourses}
-                bgColor="bg-green-600"
-                textColor="text-white"
-                descriptionTextColor="text-white/90"
-              />
-
-              <CourseStatCard
-                title="Pending"
-                description="Awaiting approval"
-                count={pendingCourses}
-                bgColor="bg-yellow-100"
-              />
-
-              <CourseStatCard
-                title="Rejected"
-                description="Not approved"
-                count={rejectedCourses}
-                bgColor="bg-red-200"
-              />
-
-              <CourseStatCard
-                title="Suspended"
-                description="Temporarily inactive"
-                count={suspendedCourses}
-                bgColor="bg-gray-100"
+              <InstructorCourseStatsCon
+                totalCourses={totalCourses}
+                approvedCourses={approvedCourses}
+                pendingCourses={pendingCourses}
+                rejectedCourses={rejectedCourses}
+                suspendedCourses={suspendedCourses}
               />
             </motion.div>
 

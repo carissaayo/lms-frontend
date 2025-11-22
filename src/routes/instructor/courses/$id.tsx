@@ -3,8 +3,8 @@ import { DashboardShell } from "@/components/dashboard-shell";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { useCourses } from "@/hooks/use-course";
-import { CourseStatus } from "@/types/course.types";
-import { ArrowLeft, Trash2, Upload, CheckCircle } from "lucide-react";
+import { Course, CourseStatus } from "@/types/course.types";
+import { ArrowLeft } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast, Toaster } from "sonner";
 import {
@@ -12,19 +12,11 @@ import {
   usePublishCourse,
   useDeleteCourse,
 } from "@/hooks/use-course";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
+
 import { Lesson } from "@/types/lesson.types";
 import { useLessonsInACourse } from "@/hooks/use-lesson";
+import SingleLoadingForbiddenError from "@/components/SingleLoadingForbiddenError";
+import CourseAction from "@/components/courses/instructor/single-course/CourseAction";
 
 export const Route = createFileRoute("/instructor/courses/$id")({
   component: CourseDetailPage,
@@ -36,7 +28,7 @@ function CourseDetailPage() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-  const course = data?.courses?.find((c: any) => c._id === id);
+  const course:Course = data?.courses?.find((c: any) => c._id === id);
 
   const { data: lessonsData } = useLessonsInACourse(course?._id);
   const lessons: Lesson[] = lessonsData?.lessons as Lesson[];
@@ -107,30 +99,16 @@ function CourseDetailPage() {
     });
   };
 
-  if (isLoading) {
-    return (
-      <DashboardShell>
-        <div className="flex justify-center items-center h-96">
-          <div className="h-10 w-10 border-4 border-gray-300 border-t-primary rounded-full animate-spin"></div>
-        </div>
-      </DashboardShell>
-    );
-  }
+  const errorUI = SingleLoadingForbiddenError({
+    error,
+    isLoading,
+    route: "/admin/instructors",
+    item: course,
+    itemName: "Course",
+  });
 
-  if (error || !course) {
-    return (
-      <DashboardShell>
-        <div className="text-center py-20">
-          <h2 className="text-xl font-semibold text-red-600">
-            Course not found
-          </h2>
-          <p className="text-muted-foreground mt-2">
-            Please check if the course ID is correct.
-          </p>
-        </div>
-      </DashboardShell>
-    );
-  }
+  if (errorUI) return errorUI;
+  if (!course) return null;
 
   return (
     <DashboardShell>
@@ -157,70 +135,15 @@ function CourseDetailPage() {
           </div>
 
           {/* Actions: Edit / Submit / Publish / Delete */}
-          <div className="flex gap-2 flex-wrap">
-            <Button>Edit Course</Button>
-
-            <Button
-              variant="outline"
-              disabled={submitMutation.isPending || course.isSubmitted}
-              onClick={handleSubmitCourse}
-            >
-              <Upload className="w-4 h-4 mr-1" />
-              Submit Course
-            </Button>
-
-            <Button
-              variant="outline"
-              disabled={
-                publishMutation.isPending ||
-                course.status !== CourseStatus.APPROVED ||
-                course.isApproved === false ||
-                course.isPublished === true
-              }
-              onClick={handlePublishCourse}
-            >
-              <CheckCircle className="w-4 h-4 mr-1" />
-              Publish
-            </Button>
-
-            <AlertDialog>
-              <AlertDialogTrigger asChild>
-                <Button
-                  variant="destructive"
-                  disabled={deleteMutation.isPending}
-                  className="bg-error"
-                >
-                  <Trash2 className="w-4 h-4 mr-1" />
-                  Delete
-                </Button>
-              </AlertDialogTrigger>
-
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle className="w-full text-center text-lg">
-                    Delete Course
-                  </AlertDialogTitle>
-                  <AlertDialogDescription className="text-base text-center">
-                    Are you sure you want to delete{" "}
-                    <span className="font-semibold">{course.title}</span>? This
-                    action cannot be undone and all related lessons will also be
-                    removed.
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter className=" w-full flex flex-row items-center justify-center gap-10">
-                  <AlertDialogCancel className="flex-1 text-base">
-                    Cancel
-                  </AlertDialogCancel>
-                  <AlertDialogAction
-                    onClick={() => handleDeleteCourse(course._id)}
-                    className="bg-error hover:bg-error/90 flex-1 text-base"
-                  >
-                    Confirm Delete
-                  </AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
-          </div>
+         <CourseAction
+         course={course}
+         isPendingSubmit={submitMutation.isPending}
+         isPendingPublish={publishMutation.isPending}
+         isPendingDelete={deleteMutation.isPending}
+         handleDeleteCourse={handleDeleteCourse}
+         handlePublishCourse={handlePublishCourse}
+         handleSubmitCourse={handleSubmitCourse}
+         />
         </div>
 
         {/* Cover Image */}

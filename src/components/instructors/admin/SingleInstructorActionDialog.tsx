@@ -7,8 +7,8 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { InstructorStatus } from "@/types/user.types";
-import { Textarea } from "../ui/textarea";
-import { Button } from "../ui/button";
+import { Textarea } from "../../ui/textarea";
+import { Button } from "../../ui/button";
 import { Dispatch, SetStateAction } from "react";
 const SingleInstructorActionDialog = ({
   actionDialogOpen,

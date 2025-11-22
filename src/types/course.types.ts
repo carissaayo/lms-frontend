@@ -43,6 +43,9 @@ export type Course = {
   updatedAt?: string;
   tags?: string[];
   duration: number;
+  isSubmitted: boolean;
+  isApproved: boolean;
+  isPublished: boolean;
 };
 
 export interface CourseDetail {
@@ -92,5 +95,5 @@ export interface CourseDetail {
   }>;
   rejectionReason?: string;
   suspensionReason?: string;
-  totalCourses:number;
+  totalCourses: number;
 }

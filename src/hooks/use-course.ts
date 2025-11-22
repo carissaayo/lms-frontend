@@ -23,7 +23,7 @@ export function useCourses() {
     queryKey: ["courses"],
     queryFn: () => {
       useAuthStore.getState().resetForbidden();
-      return getCoursesApi;
+      return getCoursesApi();
     },
     staleTime: 0,
     refetchOnMount: "always",
