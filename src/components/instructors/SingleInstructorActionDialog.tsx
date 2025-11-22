@@ -1,6 +1,3 @@
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-
 import {
   Dialog,
   DialogContent,
@@ -9,12 +6,11 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-
-import { CourseStatus } from "@/types/course.types";
-
+import { InstructorStatus } from "@/types/user.types";
+import { Textarea } from "../ui/textarea";
+import { Button } from "../ui/button";
 import { Dispatch, SetStateAction } from "react";
-
-const ActionDialogCon = ({
+const SingleInstructorActionDialog = ({
   actionDialogOpen,
   setActionDialogOpen,
   actionType,
@@ -25,33 +21,31 @@ const ActionDialogCon = ({
   isPending,
 }: {
   actionDialogOpen: boolean;
-  setActionDialogOpen: Dispatch<SetStateAction<boolean>>;
-  actionType: CourseStatus | null;
+  setActionDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  actionType: InstructorStatus|null;
   actionReason: string;
-  setActionReason: Dispatch<SetStateAction<string>>;
-  setActionType: Dispatch<SetStateAction<CourseStatus | null>>;
+  setActionReason: (e: string) => void;
+  setActionType: Dispatch<SetStateAction<InstructorStatus | null>>;
   confirmAction: () => void;
-  isPending: boolean;
+  isPending:boolean;
 }) => {
   return (
-    <Dialog
-      open={actionDialogOpen}
-      onOpenChange={setActionDialogOpen} // always passes boolean
-    >
+    <Dialog open={actionDialogOpen} onOpenChange={setActionDialogOpen}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>
-            {actionType === CourseStatus.REJECTED
-              ? "Reject Course"
-              : "Suspend Course"}
+            {actionType === InstructorStatus.SUSPENDED
+              ? "Suspend Instructor"
+              : "Reject Application"}
           </DialogTitle>
           <DialogDescription>
             Please provide a reason for{" "}
-            {actionType === CourseStatus.REJECTED ? "rejecting" : "suspending"}{" "}
-            this course. This will be visible to the instructor.
+            {actionType === InstructorStatus.SUSPENDED
+              ? "suspending"
+              : "rejecting"}{" "}
+            this instructor. This will be visible to them.
           </DialogDescription>
         </DialogHeader>
-
         <Textarea
           placeholder="Enter reason..."
           value={actionReason}
@@ -59,7 +53,6 @@ const ActionDialogCon = ({
           rows={4}
           className="resize-none"
         />
-
         <DialogFooter>
           <Button
             variant="outline"
@@ -71,15 +64,10 @@ const ActionDialogCon = ({
           >
             Cancel
           </Button>
-
           <Button
             onClick={confirmAction}
             disabled={!actionReason.trim() || isPending}
-            className={
-              actionType === CourseStatus.REJECTED
-                ? "bg-red-600 hover:bg-red-700"
-                : ""
-            }
+            className="bg-red-600 hover:bg-red-700"
           >
             {isPending ? "Processing..." : "Confirm"}
           </Button>
@@ -89,4 +77,4 @@ const ActionDialogCon = ({
   );
 };
 
-export default ActionDialogCon;
+export default SingleInstructorActionDialog;

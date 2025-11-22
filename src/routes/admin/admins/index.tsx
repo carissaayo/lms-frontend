@@ -2,7 +2,6 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Plus } from "lucide-react";
 import { PaginationControls } from "@/components/courses/Pagination";
 import { DashboardShell } from "@/components/dashboard-shell";
-import Forbidden from "@/components/forbidden";
 import { AdminStats } from "@/components/admin/AdminStats";
 import { AdminFilters } from "@/components/admin/AdminFilter";
 import { AdminTable } from "@/components/admin/AdminTable";
@@ -11,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Toaster } from "@/components/ui/sonner";
 
 import { useAdminManagement } from "@/hooks/admins/use-admin-admins";
+import LoadingForbiddenAndError from "@/components/LoadingForbiddenAndError";
 
 
 export const Route = createFileRoute("/admin/admins/")({
@@ -78,13 +78,11 @@ function AdminManagementPage() {
         </div>
 
         {/* Loading */}
-        {isLoading && <div className="flex justify-center my-10">...</div>}
-        {isForbidden && error && <Forbidden />}
-        {error && !isForbidden && (
-          <p className="text-red-600 text-center mt-10">
-            Failed to load admins.
-          </p>
-        )}
+        <LoadingForbiddenAndError
+          error={error}
+          isLoading={isLoading}
+          title="Admins"
+        />
 
         {!isLoading && !isForbidden && (
           <>
