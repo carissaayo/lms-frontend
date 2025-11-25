@@ -1,4 +1,4 @@
-import { DashboardShell } from "@/components/dashboard-shell";
+import { DashboardShell } from "@/components/dashboard-shell"; // Keeping the original shell
 import { createFileRoute } from "@tanstack/react-router";
 import { Search } from "lucide-react";
 import { useState } from "react";
@@ -29,11 +29,15 @@ function RouteComponent() {
 
   const students: Student[] = data?.students || [];
 
+  // --- MODERN LOADING/ERROR STATES ---
+
   if (error) {
     return (
       <DashboardShell>
-        <div className="flex items-center justify-center h-64">
-          <p className="text-red-600">Failed to load students.</p>
+        <div className="flex flex-col items-center justify-center h-64 border-2 border-red-200 bg-red-50 rounded-lg p-6">
+          <p className="text-red-700 text-lg font-medium">
+            🚨 Failed to load students. Please try again.
+          </p>
         </div>
       </DashboardShell>
     );
@@ -42,8 +46,9 @@ function RouteComponent() {
   if (isLoading || isFetching) {
     return (
       <DashboardShell>
-        <div className="flex items-center justify-center h-64">
-          <div className="h-8 w-8 border-4 border-gray-300 border-t-blue-600 rounded-full animate-spin"></div>
+        <div className="flex flex-col items-center justify-center h-64">
+          <div className="h-10 w-10 border-4 border-gray-200 border-t-primary-500 rounded-full animate-spin mb-4"></div>
+          <p className="text-gray-500 text-sm">Loading your students...</p>
         </div>
       </DashboardShell>
     );
@@ -54,24 +59,27 @@ function RouteComponent() {
   return (
     <DashboardShell>
       <main className="pb-12">
-        {/* Header and search bar */}
-        <div className="flex sm:items-center justify-between flex-col sm:flex-row gap-4">
-          <div className="w-full">
-            <h1 className="text-3xl font-bold font-primary tracking-tight pb-4">
-              Your Students
+        {/* Header and search bar - Cleaner, more separated look */}
+        <div className="mb-8">
+          <div className="flex items-center justify-between pb-2 border-b border-gray-200">
+            <h1 className="text-3xl font-extrabold tracking-tight text-gray-800">
+              🎓 Your Students
             </h1>
+            <p className="text-sm text-gray-500 hidden sm:block">
+              {students.length} Total Students
+            </p>
+          </div>
 
-            <div className="flex justify-end items-center mb-4 w-full">
-              <div className="relative w-full max-w-md">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-                <input
-                  type="text"
-                  placeholder="Search students..."
-                  className="w-full pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring focus:border-primary"
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                />
-              </div>
+          <div className="flex justify-end items-center mt-4 w-full">
+            <div className="relative w-full max-w-sm">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+              <input
+                type="text"
+                placeholder="Search students by name or email..."
+                className="w-full pl-10 pr-4 py-2 bg-white border border-gray-300 rounded-xl shadow-sm transition-all duration-200 ease-in-out focus:ring-2 focus:ring-primary focus:border-primary placeholder:text-gray-400"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
             </div>
           </div>
         </div>

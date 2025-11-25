@@ -7,34 +7,18 @@ import WithdrawalSection from "@/components/earning/WithdrawalButton";
 import PayoutTable from "@/components/earning/PayoutTable";
 import TopCourses from "@/components/earning/TopCourses";
 import { useInstructorEarnings } from "@/hooks/use-instructor";
+import LoadingForbiddenAndError from "@/components/LoadingForbiddenAndError";
+import useAuthStore from "@/store/useAuthStore";
 
 export const Route = createFileRoute("/instructor/earnings/")({
   component: RouteComponent,
 });
 
 function RouteComponent() {
+  const { isForbidden } = useAuthStore.getState();
+
   const { data, isLoading, error } = useInstructorEarnings();
-
-  if (error) {
-    return (
-      <DashboardShell>
-        <div className="flex items-center justify-center h-64">
-          <p className="text-red-600">Failed to load earnings data.</p>
-        </div>
-      </DashboardShell>
-    );
-  }
-
-  if (isLoading) {
-    return (
-      <DashboardShell>
-        <div className="flex items-center justify-center h-64">
-          <div className="h-8 w-8 border-4 border-gray-300 border-t-indigo-600 rounded-full animate-spin"></div>
-        </div>
-      </DashboardShell>
-    );
-  }
-
+  
   const { summary, withdrawal, chartData, topCourses, payouts } = data || {};
 
   return (
@@ -47,11 +31,19 @@ function RouteComponent() {
           <p className="text-gray-600">Track your revenue and manage payouts</p>
         </div>
 
+        <LoadingForbiddenAndError
+          error={error}
+          isLoading={isLoading}
+          title="Earnings"
+        />
+           {!isLoading && !isForbidden && !error && (<>
         <EarningsSummary summary={summary} />
         <WithdrawalSection withdrawal={withdrawal} />
         <EarningsChart data={chartData} />
         <TopCourses courses={topCourses} />
         <PayoutTable payouts={payouts} />
+           </>
+             )}
       </main>
     </DashboardShell>
   );

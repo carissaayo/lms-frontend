@@ -14,7 +14,7 @@ export function useLessons() {
     queryKey: ["lessons"],
     queryFn: () => {
       useAuthStore.getState().resetForbidden();
-      return getLessonsApi;
+      return getLessonsApi();
     },
     staleTime: 0,
     refetchOnMount: "always",

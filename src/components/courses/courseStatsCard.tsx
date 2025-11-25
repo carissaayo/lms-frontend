@@ -5,14 +5,16 @@ import {
   CardDescription,
   CardContent,
 } from "@/components/ui/card";
+import { LucideIcon } from "lucide-react"; // Import LucideIcon type
 
 const CourseStatCard = ({
   title,
   description,
   count,
-  bgColor = "var(--color-background-light)",
+  bgColor = "bg-white",
   textColor = "text-gray-900",
   descriptionTextColor = "text-gray-700",
+  icon: Icon, // Destructure the Icon component
 }: {
   title: string;
   description: string;
@@ -20,21 +22,32 @@ const CourseStatCard = ({
   bgColor: string;
   textColor?: string;
   descriptionTextColor?: string;
+  icon: LucideIcon; // New icon prop
 }) => {
   return (
     <Card
-      className={`border border-gray-200 transition duration-200 hover:scale-[1.02] hover:shadow-lg cursor-pointer ${bgColor} ${textColor}`}
+      className={`border border-gray-200 transition duration-200 hover:scale-[1.01] hover:shadow-2xl cursor-pointer shadow-lg rounded-xl overflow-hidden ${bgColor}`}
     >
-      <CardHeader className="text-center">
-        <CardTitle className="text-xl font-heading">{title}</CardTitle>
-        <CardDescription
-          className={`font-secondary text-lg ${descriptionTextColor}`}
+      <CardHeader className="flex flex-row items-center justify-between p-4 pb-2">
+        <div className="space-y-1">
+          <CardTitle className={`text-sm font-semibold uppercase ${textColor}`}>
+            {title}
+          </CardTitle>
+          <CardDescription
+            className={`text-xs ${descriptionTextColor} font-medium`}
+          >
+            {description}
+          </CardDescription>
+        </div>
+        {/* Icon container - styled for prominence */}
+        <div
+          className={`p-2 rounded-full ${textColor === "text-white" ? "bg-white/20" : "bg-gray-100"}`}
         >
-          {description}
-        </CardDescription>
+          <Icon className={`w-6 h-6 ${textColor}`} />
+        </div>
       </CardHeader>
-      <CardContent>
-        <div className="text-4xl font-heading text-center">{count}</div>
+      <CardContent className="px-4 pb-4">
+        <div className={`text-4xl font-extrabold ${textColor}`}>{count}</div>
       </CardContent>
     </Card>
   );

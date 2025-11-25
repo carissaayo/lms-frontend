@@ -13,7 +13,7 @@ interface UseEditLessonProps {
 
 export function useEditLesson({ initialLesson, lessonId }: UseEditLessonProps) {
   const navigate = useNavigate();
-  const { data } = useCourses();
+  const { data} = useCourses();
   const courses: Course[] = data?.courses ?? [];
 
   const updateLessonMutation = useUpdateLesson();

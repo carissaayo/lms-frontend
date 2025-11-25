@@ -1,14 +1,7 @@
-import {
-  Table,
-  TableCaption,
-  TableHeader,
-  TableRow,
-  TableHead,
-  TableBody,
-} from "@/components/ui/table";
-
-import BestCourseTableRow from "./BestSellingCoursesRow";
+import { TrendingUp, DollarSign, Users } from "lucide-react"; // Added icons
 import { Course } from "@/types/course.types";
+import { Link } from "@tanstack/react-router";
+import { Route as CourseRoute } from "@/routes/instructor/courses/$id";
 interface BestSellingCourseProps {
   courses?: Course[];
 }
@@ -19,42 +12,47 @@ const BestSellingCourse = ({ courses = [] }: BestSellingCourseProps) => {
     .slice(0, 5);
 
   return (
-    <section className="">
-      <h1 className="font-primary text-2xl font-semibold pb-6">
-        Best Selling Courses
+    <section className="bg-white rounded-xl shadow-xl p-6 border border-gray-100 h-full">
+      <h1 className="flex items-center font-primary text-2xl font-semibold pb-4 border-b border-gray-100 text-gray-800">
+        <TrendingUp className="w-6 h-6 mr-3 text-green-600" />
+        Top Selling Courses
       </h1>
-      <Table className="border border-muted">
-        <TableCaption>Your 5 best selling courses.</TableCaption>
-        <TableHeader>
-          <TableRow className="font-secondary text-lg">
-            <TableHead className="w-[250px] font-secondary">Title</TableHead>
-            <TableHead>Price (₦)</TableHead>
-            <TableHead className="">Students</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody className="text-base">
-          {topCourses.length > 0 ? (
-            topCourses.map((course, index) => (
-              <BestCourseTableRow
-                key={index}
-                title={course.title}
-                price={course.price ?? 0}
-                students={course.enrollments ?? 0}
-                id={course._id}
-              />
-            ))
-          ) : (
-            <TableRow>
-              <TableHead
-                colSpan={3}
-                className="text-center text-muted-foreground"
-              >
-                No courses available
-              </TableHead>
-            </TableRow>
-          )}
-        </TableBody>
-      </Table>
+
+      <div className="mt-4 space-y-3">
+        {topCourses.length > 0 ? (
+          topCourses.map((course, index) => (
+            <Link
+              key={index}
+              to="/instructor/courses/$id" // Hardcoded path, replace with correct route if available
+              params={{ id: course._id }}
+              className="flex items-center p-3 rounded-lg transition duration-200 hover:bg-gray-50 group border border-transparent hover:border-indigo-100"
+            >
+              <div className="text-xl font-extrabold text-indigo-600 mr-4 w-6 text-center">
+                #{index + 1}
+              </div>
+              <div className="flex-1 min-w-0">
+                <h3 className="text-base font-semibold truncate text-gray-900 group-hover:text-indigo-600 transition-colors">
+                  {course.title}
+                </h3>
+                <div className="flex items-center space-x-4 text-xs text-gray-500 mt-0.5">
+                  <span className="flex items-center">
+                    <Users className="w-3 h-3 mr-1" />
+                    {course.enrollments ?? 0} Students
+                  </span>
+                  <span className="flex items-center">
+                    <DollarSign className="w-3 h-3 mr-1" />
+                    ₦{course.price?.toLocaleString() ?? 0}
+                  </span>
+                </div>
+              </div>
+            </Link>
+          ))
+        ) : (
+          <div className="text-center py-10 text-gray-500">
+            No best-selling courses yet.
+          </div>
+        )}
+      </div>
     </section>
   );
 };

@@ -15,7 +15,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
+} from "@/components/ui/table"; // Assuming these are well-styled components
 import { DataTablePagination } from "./DataTablePagination";
 
 interface DataTableProps<TData, TValue> {
@@ -40,14 +40,19 @@ export function StudentsTable<TData, TValue>({
   });
 
   return (
-    <div className="text-lg">
-      <div className="overflow-hidden rounded-md border">
+    <div className="text-sm sm:text-base">
+      {/* Use soft shadow and border radius for a modern "card" look */}
+      <div className="rounded-xl shadow-lg overflow-hidden border border-gray-100 bg-white">
         <Table>
-          <TableHeader>
+          <TableHeader className="bg-gray-50 border-b border-gray-200">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
-                  <TableHead key={header.id}>
+                  // Style the column headers for a modern feel
+                  <TableHead
+                    key={header.id}
+                    className="text-xs sm:text-sm font-semibold uppercase text-gray-500 tracking-wider py-4 px-4"
+                  >
                     {header.isPlaceholder
                       ? null
                       : flexRender(
@@ -62,9 +67,16 @@ export function StudentsTable<TData, TValue>({
           <TableBody>
             {table.getRowModel().rows.length ? (
               table.getRowModel().rows.map((row) => (
-                <TableRow key={row.id}>
+                <TableRow
+                  key={row.id}
+                  // Alternate row background for better readability
+                  className="even:bg-gray-50 hover:bg-gray-100 transition-colors duration-150"
+                >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
+                    <TableCell
+                      key={cell.id}
+                      className="py-3 px-4 text-gray-700"
+                    >
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()
@@ -77,9 +89,9 @@ export function StudentsTable<TData, TValue>({
               <TableRow>
                 <TableCell
                   colSpan={columns.length}
-                  className="h-24 text-center"
+                  className="h-24 text-center text-gray-500 italic"
                 >
-                  No students found.
+                  No students found matching your search.
                 </TableCell>
               </TableRow>
             )}
@@ -87,7 +99,7 @@ export function StudentsTable<TData, TValue>({
         </Table>
       </div>
 
-      <div className="mt-4">
+      <div className="mt-6">
         <DataTablePagination table={table} />
       </div>
     </div>
