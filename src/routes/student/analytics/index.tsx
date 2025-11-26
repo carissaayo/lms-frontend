@@ -33,17 +33,6 @@ import {
 import { createFileRoute } from "@tanstack/react-router";
 import { useStudentAnalytics } from "@/hooks/use-analytics";
 
-// Mock data for charts that aren't from API yet
-const learningProgressData = [
-  { month: "Jan", hours: 12, courses: 2, completionRate: 65 },
-  { month: "Feb", hours: 18, courses: 3, completionRate: 72 },
-  { month: "Mar", hours: 25, courses: 4, completionRate: 78 },
-  { month: "Apr", hours: 32, courses: 5, completionRate: 85 },
-  { month: "May", hours: 28, courses: 6, completionRate: 82 },
-  { month: "Jun", hours: 35, courses: 7, completionRate: 88 },
-  { month: "Jul", hours: 42, courses: 8, completionRate: 92 },
-];
-
 const weeklyActivityData = [
   { day: "Mon", hours: 3.5, lessons: 8 },
   { day: "Tue", hours: 2.8, lessons: 6 },
@@ -236,6 +225,7 @@ function StudentAnalyticsPage() {
 
   // Fetch analytics data with time range filter
   const { data, isLoading, error } = useStudentAnalytics(timeRange);
+console.log(data,"data");
 
   // Helper function to get display name for time range
   const getTimeRangeLabel = (range: string) => {

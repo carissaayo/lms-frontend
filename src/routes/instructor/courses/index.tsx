@@ -114,7 +114,7 @@ function RouteComponent() {
                   </motion.div>
                 </div>
 
-                {/* Table Overview (Still needed for full data access/filtering) */}
+                {/* Table Overview  */}
                 <section className="mt-10">
                   <h1 className="font-primary text-2xl font-semibold mb-4 text-gray-900">
                     Courses Overview (Detailed Table)

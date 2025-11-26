@@ -29,7 +29,7 @@ export function useAdminProfile() {
     queryKey: ["profile"],
     queryFn: () => {
       useAuthStore.getState().resetForbidden();
-      return getAdminProfileApi;
+      return getAdminProfileApi();
     },
     staleTime: 0,
     refetchOnMount: "always",

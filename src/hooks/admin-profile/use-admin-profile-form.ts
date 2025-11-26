@@ -4,7 +4,7 @@ import { useAdminProfile, useAdminUpdateProfile } from "@/hooks/use-profile";
 import { UserProfile } from "@/types/user.types";
 
 export function useAdminProfileForm() {
-  const { data, isLoading, isError, refetch } = useAdminProfile();
+  const { data, isLoading, isError, refetch, error } = useAdminProfile();
   const updateProfile = useAdminUpdateProfile();
 
   const [editMode, setEditMode] = useState(false);
@@ -19,13 +19,15 @@ export function useAdminProfileForm() {
     "city",
     "state",
     "country",
+    "street",
     "bio",
   ] as const;
 
-  const user: UserProfile | null = editedUser ?? data?.profile ?? null;
+  const user: UserProfile = editedUser ?? data?.profile;
 
   function handleEdit() {
-    if (data?.profile) setEditedUser(data.profile);
+    if (!data?.profile) return;
+    setEditedUser(data.profile);
     setEditMode(true);
   }
 
@@ -37,6 +39,7 @@ export function useAdminProfileForm() {
 
   function handleFieldChange(field: string, value: string) {
     if (!editableFields.includes(field as any)) return;
+
     setEditedUser((prev) => (prev ? { ...prev, [field]: value } : prev));
   }
 
@@ -44,6 +47,7 @@ export function useAdminProfileForm() {
     if (!editedUser && !newPictureFile) return;
 
     const formData = new FormData();
+
     if (editedUser?.firstName)
       formData.append("firstName", editedUser.firstName);
     if (editedUser?.lastName) formData.append("lastName", editedUser.lastName);
@@ -51,8 +55,8 @@ export function useAdminProfileForm() {
       formData.append("phoneNumber", editedUser.phoneNumber);
     if (editedUser?.street) formData.append("street", editedUser.street);
     if (editedUser?.city) formData.append("city", editedUser.city);
-    if (editedUser?.state) formData.append("state", editedUser.state);
     if (editedUser?.country) formData.append("country", editedUser.country);
+    if (editedUser?.state) formData.append("state", editedUser.state);
     if (editedUser?.bio) formData.append("bio", editedUser.bio);
     if (newPictureFile) formData.append("picture", newPictureFile);
 
@@ -62,6 +66,7 @@ export function useAdminProfileForm() {
           position: "top-center",
         });
         refetch();
+
         setEditMode(false);
         setEditedUser(null);
         setNewPictureFile(null);
@@ -76,16 +81,18 @@ export function useAdminProfileForm() {
   }
 
   return {
-    user,
+    data,
     isLoading,
     isError,
+    error,
+    user,
     editMode,
-    newPictureFile,
     updateProfile,
     handleEdit,
     handleCancel,
     handleFieldChange,
     handleSave,
     setNewPictureFile,
+    newPictureFile,
   };
 }

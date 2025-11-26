@@ -1,5 +1,5 @@
 
-import { Camera, Edit, LogOut, Mail } from "lucide-react";
+import { Camera, Edit,  Mail } from "lucide-react";
 import { UserProfile } from "@/types/user.types";
 import { useRef } from "react";
 
@@ -85,7 +85,7 @@ export default function ProfileOverview({
         <button
           onClick={onEdit}
           disabled={editMode}
-          className={`px-4 py-2 flex items-center gap-2 rounded-lg font-semibold transition duration-200 ${
+          className={`px-4 py-2 flex items-center gap-2 rounded-lg font-semibold transition duration-200 cursor-pointer ${
             editMode
               ? "bg-indigo-500/50 text-indigo-200 cursor-not-allowed"
               : "bg-indigo-500 hover:bg-indigo-400 text-white shadow-md"
@@ -94,13 +94,7 @@ export default function ProfileOverview({
           <Edit className="w-4 h-4" />
           Edit Profile
         </button>
-        <button
-          onClick={() => console.log("Logging out...")}
-          className="px-4 py-2 flex items-center gap-2 rounded-lg font-semibold transition duration-200 bg-red-600 hover:bg-red-500 text-white shadow-md"
-        >
-          <LogOut className="w-4 h-4" />
-          Logout
-        </button>
+     
       </div>
     </div>
   );
