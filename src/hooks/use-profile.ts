@@ -7,10 +7,9 @@ export function useProfile() {
     queryKey: ["profile"],
     queryFn: () => {
       useAuthStore.getState().resetForbidden();
-      return getuserProfileApi;
+      return getuserProfileApi();
     },
-    staleTime: 0,
-    refetchOnMount: "always",
+    staleTime: 5000,
     retry: false,
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,

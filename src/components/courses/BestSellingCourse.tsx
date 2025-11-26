@@ -1,7 +1,6 @@
 import { TrendingUp, DollarSign, Users } from "lucide-react"; // Added icons
 import { Course } from "@/types/course.types";
 import { Link } from "@tanstack/react-router";
-import { Route as CourseRoute } from "@/routes/instructor/courses/$id";
 interface BestSellingCourseProps {
   courses?: Course[];
 }

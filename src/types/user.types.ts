@@ -49,5 +49,6 @@ export type UserProfile = {
   country?: string;
   picture?: string;
   street?: string;
-  bio?:string
+  bio?:string;
+  zip?:string
 };

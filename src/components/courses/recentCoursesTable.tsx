@@ -1,7 +1,6 @@
-import { Calendar, AlertCircle } from "lucide-react"; // Added icons
+import { Calendar,  } from "lucide-react";
 import { Course, CourseStatus } from "@/types/course.types";
 import { Link } from "@tanstack/react-router";
-import { Route as CourseRoute } from "@/routes/instructor/courses/$id"; // Assuming route to individual course exists
 
 interface RecentCoursesTableProps {
   courses?: Course[];

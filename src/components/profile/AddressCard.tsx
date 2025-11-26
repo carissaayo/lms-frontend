@@ -1,77 +1,67 @@
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardTitle } from "@/components/ui/card";
 import { UserProfile } from "@/types/user.types";
+import { MapPin, Settings } from "lucide-react";
+import { Field } from "./Field";
 
 type Props = {
   user: UserProfile;
   editMode?: boolean;
-  onFieldChange?: (field: keyof UserProfile, value: string) => void;
+  handleFieldChange: (name: string, value: string) => void;
 };
 
-export default function AddressCard({ user, editMode, onFieldChange }: Props) {
+export default function AddressCard({ user, editMode, handleFieldChange }: Props) {
   return (
-    <Card className="my-12 bg-white border-gray-200">
-      <CardContent className="px-12 py-2 space-y-4">
-        <h2 className="text-xl font-semibold font-secondary">Address</h2>
-
-        {/* Country & State */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-          <div>
-            <p className="text-sm text-muted-foreground">Country</p>
-            {editMode ? (
-              <input
-                type="text"
-                value={user.country ?? ""}
-                onChange={(e) => onFieldChange?.("country", e.target.value)}
-                className="border px-2 py-1 rounded w-full"
-              />
-            ) : (
-              <p className="text-base font-medium">{user?.country || "N/A"}</p>
-            )}
-          </div>
-          <div>
-            <p className="text-sm text-muted-foreground">State</p>
-            {editMode ? (
-              <input
-                type="text"
-                value={user.state ?? ""}
-                onChange={(e) => onFieldChange?.("state", e.target.value)}
-                className="border px-2 py-1 rounded w-full"
-              />
-            ) : (
-              <p className="text-base font-medium">{user?.state || "N/A"}</p>
-            )}
-          </div>
+    <Card className="bg-white p-6 md:p-8 rounded-xl shadow-lg border border-gray-100">
+      <CardTitle className="text-xl font-bold text-gray-800 flex items-center gap-2">
+        <Settings className="w-5 h-5 text-indigo-500" />
+        Address Details
+      </CardTitle>
+      <CardDescription className="text-sm text-gray-500 mt-1 mb-6 border-b pb-4">
+        Your current residential or billing address.
+      </CardDescription>
+      <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <div className="col-span-1 sm:col-span-2">
+          <Field
+            icon={MapPin}
+            label="Street Address"
+            name="address.street"
+            value={user.street || ""}
+            onChange={handleFieldChange}
+            editMode={editMode}
+          />
         </div>
-
-        {/* City & Street */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-          <div>
-            <p className="text-sm text-muted-foreground">City</p>
-            {editMode ? (
-              <input
-                type="text"
-                value={user.city ?? ""}
-                onChange={(e) => onFieldChange?.("city", e.target.value)}
-                className="border px-2 py-1 rounded w-full"
-              />
-            ) : (
-              <p className="text-base font-medium">{user?.city || "N/A"}</p>
-            )}
-          </div>
-          <div>
-            <p className="text-sm text-muted-foreground">Street</p>
-            {editMode ? (
-              <input
-                type="text"
-                value={user.street ?? ""}
-                onChange={(e) => onFieldChange?.("street", e.target.value)}
-                className="border px-2 py-1 rounded w-full"
-              />
-            ) : (
-              <p className="text-base font-medium">{user?.street || "N/A"}</p>
-            )}
-          </div>
-        </div>
+        <Field
+          icon={MapPin}
+          label="City"
+          name="address.city"
+          value={user.city || ""}
+          onChange={handleFieldChange}
+          editMode={editMode}
+        />
+        <Field
+          icon={MapPin}
+          label="State / Province"
+          name="address.state"
+          value={user.state || ""}
+          onChange={handleFieldChange}
+          editMode={editMode}
+        />
+        <Field
+          icon={MapPin}
+          label="Zip / Postal Code"
+          name="address.zip"
+          value={user.zip || ""}
+          onChange={handleFieldChange}
+          editMode={editMode}
+        />
+        <Field
+          icon={MapPin}
+          label="Country"
+          name="address.country"
+          value={user.country || ""}
+          onChange={handleFieldChange}
+          editMode={editMode}
+        />
       </CardContent>
     </Card>
   );

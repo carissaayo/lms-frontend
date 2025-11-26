@@ -1,15 +1,14 @@
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Pencil } from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+
+import { Camera, Edit, LogOut, Mail } from "lucide-react";
 import { UserProfile } from "@/types/user.types";
-import { useState } from "react";
+import { useRef } from "react";
 
 export type Props = {
   user: UserProfile;
   onEdit?: () => void;
   editMode?: boolean;
   onPictureChange?: (file: File) => void;
+  newPictureFile: File | null;
 };
 
 export default function ProfileOverview({
@@ -17,70 +16,92 @@ export default function ProfileOverview({
   onEdit,
   onPictureChange,
   editMode,
+  newPictureFile,
 }: Props) {
-  const [preview, setPreview] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const imageSrc = newPictureFile
+    ? URL.createObjectURL(newPictureFile)
+    : user?.picture;
+  const imageText = newPictureFile ? "New Image" : "AR";
+
+  const handleImageClick = () => {
+    if (editMode && fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file && onPictureChange) {
       onPictureChange(file);
-      const reader = new FileReader();
-      reader.onloadend = () => setPreview(reader.result as string);
-      reader.readAsDataURL(file);
     }
   };
+
   return (
-    <Card className="my-12 bg-white border-gray-200">
-      <CardContent className="p-6 px-12 flex items-center justify-between flex-wrap gap-12">
-        {/* Profile Image */}
-        <div className="bg-gray-300 h-40 w-40 rounded-full overflow-hidden relative">
-          <Avatar className="w-full h-full">
-            <AvatarImage
-              src={preview ?? user?.picture ?? ""}
-              alt={user.firstName || "Profile Picture"}
-              className="object-cover"
-            />
-            <AvatarFallback className="text-7xl font-bold font-heading">
-              {user?.firstName?.[0]?.toUpperCase() ?? "?"}
-            </AvatarFallback>
-          </Avatar>
-
-          {/* Show file input only in edit mode */}
+    <div className="bg-indigo-700 text-white rounded-xl p-8 shadow-xl mb-8 flex flex-col md:flex-row items-center justify-between">
+      <div className="flex items-center space-x-6">
+        <div className="relative">
+          <img
+            src={imageSrc}
+            onError={(e) => {
+              const img = e.target as HTMLImageElement;
+              img.onerror = null;
+              img.src = `https://placehold.co/100x100/312e81/ffffff?text=${imageText}`;
+            }}
+            alt={`${user.firstName} ${user.lastName}`}
+            className="w-24 h-24 object-cover rounded-full border-4 border-indigo-400 shadow-2xl cursor-pointer"
+            onClick={handleImageClick}
+          />
           {editMode && (
-            <label className="absolute bottom-0 right-10 bg-white px-2 py-1 rounded cursor-pointer text-sm border border-gray-300 hover:bg-gray-100">
-              Change
-              <input
-                type="file"
-                accept="image/*"
-                className="hidden"
-                onChange={handleFileChange}
-              />
-            </label>
+            <div
+              className="absolute bottom-0 right-0 p-2 bg-indigo-500 rounded-full border-2 border-white cursor-pointer hover:bg-indigo-600 transition"
+              onClick={handleImageClick}
+              aria-label="Change profile picture"
+            >
+              <Camera className="w-4 h-4 text-white" />
+            </div>
           )}
-        </div>
-        {/* Info */}
-        <div className="flex-1 min-w-[200px] text-center sm:text-left space-y-1">
-          <h2 className="text-xl font-semibold">
-            {user?.firstName} {user?.lastName}
-          </h2>
-          <p className="text-muted-foreground text-sm">{user?.email}</p>
-          {user?.street && (
-            <p className="text-muted-foreground text-sm">{user.street}</p>
-          )}
+          <input
+            type="file"
+            ref={fileInputRef}
+            onChange={handleFileChange}
+            className="hidden"
+            accept="image/*"
+          />
         </div>
 
-        {/* Edit button triggers parent handler */}
         <div>
-          <Button
-            variant="outline"
-            className="cursor-pointer bg-white hover:bg-primary-light border-gray-300 rounded-full flex gap-2 justify-between items-center w-20 px-6"
-            onClick={onEdit}
-          >
-            Edit
-            <Pencil />
-          </Button>
+          <h2 className="text-3xl font-extrabold">
+            {user.firstName} {user.lastName}
+          </h2>
+          <p className="text-indigo-200 mt-1 flex items-center gap-1">
+            <Mail className="w-4 h-4" /> {user.email}
+          </p>
         </div>
-      </CardContent>
-    </Card>
+      </div>
+
+      <div className="flex space-x-4 mt-6 md:mt-0">
+        <button
+          onClick={onEdit}
+          disabled={editMode}
+          className={`px-4 py-2 flex items-center gap-2 rounded-lg font-semibold transition duration-200 ${
+            editMode
+              ? "bg-indigo-500/50 text-indigo-200 cursor-not-allowed"
+              : "bg-indigo-500 hover:bg-indigo-400 text-white shadow-md"
+          }`}
+        >
+          <Edit className="w-4 h-4" />
+          Edit Profile
+        </button>
+        <button
+          onClick={() => console.log("Logging out...")}
+          className="px-4 py-2 flex items-center gap-2 rounded-lg font-semibold transition duration-200 bg-red-600 hover:bg-red-500 text-white shadow-md"
+        >
+          <LogOut className="w-4 h-4" />
+          Logout
+        </button>
+      </div>
+    </div>
   );
 }

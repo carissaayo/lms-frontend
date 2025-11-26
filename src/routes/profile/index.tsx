@@ -3,167 +3,110 @@ import { DashboardShell } from "@/components/dashboard-shell";
 import AddressCard from "@/components/profile/AddressCard";
 import PersonalInfoCard from "@/components/profile/PersonInfo";
 import ProfileOverview from "@/components/profile/ProfileOverview";
-import { useProfile, useUpdateProfile } from "@/hooks/use-profile";
-import { UserProfile } from "@/types/user.types";
-import { useState } from "react";
-import { toast } from "sonner";
+import { useProfilePage } from "@/hooks/profile/use-profile";
+import LoadingForbiddenAndError from "@/components/LoadingForbiddenAndError";
+import { Loader2, Save, X } from "lucide-react";
 
 export const Route = createFileRoute("/profile/")({
   component: RouteComponent,
 });
 
 function RouteComponent() {
-  const { data, isLoading, isError, refetch } = useProfile();
-  const [editMode, setEditMode] = useState(false);
-  const [newPictureFile, setNewPictureFile] = useState<File | null>(null);
-  const [editedUser, setEditedUser] = useState<UserProfile | null>(null);
-  const updateProfile = useUpdateProfile();
-  const editableFields = [
-    "firstName",
-    "lastName",
-    "phoneNumber",
-    "street",
-    "city",
-    "state",
-    "country",
-    "street",
-    "bio"
-  ] as const;
+  const {
+    isLoading,
+    error,
+    user,
+    editMode,
+    updateProfile,
+    handleEdit,
+    handleCancel,
+    handleFieldChange,
+    handleSave,
+    setNewPictureFile,
+    newPictureFile,
+  } = useProfilePage();
 
-  if (isLoading) {
-    return (
-      <DashboardShell>
-        <div className="flex justify-center items-center h-96">
-          <div className="h-10 w-10 border-4 border-gray-300 border-t-primary rounded-full animate-spin"></div>
-        </div>
-      </DashboardShell>
-    );
-  }
 
-  if (isError || !data?.profile) {
-    return (
-      <DashboardShell>
-        <p className="text-center text-red-500 py-8">
-          Failed to load profile. Please try again.
-        </p>
-      </DashboardShell>
-    );
-  }
 
-  const user: UserProfile = editedUser ?? data.profile;
 
-  function handleEdit() {
-    setEditedUser(data.profile);
-    setEditMode(true);
-  }
 
-  function handleCancel() {
-    setEditedUser(null);
-    setNewPictureFile(null);
-    setEditMode(false);
-  }
-
-  function handleFieldChange(field: string, value: string) {
-    // Prevent editing of fields not in the editable list
-    if (!editableFields.includes(field as any)) return;
-
-    setEditedUser((prev) => (prev ? { ...prev, [field]: value } : prev));
-  }
-
-  async function handleSave() {
-    if (!editedUser && !newPictureFile) return;
-
-    const formData = new FormData();
-    if (editedUser?.firstName)
-      formData.append("firstName", editedUser.firstName);
-    if (editedUser?.lastName) formData.append("lastName", editedUser.lastName);
-    if (editedUser?.phoneNumber)
-      formData.append("phoneNumber", editedUser.phoneNumber);
-    if (editedUser?.street) formData.append("street", editedUser.street);
-    if (editedUser?.city) formData.append("city", editedUser.city);
-    if (editedUser?.country) formData.append("country", editedUser.country);
-    if (editedUser?.state) formData.append("state", editedUser.state);
-    if (editedUser?.bio) formData.append("bio", editedUser.bio);
-    if (newPictureFile) formData.append("picture", newPictureFile);
-
-    updateProfile.mutate(formData, {
-      onSuccess: () => {
-        toast.success("Profile updated successfully!", {
-          position: "top-center",
-        });
-
-        refetch();
-        setEditMode(false);
-        setEditedUser(null);
-        setNewPictureFile(null);
-      },
-      onError: () => {
-        toast.error("Failed to update profile", {
-          description: "Please try again later.",
-          position: "top-center",
-        });
-      },
-    });
-  }
 
   return (
     <DashboardShell>
-      <main className="pb-12 overflow-hidden">
-        <div className="w-full">
-          <h1 className="text-3xl font-bold font-primary tracking-normal pb-4">
-            My Profile
+      <main className="max-w-6xl mx-auto py-10 px-4 sm:px-6 lg:px-8">
+        <header className="mb-8">
+          <h1 className="text-4xl font-extrabold text-gray-900 tracking-tight">
+            Account Settings
           </h1>
-        </div>
+          <p className="text-lg text-gray-500 mt-1">
+            Manage your personal and account information.
+          </p>
+        </header>
 
-        <ProfileOverview
-          user={user}
-          onEdit={handleEdit}
-          onPictureChange={(file: File) => setNewPictureFile(file)}
-          editMode={editMode}
+        <LoadingForbiddenAndError
+          error={error}
+          isLoading={isLoading}
+          title="Profile"
         />
-        <PersonalInfoCard
-          user={user}
-          editMode={editMode}
-          onFieldChange={handleFieldChange}
-        />
-        <AddressCard
-          user={user}
-          editMode={editMode}
-          onFieldChange={handleFieldChange}
-        />
-        <div className="flex gap-4 justify-end mt-4">
-          {editMode ? (
-            <>
-              {/* Cancel Button */}
-              <button
-                onClick={handleCancel}
-                className="px-4 py-2 border rounded-md cursor-pointer hover:bg-gray-100"
-              >
-                Cancel
-              </button>
 
-              {/* Save Button */}
-              <button
-                onClick={handleSave}
-                className={`px-4 py-2 bg-primary text-white rounded-md cursor-pointer ${
-                  updateProfile.isPending
-                    ? "opacity-70 cursor-not-allowed"
-                    : "hover:bg-primary-dark"
-                }`}
-                disabled={updateProfile.isPending}
-              >
-                {updateProfile.isPending ? "Saving Changes..." : "Save Changes"}
-              </button>
-            </>
-          ) : (
-            <button
-              onClick={handleEdit}
-              className="px-4 py-2 bg-primary text-white rounded-md cursor-pointer hover:bg-primary-dark"
-            >
-              Edit Profile
-            </button>
-          )}
-        </div>
+        {user && (
+          <>
+            <ProfileOverview
+              user={user}
+              editMode={editMode}
+              onEdit={handleEdit}
+              onPictureChange={setNewPictureFile}
+              newPictureFile={newPictureFile}
+            />
+
+            <div className="flex flex-col gap-8">
+              <PersonalInfoCard
+                user={user}
+                editMode={editMode}
+                handleFieldChange={handleFieldChange}
+              />
+              <AddressCard
+                user={user}
+                editMode={editMode}
+                handleFieldChange={handleFieldChange}
+              />
+            </div>
+
+            {editMode && (
+              <div className="flex gap-4 justify-end mt-8 p-4 bg-white rounded-xl shadow-lg border border-indigo-100 sticky bottom-0 z-10">
+                <button
+                  onClick={handleCancel}
+                  className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg font-semibold transition duration-200 hover:bg-gray-100 flex items-center gap-2 shadow-md"
+                  disabled={updateProfile.isPending}
+                >
+                  <X className="w-4 h-4" />
+                  Cancel
+                </button>
+
+                <button
+                  onClick={handleSave}
+                  className={`px-6 py-2 rounded-lg text-white font-semibold transition duration-200 flex items-center gap-2 shadow-md ${
+                    updateProfile.isPending
+                      ? "bg-indigo-400 cursor-not-allowed"
+                      : "bg-indigo-600 hover:bg-indigo-700"
+                  }`}
+                  disabled={updateProfile.isPending}
+                >
+                  {updateProfile.isPending ? (
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin" /> Saving
+                      Changes...
+                    </>
+                  ) : (
+                    <>
+                      <Save className="w-4 h-4" /> Save Changes
+                    </>
+                  )}
+                </button>
+              </div>
+            )}
+          </>
+        )}
       </main>
     </DashboardShell>
   );

@@ -17,7 +17,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { DataTablePagination } from "./DataTablePagination";
+import { DataTablePagination } from "../students/DataTablePagination";
+
 
 type DataTableProps<T> = {
   columns: ColumnDef<T, any>[];
