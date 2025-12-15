@@ -34,8 +34,8 @@ function RouteComponent() {
   const [timeRange, setTimeRange] = useState("6months");
   const { data, isLoading, error } = useAdminAnalytics(timeRange);
 
-  console.log(isForbidden, "isForbidden");
-  console.log(error, "error");
+console.log(data,"data");
+
   
 
   const analytics: AnalyticsResponse = data?.analytics;
